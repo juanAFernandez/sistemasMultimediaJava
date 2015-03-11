@@ -1,0 +1,162 @@
+En esta clase haremos un repaso de la swing muy guiada.
+Todo lo haremos con netBeans pero iremos viendo todo el código que se 
+genera y debemos tener muy claro para que sirve. Todo lo haremos en 
+la parte visual y vamos a ver el código que se genera.
+
+Lo primero que vamos a ver es como crear un frame(ventana) básico
+para cualquier aplicación.
+1.Creamos un proyect
+2.Seleccionamos Java Aplication
+3.Especificamos el nombre (igual al nombre que queramos).
+
+Nostoros tendremos una clase que represente al programa y otra a la 
+ventana, por eso dejamos que por defecto cree la clase que considere.
+Lo único que nos sale es la clase y el método main.
+
+A continuación pulsamos en nuevo (donde tenemos muchos templates para 
+tipos de clases distintas). Dentro de Swing usaremos con mayor frecuencia
+las cuatro primeras.
+
+Seleccionamos un JFrame y le damos un nombre con sentido como ventana
+principal. Este es el esquema básico que seguiremos siempre, empezando
+por una ventana.
+
+Se sigue explicando directamente en el código.
+Vamos a añadir elementos y ver el código que se genera.
+
+En palette tenemos tenemos todo lo que se puede incorporar.
+Containers: contenedores
+COntrols: componentes
+Mneu: menus
+
+Los manejadores de disposición se ponen con el boton derecho encima de
+donde estemos donde dice SetLayout. Siempre netBeans pone el FreeDesigne
+este no debemos usarlo, es muy malo(no reajusta), y en caso de querer
+usarlo usar el null layout. Siempre después de añadir un contenedor
+debemos de especificarle un manejador, borderLayout. AL hacer esto
+nos vamos al código y vemos que ha dejado completamente vacío initComponets
+, ahora vamos a empezar de cero realmente. Todo lo que vayamos haciendo se va
+a ir añadiendo ahora.
+Si ejecutamos ahora nos abrirá la ventana pero con el mínimo tamaño 
+y en la esquina.
+
+La linea setDefa... hace que al pinchar en X se cierra.
+
+pack() es el encargado de colocar las cosas en su lugar.
+
+Vamos a empezar con los componentes, para eso vamos a poner un manejador
+como el flow para que nos los ponga uno detrás de otro para no preocuparnos 
+por su posición.
+AL cambiarlo se ha añadido la linea :
+getContentPane().setLayout(new java.awt.FlowLayout());
+a initComponets()
+Si fuera cualqueir otro sólo se cambiaría la parte de FLow por la que 
+fuera. Esa linea siempre la tendremos asociada al manejador que 
+usaremos.
+Al añadir un componente vamos a ver las sentencias que nos añade netBeans.
+Todos los new los pondrá arriba, y la declaración de las variables abajo.
+Podemos cambiar el comportamiento del constructor que añade netBeans 
+modificando algo del programa en "personalizar".
+Abajo a la izquierda tenemos un arbol con todos los componentes
+que tenemos, si luego añadimos contenedores todo se estructurará como 
+carpetas, esto es muy útil para organizarlo todo. Si seleccionamos cualquier
+elemento, incluso el Layout o el frame en propiedades (abajo derecha)
+podemos ver sus propiedades y cambiar muchas de estas.
+Toda propiedad que se cambie va a corresponder a un mensaje en el 
+initComponents a ese objeto, pero ojo no todos los mensaje que puede
+recibir un objeto tiene por qué estar ahí en propiedades, para comprobar
+que puede hacer un objeto lo mejor es irse a la API de Java.
+
+Ojo: todo netBeans está realizado con Swing (uoh!)
+Probamos todos los componentes (Swing Controls)
+
+¿Qué es el getContentPane()?
+Sirve para acceder a una especie de cartera donde se almacenan las 
+cosas del frame. Este getContentPane nos devuelve una referencia
+a esa cartera, además no se pone el this delante pero es como si 
+lo pusiera.
+
+Cosas rarillas:
+buttonGroup no es un componente realmente, no se ve nada. Sirve para 
+agrupar botones, cumpliendo: de todos los botones que estén en un mismo 
+grupo sólo puede estar seleccionado uno. Cuando se pulsa uno se despulsa
+uno. La agrupación no es visual sinó técnica, pueden están en cualquier
+sitio.
+Las barras de desplazamiento están asociadas a un contenedor no a un 
+componente, si hacemos un comboBox muy grandes y se sale  de la zona visual
+no se verán los elementos que salgan.
+Formatted Field: entradas de texto con determinado formato.
+PasswordField: textField normal sólo que se ven asteriscos.
+EditorPane es el más complejo para editar texto, permite poner negritra,
+subrayado, tipos, colores,  etc. EL textPane también lo hace pero más
+sencillo.
+Para sacarle el máximo partido a esto debemos de revisar la API.
+El scrollBar no sirve para nada prácticamente nada, está ahí sólo 
+por reminiscencia de la AWT, donde sólo había eso para hacer scroll y 
+cosas así pero nadie lo usa.
+Separator es un elemento vacío para poner huecos entre elementos, no 
+se usa mucho.
+
+Tree: un árbol de directorios, como un explorador acotado.
+Table: una tabla
+
+
+
+AWT 96/00,01
+SWING desde entonces hasta ahora.
+
+Aparacen dos clases nuevas JTreeModel y JTableModel que sirven para
+construir el modelo. Si creamos un árbol ambién hay que crear su modelo y 
+cuando se construye (new) lo que se hace es pasarle su modelo. NetBeans
+tiene una herramienta  (un poco cutre) para construir ese 
+modelo de forma sencilla, lo mismo pasa con las tablas ( que son algo 
+más complejas que una matriz). Si nos vamos al código veremos todo el 
+rollo de código que nos ha creado. 
+
+los probamos todos. Probar durante esta semana los componentes.
+
+Si nos liamos con la posición de un componente dentro de un border layout
+podemos irnos a las propiedades para que nos diga donde está.
+Los + usados: border(por defecto de un frame) flow, grid y null.
+Coger 5 botones y cambiar los layout para ver como queda.
+
+CONTENEDORES:
+Un objeto pensado para tener componentes dentro de el. En JAva tenemos
+Component y heredando Container, ¿esto está bien? ¿debería ser al revés?
+Si. El tener no implica herencia. La herencia es el ser.
+Si-> porque un componente es un elemento más abstracto que cumple 
+tanto un botón como un frame. Frase del ser o tener en Java.
+
+Tenemos dos tipos los que son de tipo raiz donde colocar cosas y los
+que son de tipo panel para ir dentro de otro.
+Los contenedores de tipo panel pensados para estar dentro de otro
+contendor están en Swing Containers.
+Para crearlos necesitamos una clase propia para cada uno de ellos.
+Por cada ventana o diáolo tendremos una clase.
+
+Cuando pongo un panel es como empezar de nuevo, asignar layout y volver
+a anidar más.
+Si ponemos un scrollPanel si los elementos excenden la zona de 
+visualización se añaden de forma automática las barras de scroll.
+
+Hacer la parte visual de la práctica 4! Objetivo para casa!
+
+
+
+
+
+
+-o-
+Tip avanzado:
+Dentro de un new de un objeto se peude crear un método  que sólo
+sirva para ese objeto. Esto es lo que se hace por ejemplo en:
+java.awt.EventQueue.invokeLater(new Runnable() {
+            //El run está asociado a que se ejecute en una hebra.
+            public void run() {
+                //Sólo con esto funcionaría pero se mete dentro de este Runnable para que se ejecute en un entorno de hebras.
+                new VentanaPrincipal().setVisible(true);
+            }
+        });
+
+Es una sobrecarga de un método en la creación de un objeto.
+-o-
