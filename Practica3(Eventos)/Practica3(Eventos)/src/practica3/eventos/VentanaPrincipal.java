@@ -18,12 +18,17 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     //Usamos un objeto punto. para tener p.x y p.y
     Point p;
     Point lineaExtremoA, lineaExtremoB;
+    Point puntoMemoria;
+    
+    enum tipoObjeto{PUNTO,LINEA,RECTANGULO,OVALO};
+    tipoObjeto tipoObjetoADibujar;
     
     /**
      * Creates new form VentanaPrincipal
      */
     public VentanaPrincipal() {
         initComponents();
+     
     }
 
     /**
@@ -49,61 +54,69 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        boton = new javax.swing.JButton();
-        boton2 = new javax.swing.JButton();
+        grupoBotonesTIpoDibujo = new javax.swing.ButtonGroup();
+        botonPunto = new javax.swing.JToggleButton();
+        botonLinea = new javax.swing.JToggleButton();
+        botonRectangulo = new javax.swing.JToggleButton();
+        botonOvalo = new javax.swing.JToggleButton();
 
         FormListener formListener = new FormListener();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setPreferredSize(new java.awt.Dimension(400, 350));
         addMouseMotionListener(formListener);
         addMouseListener(formListener);
         getContentPane().setLayout(new java.awt.FlowLayout());
 
-        boton.setText("boton Prueba");
-        boton.addMouseMotionListener(formListener);
-        boton.addMouseListener(formListener);
-        getContentPane().add(boton);
+        grupoBotonesTIpoDibujo.add(botonPunto);
+        botonPunto.setText("punto");
+        botonPunto.addMouseListener(formListener);
+        getContentPane().add(botonPunto);
 
-        boton2.setText("boton Prueba 2");
-        boton2.addMouseListener(formListener);
-        boton2.addActionListener(formListener);
-        getContentPane().add(boton2);
+        grupoBotonesTIpoDibujo.add(botonLinea);
+        botonLinea.setText("linea");
+        botonLinea.addMouseListener(formListener);
+        getContentPane().add(botonLinea);
+
+        grupoBotonesTIpoDibujo.add(botonRectangulo);
+        botonRectangulo.setText("rectangulo");
+        botonRectangulo.addMouseListener(formListener);
+        getContentPane().add(botonRectangulo);
+
+        grupoBotonesTIpoDibujo.add(botonOvalo);
+        botonOvalo.setText("ovalo");
+        botonOvalo.addMouseListener(formListener);
+        getContentPane().add(botonOvalo);
 
         pack();
     }
 
     // Code for dispatching events from components to event handlers.
 
-    private class FormListener implements java.awt.event.ActionListener, java.awt.event.MouseListener, java.awt.event.MouseMotionListener {
+    private class FormListener implements java.awt.event.MouseListener, java.awt.event.MouseMotionListener {
         FormListener() {}
-        public void actionPerformed(java.awt.event.ActionEvent evt) {
-            if (evt.getSource() == boton2) {
-                VentanaPrincipal.this.boton2ActionPerformed(evt);
-            }
-        }
-
         public void mouseClicked(java.awt.event.MouseEvent evt) {
             if (evt.getSource() == VentanaPrincipal.this) {
                 VentanaPrincipal.this.formMouseClicked(evt);
             }
-            else if (evt.getSource() == boton) {
-                VentanaPrincipal.this.botonMouseClicked(evt);
+            else if (evt.getSource() == botonPunto) {
+                VentanaPrincipal.this.botonPuntoMouseClicked(evt);
             }
-            else if (evt.getSource() == boton2) {
-                VentanaPrincipal.this.boton2MouseClicked(evt);
+            else if (evt.getSource() == botonLinea) {
+                VentanaPrincipal.this.botonLineaMouseClicked(evt);
+            }
+            else if (evt.getSource() == botonRectangulo) {
+                VentanaPrincipal.this.botonRectanguloMouseClicked(evt);
+            }
+            else if (evt.getSource() == botonOvalo) {
+                VentanaPrincipal.this.botonOvaloMouseClicked(evt);
             }
         }
 
         public void mouseEntered(java.awt.event.MouseEvent evt) {
-            if (evt.getSource() == boton) {
-                VentanaPrincipal.this.botonMouseEntered(evt);
-            }
         }
 
         public void mouseExited(java.awt.event.MouseEvent evt) {
-            if (evt.getSource() == boton) {
-                VentanaPrincipal.this.botonMouseExited(evt);
-            }
         }
 
         public void mousePressed(java.awt.event.MouseEvent evt) {
@@ -119,10 +132,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         }
 
         public void mouseDragged(java.awt.event.MouseEvent evt) {
-            if (evt.getSource() == boton) {
-                VentanaPrincipal.this.botonMouseDragged(evt);
-            }
-            else if (evt.getSource() == VentanaPrincipal.this) {
+            if (evt.getSource() == VentanaPrincipal.this) {
                 VentanaPrincipal.this.formMouseDragged(evt);
             }
         }
@@ -131,44 +141,15 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         }
     }// </editor-fold>//GEN-END:initComponents
 
-    /*
-    Si no entendieramos el código NetBeans nos mandará directamente aquí, dentro de botonMouseClicked
-    para añadir el código que se ejecutará al realizar una acción sobre el boton, pero tenemos 
-    que entender de donde viene el código y como ha sucedido todo el proceso.    
-    */
-    private void botonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_botonMouseClicked
-        boton.setBackground(Color.red);
-    }//GEN-LAST:event_botonMouseClicked
-
-    private void botonMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_botonMouseEntered
-        boton.setBackground(Color.blue);
-    }//GEN-LAST:event_botonMouseEntered
-
-    private void botonMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_botonMouseExited
-        boton.setBackground(Color.green);
-    }//GEN-LAST:event_botonMouseExited
-
-    private void botonMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_botonMouseDragged
-        boton.setBackground(Color.yellow);
-    }//GEN-LAST:event_botonMouseDragged
-
     private void formMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseClicked
         //Del JFrames
         //this.setBackground(Color.yellow);
         //this.getContentPane().setBackground(Color.red);
         
         //Con este método conseguimos la posición del ratón
-        p=evt.getPoint();
+        puntoMemoria=p=evt.getPoint();
         this.repaint();
     }//GEN-LAST:event_formMouseClicked
-
-    private void boton2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_boton2MouseClicked
-        boton2.setBackground(Color.red);
-    }//GEN-LAST:event_boton2MouseClicked
-
-    private void boton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boton2ActionPerformed
-        boton2.setBackground(Color.blue);
-    }//GEN-LAST:event_boton2ActionPerformed
 
     private void formMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMousePressed
         /*
@@ -195,11 +176,30 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         this.repaint();
     }//GEN-LAST:event_formMouseDragged
 
+    private void botonPuntoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_botonPuntoMouseClicked
+        this.tipoObjetoADibujar=tipoObjeto.PUNTO;
+    }//GEN-LAST:event_botonPuntoMouseClicked
+
+    private void botonLineaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_botonLineaMouseClicked
+        this.tipoObjetoADibujar=tipoObjeto.LINEA;        
+    }//GEN-LAST:event_botonLineaMouseClicked
+
+    private void botonRectanguloMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_botonRectanguloMouseClicked
+        this.tipoObjetoADibujar=tipoObjeto.RECTANGULO;
+    }//GEN-LAST:event_botonRectanguloMouseClicked
+
+    private void botonOvaloMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_botonOvaloMouseClicked
+        this.tipoObjetoADibujar=tipoObjeto.OVALO;
+    }//GEN-LAST:event_botonOvaloMouseClicked
+
     
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton boton;
-    private javax.swing.JButton boton2;
+    private javax.swing.JToggleButton botonLinea;
+    private javax.swing.JToggleButton botonOvalo;
+    private javax.swing.JToggleButton botonPunto;
+    private javax.swing.JToggleButton botonRectangulo;
+    private javax.swing.ButtonGroup grupoBotonesTIpoDibujo;
     // End of variables declaration//GEN-END:variables
 
     public void paint(Graphics g){
@@ -224,8 +224,8 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         /*
         Revisar la librería Graphics !
         */
-        if(p!=null) //Evitamos la excepción para que no se dibuje si nó está definido.
-            g.fillOval(p.x-5, p.y-5, 10, 10);
+       // if(p!=null) //Evitamos la excepción para que no se dibuje si nó está definido.
+         //   g.fillOval(p.x-5, p.y-5, 10, 10);
         /*
         En lugar de ser 50, 50 tenemos que indicar la posición que nosotros queremos.
         
@@ -234,9 +234,23 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         tenemos que usar el método repaint.
         */
         
-        if(lineaExtremoA!=null && lineaExtremoB!=null)
-            g.drawLine(lineaExtremoA.x, lineaExtremoA.y, lineaExtremoB.x, lineaExtremoB.y);
+        if(tipoObjetoADibujar==tipoObjeto.PUNTO)
+            if(p!=null) 
+                g.fillOval(p.x-5, p.y-5, 10, 10);
         
+        if(tipoObjetoADibujar==tipoObjeto.LINEA)
+            if(lineaExtremoA!=null && lineaExtremoB!=null)
+                g.drawLine(lineaExtremoA.x, lineaExtremoA.y, lineaExtremoB.x, lineaExtremoB.y);
+        
+        
+        if(tipoObjetoADibujar==tipoObjeto.RECTANGULO)
+            if(lineaExtremoA!=null && lineaExtremoB!=null && puntoMemoria!=null)
+                g.drawRect(lineaExtremoA.x, lineaExtremoA.y, lineaExtremoB.x-puntoMemoria.x, lineaExtremoB.x-puntoMemoria.x);
+        
+        if(tipoObjetoADibujar==tipoObjeto.OVALO)
+            if(lineaExtremoA!=null && lineaExtremoB!=null && puntoMemoria!=null)
+                g.drawOval(lineaExtremoA.x, lineaExtremoA.y, lineaExtremoB.x-puntoMemoria.x, lineaExtremoB.x-puntoMemoria.x);
+    
     }
 
 }

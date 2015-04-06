@@ -47,7 +47,6 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         BotonLapiz.setBackground(new java.awt.Color(10, 0, 255));
         GrupoBotonesDibujo.add(BotonLapiz);
         BotonLapiz.setForeground(new java.awt.Color(253, 2, 2));
-        BotonLapiz.setIcon(new javax.swing.ImageIcon("/home/juan/Documentos/SegundoCuatrimestre1415/SMM/sistemasMultimediaJava/Practica4/iconos/Lapiz.gif")); // NOI18N
         BotonLapiz.setFocusable(false);
         BotonLapiz.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         BotonLapiz.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -59,21 +58,18 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         jToolBar1.add(BotonLapiz);
 
         GrupoBotonesDibujo.add(BotonLinea);
-        BotonLinea.setIcon(new javax.swing.ImageIcon("/home/juan/Documentos/SegundoCuatrimestre1415/SMM/sistemasMultimediaJava/Practica4/iconos/Linea.gif")); // NOI18N
         BotonLinea.setFocusable(false);
         BotonLinea.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         BotonLinea.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         jToolBar1.add(BotonLinea);
 
         GrupoBotonesDibujo.add(BotonRectangulo);
-        BotonRectangulo.setIcon(new javax.swing.ImageIcon("/home/juan/Documentos/SegundoCuatrimestre1415/SMM/sistemasMultimediaJava/Practica4/iconos/Rectangulo.gif")); // NOI18N
         BotonRectangulo.setFocusable(false);
         BotonRectangulo.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         BotonRectangulo.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         jToolBar1.add(BotonRectangulo);
 
         GrupoBotonesDibujo.add(BotonOvalo);
-        BotonOvalo.setIcon(new javax.swing.ImageIcon("/home/juan/Documentos/SegundoCuatrimestre1415/SMM/sistemasMultimediaJava/Practica4/iconos/Ovalo.gif")); // NOI18N
         BotonOvalo.setFocusable(false);
         BotonOvalo.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         BotonOvalo.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -148,10 +144,10 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(BotonNegro, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jToggleButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jToggleButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jToggleButton2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(BotonNegro, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jToggleButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
