@@ -24,68 +24,24 @@ import org.w3c.dom.Element;
 /* ##IMPORTS */
 
 
- class Persona{
-        
-        private String nombre;
-        private int edad;
-        private int dni;
-        
-        
-        public Persona(String nombre, int edad, int dni){
-            this.nombre=nombre; this.edad=edad; this.dni=dni;
-        }
-        
-        public String getNombre(){
-            return nombre;
-        }
-        public void setNombre(String nombre){
-            this.nombre=nombre;
-        }
-        public int getEdad(){
-            return edad;
-        }
-        public void setEdad(int edad){
-            this.edad=edad;
-        }        
-        public int getDni(){
-            return dni;
-        }
-        public void setDni(int dni){
-            this.dni=dni;
-        }
-        
-                
-    }
+ 
 
 public class XMLWriter {
     
    
     
     
-    public static void main(String[] args) throws TransformerConfigurationException, TransformerException {
+    public static void escribeXML(ArrayList<Persona> arrayPersonas, String ruta) throws TransformerConfigurationException, TransformerException {
         
-        
+        /*
         ArrayList<Persona> arrayPersonas = new ArrayList<Persona>();
         
         //Introducción de elementos:
         arrayPersonas.add(new Persona("juan",27,322425));
         arrayPersonas.add(new Persona("cr7",27,35224));
         arrayPersonas.add(new Persona("alcalde", 50,3439923));
-        
-        Persona maria = new Persona("maria",2,5);
-        
-
-        //Obtenemos el nombre de la clase
-        System.out.println(maria.getClass().getSimpleName());
-        
-
-        //Obtenemos el nombre de las variables:
-        
-        Field[] fields = Persona.class.getDeclaredFields();              
-        for(Field field: fields){
-            System.out.println(field.getName());
-        }
-        
+        */
+   
         try {
             /*
             Define una APP fábrica que permite a las aplicaciones para obtener un analizador que produce árboles de objetos DOM de documentos XML.
@@ -139,7 +95,6 @@ public class XMLWriter {
                 //Obtenemos las variables que tiene:
                 Field[] variables = Persona.class.getDeclaredFields();              
                 for(Field variable: variables){
-                    System.out.println(variable.getName());
                     //Obtenemos el nombre de la variable:
                     Element tagVariable = doc.createElement(variable.getName());
                     if(variable.getName().contains("nombre"))
@@ -150,46 +105,8 @@ public class XMLWriter {
                         tagVariable.appendChild(doc.createTextNode(Integer.toString(persona.getDni())));
                     elementoEnXML.appendChild(tagVariable);
                 }
-                
-                Element perro = doc.createElement("color");
-                perro.appendChild(doc.createTextNode("marron"));
-                elementoEnXML.appendChild(perro);
-                           
+             
             }
-            
-            
-            //staff elements
-            Element staff = doc.createElement("Staff");
-            rootElement.appendChild(staff);
-            
-            /*
-            //Set attribute to staff element
-            Attr attr = doc.createAttribute("id");
-            attr.setValue("1");
-            staff.setAttributeNode(attr);
-            */
-            
-            //Añadimos el elemento "firstname"
-            //Creamos el tag firstname
-            Element firstname = doc.createElement("firstname");
-            //Añadimos el texto al tag que hemos creado antes.
-            firstname.appendChild(doc.createTextNode("young man"));
-            staff.appendChild(firstname);
-            
-            //Añadimos el elemento "lastname"
-            Element lastname = doc.createElement("lastname");
-            lastname.appendChild(doc.createTextNode("mook kim"));
-            staff.appendChild(lastname);
-            
-            //Añadimos el elemento nickname
-            Element nickname = doc.createElement("nickname");
-            nickname.appendChild(doc.createTextNode("mkyong"));
-            staff.appendChild(nickname);
-            
-            //Añadimos el elemento salario
-            Element salary = doc.createElement("salary");
-            salary.appendChild(doc.createTextNode("250"));
-            staff.appendChild(salary);
             
             //Escribimos la información en el fichero XML
             
@@ -199,13 +116,11 @@ public class XMLWriter {
 
             
             //StreamResult result = new StreamResult(System.out);
-            StreamResult result = new StreamResult(new File("/home/juan/file.xml"));
+            StreamResult result = new StreamResult(new File(ruta));
             
             transformer.transform(source,result);
             
-            
-            
-            
+          
         } catch (ParserConfigurationException ex) {
             Logger.getLogger(XMLWriter.class.getName()).log(Level.SEVERE, null, ex);
         }
