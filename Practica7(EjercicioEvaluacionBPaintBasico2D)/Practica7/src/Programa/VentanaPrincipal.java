@@ -75,9 +75,9 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         panelGrosor = new javax.swing.JPanel();
         spinnerGrosor = new javax.swing.JSpinner();
         jPanelInfo = new javax.swing.JPanel();
-        barraInfoHerramienta = new javax.swing.JLabel();
+        nfoHerramienta = new javax.swing.JLabel();
         coordenadas = new javax.swing.JLabel();
-        jSeparator1 = new javax.swing.JSeparator();
+        separadorBarraInfo = new javax.swing.JSeparator();
         panelEscritorio = new javax.swing.JDesktopPane();
         jMenuBar1 = new javax.swing.JMenuBar();
         menuArchivo = new javax.swing.JMenu();
@@ -321,13 +321,13 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
         jPanelInfo.setLayout(new java.awt.BorderLayout());
 
-        barraInfoHerramienta.setText("Punto");
-        jPanelInfo.add(barraInfoHerramienta, java.awt.BorderLayout.LINE_START);
+        nfoHerramienta.setText("Punto");
+        jPanelInfo.add(nfoHerramienta, java.awt.BorderLayout.LINE_START);
 
         coordenadas.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         coordenadas.setText("Coordenadas");
         jPanelInfo.add(coordenadas, java.awt.BorderLayout.LINE_END);
-        jPanelInfo.add(jSeparator1, java.awt.BorderLayout.PAGE_START);
+        jPanelInfo.add(separadorBarraInfo, java.awt.BorderLayout.PAGE_START);
 
         PanelSur.add(jPanelInfo, java.awt.BorderLayout.PAGE_END);
 
@@ -341,7 +341,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         );
         panelEscritorioLayout.setVerticalGroup(
             panelEscritorioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 220, Short.MAX_VALUE)
+            .addGap(0, 218, Short.MAX_VALUE)
         );
 
         getContentPane().add(panelEscritorio, java.awt.BorderLayout.CENTER);
@@ -397,7 +397,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     */
     private void BotonLapizActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonLapizActionPerformed
         //Mensaje en la barra de estado inferior:
-        this.barraInfoHerramienta.setText("Punto");
+        this.nfoHerramienta.setText("Punto");
         //Enviamos mensaje a Lienzo para que se seleccione la herramienta punto:
 //        this.lienzo1.setTipoHerramienta(Lienzo.tipoHerramienta.PUNTO);
     }//GEN-LAST:event_BotonLapizActionPerformed
@@ -408,21 +408,21 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
     private void BotonLineaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonLineaActionPerformed
         //Mensaje en la barra de estado inferior:
-        this.barraInfoHerramienta.setText("Línea");
+        this.nfoHerramienta.setText("Línea");
         //Enviamoss mensaje a Lienzo para que se seleccione la herramienta linea:
     //    this.lienzo1.setTipoHerramienta(Lienzo.tipoHerramienta.LINEA);
     }//GEN-LAST:event_BotonLineaActionPerformed
 
     private void BotonRectanguloActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonRectanguloActionPerformed
         //Mensaje en la barra de estado inferior:
-        this.barraInfoHerramienta.setText("Rectángulo");
+        this.nfoHerramienta.setText("Rectángulo");
         //Enviamoss mensaje a Lienzo para que se seleccione la herramienta rectángulo:
 //        this.lienzo1.setTipoHerramienta(Lienzo.tipoHerramienta.RECTANGULO);
     }//GEN-LAST:event_BotonRectanguloActionPerformed
 
     private void BotonOvaloActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonOvaloActionPerformed
         //Mensaje en la barra de estado inferior:
-        this.barraInfoHerramienta.setText("Óvalo");
+        this.nfoHerramienta.setText("Óvalo");
         //Enviamoss mensaje a Lienzo para que se seleccione la herramienta óvalo:
  //       this.lienzo1.setTipoHerramienta(Lienzo.tipoHerramienta.OVALO);
     }//GEN-LAST:event_BotonOvaloActionPerformed
@@ -466,7 +466,6 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private javax.swing.ButtonGroup GrupoBotonesDibujo;
     private javax.swing.JPanel PanelNorte;
     private javax.swing.JPanel PanelSur;
-    private javax.swing.JLabel barraInfoHerramienta;
     private javax.swing.JMenuItem botonAbrirMenuArchivo;
     private javax.swing.JCheckBox botonAlisar;
     private javax.swing.JToggleButton botonAmarillo;
@@ -492,17 +491,18 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanelInfo;
-    private javax.swing.JSeparator jSeparator1;
     private javax.swing.JToolBar jToolBar1;
     private javax.swing.JLabel labelCC;
     private javax.swing.JMenu menuArchivo;
     private javax.swing.JMenu menuEdicion;
+    private javax.swing.JLabel nfoHerramienta;
     private javax.swing.JPanel panelColores;
     private javax.swing.JDesktopPane panelEscritorio;
     private javax.swing.JPanel panelGrosor;
     private javax.swing.JPanel panelHerramientasInferior;
     private javax.swing.JPanel panelPropiedades;
     private javax.swing.JPopupMenu popUpAjustes;
+    private javax.swing.JSeparator separadorBarraInfo;
     private javax.swing.JSpinner spinnerGrosor;
     // End of variables declaration//GEN-END:variables
 }
