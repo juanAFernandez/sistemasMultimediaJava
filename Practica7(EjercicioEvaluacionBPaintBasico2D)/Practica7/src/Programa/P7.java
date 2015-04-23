@@ -37,7 +37,7 @@ public class P7 {
         }
         //</editor-fold>
 
-        System.out.println("Programa principal de entornoVisualPractica5");
+        System.out.println("Programa principal de entornoVisualPractica7");
         
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {

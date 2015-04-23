@@ -63,7 +63,6 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         labelGrosor = new javax.swing.JLabel();
         spinnerGrosor = new javax.swing.JSpinner();
         botonSeleccion = new javax.swing.JCheckBox();
-        lienzo1 = new GUI.Lienzo();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         botonNuevoMenuArchivo = new javax.swing.JMenuItem();
@@ -353,28 +352,6 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
         PanelCentro.add(panelHerramientas, java.awt.BorderLayout.LINE_END);
 
-        lienzo1.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
-            public void mouseMoved(java.awt.event.MouseEvent evt) {
-                lienzo1MouseMoved(evt);
-            }
-            public void mouseDragged(java.awt.event.MouseEvent evt) {
-                lienzo1MouseDragged(evt);
-            }
-        });
-
-        javax.swing.GroupLayout lienzo1Layout = new javax.swing.GroupLayout(lienzo1);
-        lienzo1.setLayout(lienzo1Layout);
-        lienzo1Layout.setHorizontalGroup(
-            lienzo1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 556, Short.MAX_VALUE)
-        );
-        lienzo1Layout.setVerticalGroup(
-            lienzo1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 220, Short.MAX_VALUE)
-        );
-
-        PanelCentro.add(lienzo1, java.awt.BorderLayout.CENTER);
-
         getContentPane().add(PanelCentro, java.awt.BorderLayout.CENTER);
 
         jMenu1.setText("Archivo");
@@ -604,7 +581,6 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private javax.swing.JToolBar jToolBar1;
     private javax.swing.JLabel labelCC;
     private javax.swing.JLabel labelGrosor;
-    private GUI.Lienzo lienzo1;
     private javax.swing.JPanel panelHerramientas;
     private javax.swing.JPopupMenu popUpAjustes;
     private javax.swing.JSpinner spinnerGrosor;

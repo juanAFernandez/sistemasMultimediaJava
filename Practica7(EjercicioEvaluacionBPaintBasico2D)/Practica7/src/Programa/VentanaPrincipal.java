@@ -1,12 +1,17 @@
 package Programa;
 
+import static extras.Imprimir.Imprimir;
 import java.awt.Color;
-import java.awt.GraphicsEnvironment;
 import java.awt.geom.Point2D;
+import java.io.File;
 import javax.swing.BorderFactory;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import extras.Herramienta;
 
 
-public class VentanaPrincipal extends javax.swing.JFrame {
+public class VentanaPrincipal extends JFrame {
 
     private String []fuentesSistema;
     
@@ -21,7 +26,10 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         this.BotonLinea.doClick();
         this.dialogoAbout.setSize(600, 200);
         this.dialogoAbout.setLocationRelativeTo(null);
-        this.spinnerGrosor.setValue(10);
+        
+        
+        
+        this.spinnerGrosor.setValue(1);
 //        this.lienzo1.setGrosorLinea(10);
         
         //this.BotonHerramientas.doClick();
@@ -32,6 +40,12 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         this.panelColores.setBorder(BorderFactory.createTitledBorder("Color"));
         this.panelGrosor.setBorder(BorderFactory.createTitledBorder("Grosor"));
         this.panelPropiedades.setBorder(BorderFactory.createTitledBorder(""));
+        
+        //Para que el JFrame se vea a pantalla completa:
+        //this.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        this.setSize(500, 500);
+        
+        this.panelHerramientasInferior.setPreferredSize(new java.awt.Dimension(615, 140));
         
         
         //this.panelEscritorio.setBackground(Color.red);
@@ -114,7 +128,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         dialogoAbout.getContentPane().add(jPanel1, java.awt.BorderLayout.PAGE_START);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Open MOJ (Media Over Java) P6");
+        setTitle("Open MOJ (Media Over Java) P7");
 
         jToolBar1.setRollover(true);
 
@@ -172,7 +186,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         PanelNorte.setLayout(PanelNorteLayout);
         PanelNorteLayout.setHorizontalGroup(
             PanelNorteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jToolBar1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 649, Short.MAX_VALUE)
+            .addComponent(jToolBar1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 621, Short.MAX_VALUE)
         );
         PanelNorteLayout.setVerticalGroup(
             PanelNorteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -185,7 +199,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
         PanelSur.setLayout(new java.awt.BorderLayout());
 
-        panelHerramientasInferior.setPreferredSize(new java.awt.Dimension(615, 70));
+        panelHerramientasInferior.setPreferredSize(new java.awt.Dimension(615, 120));
         panelHerramientasInferior.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         botonNegro.setBackground(new java.awt.Color(1, 1, 1));
@@ -272,15 +286,35 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        panelHerramientasInferior.add(panelColores, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, 74));
+        panelHerramientasInferior.add(panelColores, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 20, 140, 110));
 
         botonRelleno.setText("Relleno");
+        botonRelleno.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonRellenoActionPerformed(evt);
+            }
+        });
 
         botonTransparencia.setText("Transparencia");
+        botonTransparencia.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonTransparenciaActionPerformed(evt);
+            }
+        });
 
         botonAlisar.setText("Alisar");
+        botonAlisar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonAlisarActionPerformed(evt);
+            }
+        });
 
         botonEditar.setText("Editar");
+        botonEditar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonEditarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout panelPropiedadesLayout = new javax.swing.GroupLayout(panelPropiedades);
         panelPropiedades.setLayout(panelPropiedadesLayout);
@@ -300,7 +334,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         panelPropiedadesLayout.setVerticalGroup(
             panelPropiedadesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelPropiedadesLayout.createSequentialGroup()
-                .addContainerGap(20, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(panelPropiedadesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(botonRelleno)
                     .addComponent(botonTransparencia))
@@ -311,11 +345,18 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        panelHerramientasInferior.add(panelPropiedades, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 0, 240, -1));
+        panelHerramientasInferior.add(panelPropiedades, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 30, 240, 70));
 
         panelGrosor.setLayout(new java.awt.BorderLayout());
-        panelHerramientasInferior.add(panelGrosor, new org.netbeans.lib.awtextra.AbsoluteConstraints(108, 0, 80, -1));
-        panelHerramientasInferior.add(spinnerGrosor, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 20, 50, -1));
+
+        spinnerGrosor.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                spinnerGrosorStateChanged(evt);
+            }
+        });
+        panelGrosor.add(spinnerGrosor, java.awt.BorderLayout.CENTER);
+
+        panelHerramientasInferior.add(panelGrosor, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 20, 80, 70));
 
         PanelSur.add(panelHerramientasInferior, java.awt.BorderLayout.PAGE_START);
 
@@ -337,18 +378,18 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         panelEscritorio.setLayout(panelEscritorioLayout);
         panelEscritorioLayout.setHorizontalGroup(
             panelEscritorioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 649, Short.MAX_VALUE)
+            .addGap(0, 621, Short.MAX_VALUE)
         );
         panelEscritorioLayout.setVerticalGroup(
             panelEscritorioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 218, Short.MAX_VALUE)
+            .addGap(0, 0, Short.MAX_VALUE)
         );
 
         getContentPane().add(panelEscritorio, java.awt.BorderLayout.CENTER);
 
         menuArchivo.setText("Archivo");
 
-        botonNuevoMenuArchivo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/NuevoBoceto.GIF"))); // NOI18N
+        botonNuevoMenuArchivo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/iconNew.png"))); // NOI18N
         botonNuevoMenuArchivo.setText("Nuevo");
         botonNuevoMenuArchivo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -357,7 +398,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         });
         menuArchivo.add(botonNuevoMenuArchivo);
 
-        botonAbrirMenuArchivo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/folder265.png"))); // NOI18N
+        botonAbrirMenuArchivo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/iconFolder.png"))); // NOI18N
         botonAbrirMenuArchivo.setText("Abrir");
         botonAbrirMenuArchivo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -366,8 +407,13 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         });
         menuArchivo.add(botonAbrirMenuArchivo);
 
-        botonGuardarMenuArchivo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/Guardar.gif"))); // NOI18N
+        botonGuardarMenuArchivo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/iconSave.png"))); // NOI18N
         botonGuardarMenuArchivo.setText("Guardar");
+        botonGuardarMenuArchivo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonGuardarMenuArchivoActionPerformed(evt);
+            }
+        });
         menuArchivo.add(botonGuardarMenuArchivo);
 
         jMenuBar1.add(menuArchivo);
@@ -397,63 +443,147 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     */
     private void BotonLapizActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonLapizActionPerformed
         //Mensaje en la barra de estado inferior:
-        this.nfoHerramienta.setText("Punto");
-        //Enviamos mensaje a Lienzo para que se seleccione la herramienta punto:
-//        this.lienzo1.setTipoHerramienta(Lienzo.tipoHerramienta.PUNTO);
+        this.nfoHerramienta.setText("Punto");        
+        //Tenemos que enviar un mensaje a la ventana seleccionada:
+        if(panelEscritorio.getSelectedFrame()!=null)
+            ((VentanaInterna)panelEscritorio.getSelectedFrame()).setHerramienta(Herramienta.PUNTO);
     }//GEN-LAST:event_BotonLapizActionPerformed
 
     private void botonNegroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonNegroActionPerformed
-  //      this.lienzo1.setColor(Color.BLACK);
+        if(panelEscritorio.getSelectedFrame()!=null)
+            ((VentanaInterna)panelEscritorio.getSelectedFrame()).setColor(Color.BLACK); 
     }//GEN-LAST:event_botonNegroActionPerformed
 
     private void BotonLineaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonLineaActionPerformed
         //Mensaje en la barra de estado inferior:
-        this.nfoHerramienta.setText("Línea");
-        //Enviamoss mensaje a Lienzo para que se seleccione la herramienta linea:
-    //    this.lienzo1.setTipoHerramienta(Lienzo.tipoHerramienta.LINEA);
+        this.nfoHerramienta.setText("Línea");                
+        //Tenemos que enviar un mensaje a la ventana seleccionada:       
+        if(panelEscritorio.getSelectedFrame()!=null)
+            ((VentanaInterna)panelEscritorio.getSelectedFrame()).setHerramienta(Herramienta.LINEA);               
     }//GEN-LAST:event_BotonLineaActionPerformed
 
     private void BotonRectanguloActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonRectanguloActionPerformed
         //Mensaje en la barra de estado inferior:
         this.nfoHerramienta.setText("Rectángulo");
-        //Enviamoss mensaje a Lienzo para que se seleccione la herramienta rectángulo:
-//        this.lienzo1.setTipoHerramienta(Lienzo.tipoHerramienta.RECTANGULO);
+        //Tenemos que enviar un mensaje a la ventana seleccionada:       
+        if(panelEscritorio.getSelectedFrame()!=null)
+            ((VentanaInterna)panelEscritorio.getSelectedFrame()).setHerramienta(Herramienta.RECTANGULO);  
     }//GEN-LAST:event_BotonRectanguloActionPerformed
 
     private void BotonOvaloActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonOvaloActionPerformed
         //Mensaje en la barra de estado inferior:
         this.nfoHerramienta.setText("Óvalo");
-        //Enviamoss mensaje a Lienzo para que se seleccione la herramienta óvalo:
- //       this.lienzo1.setTipoHerramienta(Lienzo.tipoHerramienta.OVALO);
+        //Tenemos que enviar un mensaje a la ventana seleccionada:       
+        if(panelEscritorio.getSelectedFrame()!=null)
+            ((VentanaInterna)panelEscritorio.getSelectedFrame()).setHerramienta(Herramienta.OVALO); 
     }//GEN-LAST:event_BotonOvaloActionPerformed
 
     private void botonRojoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonRojoActionPerformed
- //       this.lienzo1.setColor(Color.RED);
+        if(panelEscritorio.getSelectedFrame()!=null)
+            ((VentanaInterna)panelEscritorio.getSelectedFrame()).setColor(Color.RED);         
     }//GEN-LAST:event_botonRojoActionPerformed
 
     private void botonAzulActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonAzulActionPerformed
-   //     this.lienzo1.setColor(Color.BLUE);
+        if(panelEscritorio.getSelectedFrame()!=null)
+            ((VentanaInterna)panelEscritorio.getSelectedFrame()).setColor(Color.BLUE); 
     }//GEN-LAST:event_botonAzulActionPerformed
 
     private void botonBlancoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonBlancoActionPerformed
-   //     this.lienzo1.setColor(Color.WHITE);
+        if(panelEscritorio.getSelectedFrame()!=null)
+            ((VentanaInterna)panelEscritorio.getSelectedFrame()).setColor(Color.WHITE); 
     }//GEN-LAST:event_botonBlancoActionPerformed
 
     private void botonAmarilloActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonAmarilloActionPerformed
-  //      this.lienzo1.setColor(Color.YELLOW);
+        if(panelEscritorio.getSelectedFrame()!=null)
+            ((VentanaInterna)panelEscritorio.getSelectedFrame()).setColor(Color.YELLOW); 
     }//GEN-LAST:event_botonAmarilloActionPerformed
 
     private void botonVerdeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonVerdeActionPerformed
-   //     this.lienzo1.setColor(Color.GREEN);
+        if(panelEscritorio.getSelectedFrame()!=null)
+            ((VentanaInterna)panelEscritorio.getSelectedFrame()).setColor(Color.GREEN); 
     }//GEN-LAST:event_botonVerdeActionPerformed
 
     private void botonNuevoMenuArchivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonNuevoMenuArchivoActionPerformed
-        // TODO add your handling code here:
+        VentanaInterna ventanaInterna = new VentanaInterna();
+        ventanaInterna.setHerramienta(Herramienta.LINEA);
+        ventanaInterna.setColor(Color.BLACK);
+        this.panelEscritorio.add(ventanaInterna);
+        System.out.println("Pulsado Archivo->Nuevo. Añadido objeto VentanaInterna a panelEscritorio");
+        ventanaInterna.setVisible(true);
     }//GEN-LAST:event_botonNuevoMenuArchivoActionPerformed
 
+    //Acción sobre el botón abrir:
     private void botonAbrirMenuArchivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonAbrirMenuArchivoActionPerformed
-        // TODO add your handling code here:
+        JFileChooser dlg = new JFileChooser();
+        int resp = dlg.showOpenDialog(this);
+        if(resp==JFileChooser.APPROVE_OPTION){
+            File f = dlg.getSelectedFile();
+        }
     }//GEN-LAST:event_botonAbrirMenuArchivoActionPerformed
+
+    //Acción sobre el botón guardar:
+    private void botonGuardarMenuArchivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonGuardarMenuArchivoActionPerformed
+        JFileChooser dlg = new JFileChooser();
+        int resp = dlg.showOpenDialog(this);
+        if(resp==JFileChooser.APPROVE_OPTION){
+            File f = dlg.getSelectedFile();
+        }
+    }//GEN-LAST:event_botonGuardarMenuArchivoActionPerformed
+
+    private void botonEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonEditarActionPerformed
+        if(botonEditar.isSelected())            
+            if(panelEscritorio.getSelectedFrame()!=null)
+                ((VentanaInterna)panelEscritorio.getSelectedFrame()).setModoSeleccion(true);
+        
+        if(!botonEditar.isSelected())            
+            if(panelEscritorio.getSelectedFrame()!=null)
+                ((VentanaInterna)panelEscritorio.getSelectedFrame()).setModoSeleccion(false);  
+  
+    }//GEN-LAST:event_botonEditarActionPerformed
+
+    private void spinnerGrosorStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_spinnerGrosorStateChanged
+        
+        if((int)spinnerGrosor.getValue()<=0){
+         Imprimir("No se puede usar un numero menor o igual a 0 como grosor del trazado.");
+         //Mostramos un mensaje
+         JOptionPane.showMessageDialog(this, "¿Estas seguro de querer usar un grosor igual a 0?", "Mala idea", JOptionPane.WARNING_MESSAGE);
+         spinnerGrosor.setValue(1);
+        }if(panelEscritorio.getSelectedFrame()!=null)
+           ((VentanaInterna)panelEscritorio.getSelectedFrame()).setGrosor((int)spinnerGrosor.getValue()); 
+    }//GEN-LAST:event_spinnerGrosorStateChanged
+
+    private void botonRellenoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonRellenoActionPerformed
+        if(botonRelleno.isSelected()){
+            if(panelEscritorio.getSelectedFrame()!=null)
+           ((VentanaInterna)panelEscritorio.getSelectedFrame()).setRelleno(true);
+        }
+        if(!botonRelleno.isSelected()){
+            if(panelEscritorio.getSelectedFrame()!=null)
+           ((VentanaInterna)panelEscritorio.getSelectedFrame()).setRelleno(false);
+        }
+    }//GEN-LAST:event_botonRellenoActionPerformed
+
+    private void botonAlisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonAlisarActionPerformed
+         if(botonAlisar.isSelected()){
+            if(panelEscritorio.getSelectedFrame()!=null)
+           ((VentanaInterna)panelEscritorio.getSelectedFrame()).setMejoraRenderizacion(true);
+        }
+        if(!botonAlisar.isSelected()){
+            if(panelEscritorio.getSelectedFrame()!=null)
+           ((VentanaInterna)panelEscritorio.getSelectedFrame()).setMejoraRenderizacion(false);
+        }
+    }//GEN-LAST:event_botonAlisarActionPerformed
+
+    private void botonTransparenciaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonTransparenciaActionPerformed
+        if(botonTransparencia.isSelected()){
+            if(panelEscritorio.getSelectedFrame()!=null)
+           ((VentanaInterna)panelEscritorio.getSelectedFrame()).setTransparencia(true);
+        }
+        if(!botonTransparencia.isSelected()){
+            if(panelEscritorio.getSelectedFrame()!=null)
+           ((VentanaInterna)panelEscritorio.getSelectedFrame()).setTransparencia(false);
+        }
+    }//GEN-LAST:event_botonTransparenciaActionPerformed
 
     
 

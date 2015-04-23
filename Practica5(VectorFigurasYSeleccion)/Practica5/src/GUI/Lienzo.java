@@ -13,12 +13,15 @@ import java.awt.Point;
 import java.awt.Shape;
 import java.awt.Stroke;
 import java.awt.geom.Ellipse2D;
-import java.awt.geom.Line2D;
+//import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import static extras.Imprimir.Imprimir;
+//import java.awt.geom.Line2D;
+
 
 
 /**
@@ -45,7 +48,7 @@ public class Lienzo extends javax.swing.JPanel {
     ArrayList <Shape> vShape = new ArrayList();
     
     
-    Line2D lineaPrueba = new Line2D.Double();
+    Linea2D.Double lineaPrueba = new Linea2D.Double();
     private float grosorLinea=10;
     
     enum tipoHerramienta{PUNTO,LINEA,RECTANGULO,OVALO};
@@ -101,6 +104,9 @@ public class Lienzo extends javax.swing.JPanel {
         
         this.setAtributos(g2d);
                 
+        
+        
+        
         //Ahora lo único que hacemos el recorrer el vector de shapes y dibujarlas.
         if(!vShape.isEmpty())
             for(Shape s:vShape) g2d.draw(s);
@@ -125,9 +131,13 @@ public class Lienzo extends javax.swing.JPanel {
     
     
     private Shape getShapeSeleccionada(Point2D p){
-        for(Shape s:vShape)
+        Imprimir("Buscando coincidencias en "+vShape.size()+" elementos");
+        for(Shape s:vShape){
+            Imprimir("Objeto de tipo "+s.getClass().getName());
             if(s.contains(p)) 
                 return s;
+        }
+        
         return null;
     }
     
@@ -211,7 +221,7 @@ public class Lienzo extends javax.swing.JPanel {
          
         
         if(this.herramienta==tipoHerramienta.LINEA)
-            vShape.add(new Line2D.Double());
+            vShape.add(new Linea2D.Double());
         else if(this.herramienta==tipoHerramienta.RECTANGULO)
             vShape.add(new Rectangle2D.Double());
         else if(this.herramienta==tipoHerramienta.OVALO)
@@ -270,7 +280,7 @@ public class Lienzo extends javax.swing.JPanel {
             Sería mucho más lógico tener un set para cada uno de los puntos de la linea sin que nos tuviera
             que forzar a usar los dos.
             */
-            ((Line2D)vShape.get(vShape.size()-1)).setLine(pA, pB);
+            ((Linea2D)vShape.get(vShape.size()-1)).setLine(pA, pB);
         else if(this.herramienta==tipoHerramienta.RECTANGULO){
             /*
             Para modificarlo tenemos que volver a especificar el primer punto y calcular el ancho y alto del rectángulo

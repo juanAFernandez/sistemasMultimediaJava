@@ -16,8 +16,8 @@ public class Programa {
         
         //Introducción de elementos:
         arrayPersonas.add(new Persona("juan",27,322425));
-        arrayPersonas.add(new Persona("cr7",27,35224));
-        arrayPersonas.add(new Persona("topacio", 50,3439923));
+        arrayPersonas.add(new Persona("juan carlos",27,35224));
+        arrayPersonas.add(new Persona("juan domingo", 50,3439923));
         
         //Escribimos en XML
         escribeXML(arrayPersonas, "/home/juan/file.xml");
