@@ -9,6 +9,8 @@ import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import extras.Herramienta;
+import java.awt.image.BufferedImage;
+import javax.imageio.ImageIO;
 
 public class VentanaPrincipal extends JFrame {
 
@@ -26,6 +28,11 @@ public class VentanaPrincipal extends JFrame {
         this.dialogoAbout.setSize(600, 200);
         this.dialogoAbout.setLocationRelativeTo(null);
         
+        //botonRojo.setSelected(true);
+        //botonRojo.setSelected(rootPaneCheckingEnabled);
+        
+        //botonRojo.doClick();
+        //botonRojo.setSelected(true);
         
         
         this.spinnerGrosor.setValue(1);
@@ -51,7 +58,7 @@ public class VentanaPrincipal extends JFrame {
         
         
         //Abrimos una ventana al iniciar el programa:
-        VentanaInterna ventanaInterna = new VentanaInterna();
+        VentanaInterna ventanaInterna = new VentanaInterna(this);
         ventanaInterna.getLienzo().setTipoHerramienta(Herramienta.LINEA);
         ventanaInterna.getLienzo().setColor(Color.BLACK);
         this.panelEscritorio.add(ventanaInterna);
@@ -449,6 +456,35 @@ public class VentanaPrincipal extends JFrame {
         this.coordenadas.setText("x "+(int)puntoRaton.getX()+" y "+(int)puntoRaton.getY());
     }
     
+    public void saluda(){
+        Imprimir("hola desde ventana principal");
+    }
+    
+    public void setColor(Color color){        
+        
+       Imprimir("Cambiando herramienta de color a "+color.toString()); 
+       
+       if(color==Color.BLACK){
+           Imprimir("cambiando a negro");
+           this.GrupoBotonesColores.clearSelection();
+           this.GrupoBotonesColores.setSelected(botonNegro.getModel(), true);
+       }
+       if(color==Color.RED){
+           Imprimir("cambiando a rojo");
+           this.GrupoBotonesColores.clearSelection();
+           this.GrupoBotonesColores.setSelected(botonNegro.getModel(), true);
+       }
+    }
+    
+    public void setGrosor(int grosor){
+        this.spinnerGrosor.setValue(grosor);
+    }
+    
+    
+    
+    
+    
+    
     /*
     Hay que usar el action porque lo que estamos haciendo es ejecutar acciones sobre el botón
     */
@@ -459,7 +495,20 @@ public class VentanaPrincipal extends JFrame {
         if(panelEscritorio.getSelectedFrame()!=null)
             //((VentanaInterna)panelEscritorio.getSelectedFrame()).setHerramienta(Herramienta.PUNTO);
             ((VentanaInterna)panelEscritorio.getSelectedFrame()).getLienzo().setTipoHerramienta(Herramienta.PUNTO);
-           
+        
+        
+        this.GrupoBotonesColores.clearSelection();
+        this.GrupoBotonesColores.setSelected(botonRojo.getModel(), true);
+        //botonRojo.setOpaque(true);
+        botonRojo.setFocusPainted(true);
+        botonRojo.setBorderPainted(true);
+        botonRojo.setContentAreaFilled(true);
+       
+        /*
+        ¿Cómo hacer que se marque el borde como se encuentra al principio?
+        */
+        
+        
     }//GEN-LAST:event_BotonLapizActionPerformed
 
     private void botonNegroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonNegroActionPerformed
@@ -517,12 +566,23 @@ public class VentanaPrincipal extends JFrame {
     }//GEN-LAST:event_botonVerdeActionPerformed
 
     private void botonNuevoMenuArchivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonNuevoMenuArchivoActionPerformed
-        VentanaInterna ventanaInterna = new VentanaInterna();
+        //Declaramos un nuevo objeto de tipo VentanaInterna
+        VentanaInterna ventanaInterna = new VentanaInterna(this);
+        //Hacemos algunos ajustes de ese objeto como establecer herramienta por defecto y color por defecto
         ventanaInterna.getLienzo().setTipoHerramienta(Herramienta.LINEA);
         ventanaInterna.getLienzo().setColor(Color.BLACK);
+        //Añadimos la ventana interna al objeto de tipo JDesktopPane
         this.panelEscritorio.add(ventanaInterna);
         System.out.println("Pulsado Archivo->Nuevo. Añadido objeto VentanaInterna a panelEscritorio");
+        //La hacemos visible:
         ventanaInterna.setVisible(true);
+        
+        
+        BufferedImage img;
+        img=new BufferedImage(300,300,BufferedImage.TYPE_INT_RGB);
+        ventanaInterna.getLienzo().setImage(img);
+        
+        
     }//GEN-LAST:event_botonNuevoMenuArchivoActionPerformed
 
     //Acción sobre el botón abrir:
@@ -530,17 +590,50 @@ public class VentanaPrincipal extends JFrame {
         JFileChooser dlg = new JFileChooser();
         int resp = dlg.showOpenDialog(this);
         if(resp==JFileChooser.APPROVE_OPTION){
-            File f = dlg.getSelectedFile();
+            try{
+                File f = dlg.getSelectedFile();
+                //COn ImageIO.read realizamos realmente la lectura de la imagen y la cargamos en la variable img
+                BufferedImage img = ImageIO.read(f);
+                VentanaInterna vi = new VentanaInterna(this);
+                vi.getLienzo().setImage(img);
+                this.panelEscritorio.add(vi);
+                vi.setTitle(f.getName());
+                vi.setVisible(true);
+            }catch(Exception ex){
+            System.err.println("Error al leer la imagen");
+            }
         }
     }//GEN-LAST:event_botonAbrirMenuArchivoActionPerformed
 
+    
     //Acción sobre el botón guardar:
     private void botonGuardarMenuArchivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonGuardarMenuArchivoActionPerformed
-        JFileChooser dlg = new JFileChooser();
-        int resp = dlg.showOpenDialog(this);
-        if(resp==JFileChooser.APPROVE_OPTION){
-            File f = dlg.getSelectedFile();
+        
+        //Seleccionamos la ventana seleccionada:
+        VentanaInterna ventanaInternaSeleccionada = (VentanaInterna)panelEscritorio.getSelectedFrame();
+        if(ventanaInternaSeleccionada!=null){
+            JFileChooser dlg = new JFileChooser();
+            dlg.setSelectedFile(new File( ((VentanaInterna)panelEscritorio.getSelectedFrame()).getNombreVentana()  ));
+            int resp = dlg.showSaveDialog(this);
+            if(resp==JFileChooser.APPROVE_OPTION){
+                
+                try{
+                    BufferedImage img =ventanaInternaSeleccionada.getLienzo().getImage();
+                    if(img!=null){
+                        File f = dlg.getSelectedFile();
+                        ImageIO.write(img, "jpg",f);
+                        ventanaInternaSeleccionada.setTitle(f.getName());
+                    }
+                }catch(Exception ex){
+                    System.err.println("Error al guardar la imagen");
+                }
+              
+            }
         }
+        
+        
+        
+       
     }//GEN-LAST:event_botonGuardarMenuArchivoActionPerformed
 
     private void botonEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonEditarActionPerformed

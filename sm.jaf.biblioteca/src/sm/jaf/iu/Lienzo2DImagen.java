@@ -5,19 +5,77 @@
  */
 package sm.jaf.iu;
 
+import static extras.Imprimir.Imprimir;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.image.BufferedImage;
+
 /**
  *
  * @author juan
+ * 
+ * 
+ * Lienzo2DImagen extiende de Lienzo2D porque debe tener todas las caracteríticas propias del Lienzo2D además de las 
+ * que esta clase añada. Por eso una instancia de esta podrá hacer todo lo que hacía el padre, tendrá todos sus métodos 
+ * y serán accesibles todas sus variables siempre a través de los métodos set/get. Así esta nueva imagen se centrará a todo lo relativo 
+ * a la imagen.
+ * 
+ * 
  */
 public class Lienzo2DImagen extends Lienzo2D {
 
+    //Variable que almacernará los datos de la imagen.
+    private BufferedImage imagen;
+    
+    
+    
+    
     /**
      * Creates new form Lienzo2DImagen
      */
     public Lienzo2DImagen() {
-        initComponents();
+        initComponents();        
     }
 
+    
+    public void setImage(BufferedImage img){
+        Imprimir("INTRODUCIENDO IMAGEN EN LIENZO2diMAGEN");
+        this.imagen= img;
+        
+        //Ajustamos el tamaño del lienzo al tamaño de la imagen que abrimos.
+        if(img!=null){
+            setPreferredSize(new Dimension(img.getWidth(), img.getHeight()));
+        }
+            
+    }
+    
+    
+    public BufferedImage getImage(boolean drawVector){
+        if(drawVector){
+            return getImage();
+        }
+        else
+            return getImage();
+    }
+            
+    
+    public BufferedImage getImage(){
+        return imagen;
+    }
+    
+    @Override
+    public void paintComponent(Graphics g){
+        super.paintComponent(g);
+        if(imagen!=null)
+            g.drawImage(imagen, 0, 0, this);
+    }
+    
+    
+    
+    
+    
+    
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -42,4 +100,6 @@ public class Lienzo2DImagen extends Lienzo2D {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables
+
+    
 }

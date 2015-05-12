@@ -6,8 +6,11 @@
 package Programa;
 
 import static extras.Imprimir.Imprimir;
-import java.awt.Color;
 import extras.Herramienta;
+import java.awt.event.ComponentEvent;
+import java.awt.event.MouseEvent;
+import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
 import sm.jaf.iu.Lienzo2DImagen;
 
 /**
@@ -16,20 +19,24 @@ import sm.jaf.iu.Lienzo2DImagen;
  */
 public class VentanaInterna extends javax.swing.JInternalFrame {
 
-    
+       //Variable de clase para contar el número de instancias que se tienen:
        static int contadorVentanas = 0;
-  //  static final int xOffset = 30, yOffset = 30;
+       
+       private VentanaPrincipal parent;
+       
+    //   private String nombreVentana;
     
     /**
      * Creates new form VI
      */
-    public VentanaInterna() {
+    public VentanaInterna(VentanaPrincipal v) {        
         super("Sin título " + (++contadorVentanas),true,true,true,true);
+        this.parent=v;
+      //  nombreVentana="Sin título "+contadorVentanas;
         initComponents();                       
     }
     
-    
-    
+   
     /*
     Método que devuelve el objeto miLienzo2D desde donde es llamado para poder trabar con el y poder usar directamente
     sus métodos.
@@ -37,36 +44,14 @@ public class VentanaInterna extends javax.swing.JInternalFrame {
     public Lienzo2DImagen getLienzo(){        
         return this.miLienzo2D;
     }
-    
-    /*
-    public void setHerramienta(Herramienta herramienta){
-        Imprimir("llamada a método intermedio");
-        //miLienzo2D.setTipoHerramienta(herramienta);
+    public String getNombreVentana(){
+        //return nombreVentana;
+        return this.getTitle();
     }
-    */
-    
-     //Set de color
-    public void setColor(Color color){
-        miLienzo2D.setColor(color);
+    public void setNombreVentana(String nuevoNombre){
+        this.setTitle(nuevoNombre);
     }
-        
-    public void setModoSeleccion(boolean modo){
-        miLienzo2D.setModoSeleccion(modo);            
-    }
-    public void setGrosor(int grosor){
-        miLienzo2D.setGrosor(grosor);
-    }
-    
-    public void setRelleno(boolean relleno){
-        miLienzo2D.setRelleno(relleno);
-    }
-    public void setMejoraRenderizacion(boolean mejora){
-        miLienzo2D.setMejoraRenderizacion(mejora);
-    }
-    public void setTransparencia(boolean transparencia){
-        miLienzo2D.setTransparencia(transparencia);
-    }
-    
+     
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -76,26 +61,76 @@ public class VentanaInterna extends javax.swing.JInternalFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        panelScroll = new javax.swing.JScrollPane();
         miLienzo2D = new sm.jaf.iu.Lienzo2DImagen();
+
+        addInternalFrameListener(new javax.swing.event.InternalFrameListener() {
+            public void internalFrameOpened(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameClosing(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameClosed(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameIconified(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameDeiconified(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameActivated(javax.swing.event.InternalFrameEvent evt) {
+                formInternalFrameActivated(evt);
+            }
+            public void internalFrameDeactivated(javax.swing.event.InternalFrameEvent evt) {
+            }
+        });
+        
 
         javax.swing.GroupLayout miLienzo2DLayout = new javax.swing.GroupLayout(miLienzo2D);
         miLienzo2D.setLayout(miLienzo2DLayout);
         miLienzo2DLayout.setHorizontalGroup(
             miLienzo2DLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 394, Short.MAX_VALUE)
+            .addGap(0, 388, Short.MAX_VALUE)
         );
         miLienzo2DLayout.setVerticalGroup(
             miLienzo2DLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 274, Short.MAX_VALUE)
+            .addGap(0, 268, Short.MAX_VALUE)
         );
 
-        getContentPane().add(miLienzo2D, java.awt.BorderLayout.CENTER);
+        panelScroll.setViewportView(miLienzo2D);
+
+        getContentPane().add(panelScroll, java.awt.BorderLayout.CENTER);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+   
+
+    private void formInternalFrameActivated(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameActivated
+        
+        /*
+        Cuando seleccionamos una ventana interna tenemos que mandar los mensajes necesarios para que las herramientas
+        se cambien según estén configuradas dentro de cada una de ellas.
+        */
+                        
+        //Mensaje de depuración por terminal:
+        Imprimir("Seleccionada ventana "+this.getNombreVentana());
+        
+        //Herramienta
+//        parent.setTipoHerramienta(this.getLienzo().getTipoHerramienta());
+        
+        //Color:
+        parent.setColor(this.getLienzo().getColor());
+        
+        //Grosor de linea:
+        parent.setGrosor(this.getLienzo().getGrosor());
+        
+        
+        //Cuatro variables booleanas checkbox
+        
+        
+    }//GEN-LAST:event_formInternalFrameActivated
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private sm.jaf.iu.Lienzo2DImagen miLienzo2D;
+    private javax.swing.JScrollPane panelScroll;
     // End of variables declaration//GEN-END:variables
 }

@@ -1,0 +1,41 @@
+Práctica 9
+
+Segunda práctica del bloque de imágenes. Primera de las tres del procesamiento de imágenes.
+
+Para llevar a cabo el procesamiento nos basamos en objetos de tipo BufferedImageOp que es abstracta y que heredando de esta hay varias
+clases que implementan las operaciones.
+
+Hoy vamos a probar las tres primeras. En la seguna prácticas otras tres y en la última construiremos nuestras propias clases.
+
+El slider tiene que ser desde -255 a 255 y que el slider se inicie en la la posición 0 (centro)
+
+Al mover el slidder a operación hay que hacerla sobre la imagen inicial no sobre la imagen resultado de la operación anterior, si 
+lo hacemos mal se nos irá a negro a blanco muy muy rápido porque estaremos sobreescribiendo operaciones.
+
+
+Para solucionarlo tenemos que definir una variable BUfferedImage imgSource con los objetivos:
+
+1. Cuando empieza la operación de brillo le asignamos un valor a esa imgSource de forma que el rescaleOp usando filter
+se usará sobre esta imagen.
+
+2. Durante la operación se hace sobre esa
+rop.filter(imgSource)
+
+3. y al acabar ponemos esa imagen a null.
+imgSource=null
+
+
+Cuando hacemos foco sobre el slider podemos entender que es el comienzo de la operacióny donde haremos el punto.
+Entonces genstionaremos tres eventos del slider, onFocus, change y exitFocus.
+
+-> En cuanto se pierde el foco ya se aplica el cambio y no se puede volver atrás. Esta es una solución pero podría haber más, como un mensaje de confirmación.
+
+
+2ªParte: Vamos a aplicar filtros con cinco máscaras distintas.
+
+Para cada máscara crearemos un kernel u otro.
+
+Se nos ha pasado la clase sm.img para 
+
+
+//Las solución es poner un valor alfa por cada canaly poner en el último cero siempre.

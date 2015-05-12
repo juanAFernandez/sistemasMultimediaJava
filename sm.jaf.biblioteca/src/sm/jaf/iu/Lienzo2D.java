@@ -37,7 +37,7 @@ public class Lienzo2D extends javax.swing.JPanel {
     
 
     //Vector de objetos de tipo Shape (Java2D) que es del que heredan todos los tipos que vamos a usar:
-    ArrayList <Shape> vShape = new ArrayList();
+    private ArrayList <Shape> vShape = new ArrayList();
     
     private Point pA, pB;
     
@@ -65,13 +65,19 @@ public class Lienzo2D extends javax.swing.JPanel {
         Imprimir("recibido tipo de herramienta");
         this.tipoHerramienta=herramienta;
     }
-     //Set de color
+    
+     //Set/Get de color
     public void setColor(Color color){
         Imprimir("Cambiado color");
         this.color=color;
         //Para que al hacer el cambio de color este se aplique en todas las figuras a través del método setAtributos de paint()
         this.repaint();
     }
+    public Color getColor(){
+        return color;
+    }
+    
+    
     
     public void setRelleno(boolean relleno){
         this.relleno=relleno;
@@ -102,6 +108,9 @@ public class Lienzo2D extends javax.swing.JPanel {
         grosorLinea = grosor;
         Imprimir("Cambiando grosor a "+grosor);
         this.repaint();
+    }
+    public int getGrosor(){
+        return grosorLinea;
     }
     
     public void setTransparencia(boolean transparencia){
