@@ -23,33 +23,71 @@ import extras.Herramienta;
 import java.awt.AlphaComposite;
 import java.awt.Composite;
 import java.awt.RenderingHints;
+import java.awt.geom.Line2D;
+import sm.jaf.graficos.Elipse;
+import sm.jaf.graficos.Figura;
+import sm.jaf.graficos.Linea;
 //import java.awt.geom.Line2D;
 import sm.jaf.graficos.Linea2D;
+import sm.jaf.graficos.ManoAlzada;
+import sm.jaf.graficos.Rectangulo;
+
+
 
 /**
- *
- * @author juan
+ * 
+ * @author Juan A. Fernández Sánchez
  */
-
-
 public class Lienzo2D extends javax.swing.JPanel {
 
     
+    
+    /**
+     * Variables como color o grosorLinea son solo variables auxiliares que sirve para la creación de las figuras.
+     * Estas variables no configurar la forma de dibujara todas las figuras. Son solo usadas para coger
+     * las características que el usuario ha establecido a traveś de las herramientas de la Ventana Principal.
+     * Esto es especialmente visible cuando no se selecciona ninguna al principio y se empiezan a usar con 
+     * sus valores por defecto. 
+     * Por eso si el valor del grosor es 1 las figuras que se construyan tendrán el valor 1 pero si el usuario 
+     * cambia este valor las nuevas se crearán con el nuevo valor pero las antiguas conservan el suyo propio al
+     * ser atributos de la clase Figura, pero son necesarias aquí para la construcción y para la gestión de las
+     * herramientas activas del usuario en la vista principal del programa.
+     */
 
+  //  private VentanaPrincipal padre;
+    
     //Vector de objetos de tipo Shape (Java2D) que es del que heredan todos los tipos que vamos a usar:
-    private ArrayList <Shape> vShape = new ArrayList();
+    private ArrayList <Figura> vShape = new ArrayList();
     
     private Point pA, pB;
     
     private boolean relleno, sentidoContrario, modoSeleccion, mejoraRenderizacion, transparencia;
     private Color color;
+    
+    
+    /**
+     * Objeto temporal para cuando se hace una selección de una figura.
+     */
     int figuraMoviendo;
+    
+    
+    /**
+     * Para almacenar el grosor de trazado de trabajo en el lienzo.
+     * ¿Por qué tendría que tener el Lienzo un grosor si eso es algo propio de las figuras?
+     * 
+     * Cuando se cambia el grosor del trazado en la ventana principal se está cambiando aquí.
+     * 
+     */
     private int grosorLinea=1;
     
     
     private Herramienta tipoHerramienta;
 
     //Constructor de la clase Lienzo2D
+    
+    /**
+     * Necesitamos una referncia directa al padre.
+     */
     public Lienzo2D() {
         initComponents();
         mejoraRenderizacion=false;
@@ -91,12 +129,18 @@ public class Lienzo2D extends javax.swing.JPanel {
     }
     
     
-  
+  /*
     private Shape getShapeSeleccionada(Point2D p){
-        for(Shape s:vShape)
+        for(Figura s:vShape)
             if(s.contains(p)) 
                 return s;
         return null;
+    }
+    
+    */
+    
+    public Figura getFigura(int pos){
+        return vShape.get(pos);
     }
     
     public void setModoSeleccion(boolean modo){
@@ -161,22 +205,37 @@ public class Lienzo2D extends javax.swing.JPanel {
     public void paint(Graphics g){
         super.paint(g);
         Graphics2D g2d=(Graphics2D)g;
+ 
+        if(mejoraRenderizacion){
+            //Renderización
+            RenderingHints render;
+            
+            render = new RenderingHints(RenderingHints.KEY_ANTIALIASING,
+            RenderingHints.VALUE_ANTIALIAS_ON);
+            
+
+            render.put(RenderingHints.KEY_COLOR_RENDERING,
+            RenderingHints.VALUE_COLOR_RENDER_QUALITY);
+            g2d.setRenderingHints(render);
+        }
         
-        
-        this.setAtributos(g2d);
         
         /*
         Recorremos el vector y usamos el objeto Graphics2D creado para pintar cada uno de los objetos que contiene el vector
         de figuras.
         */
-        if(!vShape.isEmpty())
-            for(Shape s:vShape){
-                //Imprimir(s.getClass().getName());
-                if( (s.getClass().getName().contains("Rectangle") || s.getClass().getName().contains("Ellipse")) && relleno==true)
-                    g2d.fill(s);
-                else
-                    g2d.draw(s);                                              
-            }
+        
+            if(!vShape.isEmpty())
+                for(Figura figura:vShape){
+                    figura.dibujateEn(g2d);
+                   /*
+                   //Imprimir(s.getClass().getName());
+                    if( (s.getClass().getName().contains("Rectangle") || s.getClass().getName().contains("Ellipse")) && relleno==true)
+                        g2d.fill(s);
+                    else
+                        g2d.draw(s);                                              
+                    */
+                }
         
         
         
@@ -219,45 +278,133 @@ public class Lienzo2D extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
+   
+    public void  addFigure(Figura figura){
+        vShape.add(figura);
+        this.repaint();
+    }
+    
+    public Figura getFiguraSeleccionada(Point2D puntoClicado){
+        
+        //Se recorre todas las figuras almacenadas en el vector a ver en cual coincide el punto. Cuando
+        //damos con ella la devolvemos
+        for(Figura figura: vShape)
+            if(figura.contiene(puntoClicado))
+                return figura;
+        /* En el caso de que el niguna función devolviera true significaría que el punto no pertenece a ninguna y devolvemos null
+        para indicarlo asi. */
+        return null;
+    }
+    
+    /**
+     * Gestion del evento presionar ratón.
+     * @param evt Evento en gestión.
+     */
     private void formMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMousePressed
     
         //Obtenemos el primer punto necesario al presionar (sin soltar) el ratón en cualquier parte del frame.        
         pA=evt.getPoint();
         
-        //Si el modo selección de figuras está activo:
+        
+        //Si se encuentra seleccionado el modo "selección" porque se quiere editar alguna figura:
         if(modoSeleccion==true){
-            if(getShapeSeleccionada((Point2D)pA)!=null){
-                System.out.println("Figura seleccionada"+getShapeSeleccionada((Point2D)pA));
-                //Obtenermos una referencia a la figura en el vector:
-                figuraMoviendo=vShape.indexOf(getShapeSeleccionada((Point2D)pA));
-                System.out.println("figura: "+figuraMoviendo);
+            
+            //Con el punto obtenido buscamos en el vector de figuras amacenadas aquella que hayamos podido seleccionar.
+            Figura figura = getFiguraSeleccionada(pA);
+            
+            //Si ha ocurrido una selección:
+            if(figura!=null){                
+                                
+                //Extraemos la posición dentro del vector de figuras de esta para tenerla localizada.
+                figuraMoviendo = vShape.indexOf(figura);
+                
+                System.out.println("Se ha seleccionado una figura n1 "+figuraMoviendo+" : "+figura.toString());
+                
+            //Si no ha ocurrido una selección:
             }else{
-                System.out.println("no se ha seleccionado ninguna figura");
+                
+                System.out.println("No se ha seleccionado ninguna figura.");
+            
+                //Para controlar que no se ha seleccionado ninguna figura del vector se usa el valor de control -1
                 figuraMoviendo=-1;
-            }
+                
+             }
+            
+            
+        //Si no se encuentra en el modo selección (entonces se quiere dibujar):
         }else{
-        //Añadimos una nueva figura al vector de figuras al presionar el ratón, dependiendo del tipo de figura
-        //que esté seleccionada en las herramientas.
-       // vShape.add(new Line2D.Double());
         
+                //Objeto temporal al que aplicaremos características antes de introducirlo en el vector.
+                Figura figuraTemporal;
+
+                if(this.tipoHerramienta==Herramienta.PUNTO){
+                
+                    figuraTemporal = new ManoAlzada();
+                    //Aplicamos el color 
+                    figuraTemporal.setColor(color);
+                    
+                    /**
+                     * No tendría que estar cogiendo el grosor predeterminado de aquí, ya que no es una propiedad del lienzo
+                     * sino de la ventana principa, de los ajustes por defecto de los selecctores de herramientas.
+                     * 
+                     */
+                    
+                    figuraTemporal.setGrosorTrazo(grosorLinea);
+                    
+                    ((ManoAlzada)figuraTemporal).addPunto(pA);
+                    
+                    vShape.add(figuraTemporal);
+                    
+                    
+                
+                }else
+                //Si ha sido seleccionada la herramienta LINEA del buttonGroup
+                if(this.tipoHerramienta==Herramienta.LINEA){
+                    //Construimos la figura como una Linea
+                    figuraTemporal = new Linea();
+
+                    //Aplicamos el color 
+                    figuraTemporal.setColor(color);
+                    figuraTemporal.setGrosorTrazo(grosorLinea);
+
+                    vShape.add(figuraTemporal);
+
+                }else 
+                if(this.tipoHerramienta==Herramienta.RECTANGULO){
+                    //Construimos la figura como un rectángulo
+                    figuraTemporal = new Rectangulo();
+
+                    figuraTemporal.setColor(color);
+                    figuraTemporal.setGrosorTrazo(grosorLinea);
+
+                    //Si  ha espeficado quse quiere que la figu esté rellena
+                    if(relleno)
+                        ((Rectangulo)figuraTemporal).setRelleno(true);
+                    
+                    vShape.add(figuraTemporal);
+                }
+                
+                else if(this.tipoHerramienta==Herramienta.OVALO){
+                    
+                    System.out.println("Añadiendo figura ovalo");
+                    
+                    //Construimos la figura como un rectángulo
+                    figuraTemporal = new Elipse();
+
+                    figuraTemporal.setColor(color);
+                    figuraTemporal.setGrosorTrazo(grosorLinea);
+                    
+                    //Si  ha espeficado quse quiere que la figu esté rellena
+                    if(relleno)
+                        ((Elipse)figuraTemporal).setRelleno(true);
+
+                    vShape.add(figuraTemporal);
+
+                }
+                
          
-        if(this.tipoHerramienta==Herramienta.PUNTO){
-            //Mientras que no tenemos la clase propia punto lo haremos con un Rectángulo sin suficiente ancho y alto como para que se vea
-            vShape.add(new Rectangle2D.Double(pA.x, pA.y, 2, 2));
-            //No necesitamos otro punto para dibujar un punto, por eso redibujamos todo ya:
-            this.repaint();
-        }else
-        if(this.tipoHerramienta==Herramienta.LINEA){
-            vShape.add(new Linea2D());
-        }else 
-        if(this.tipoHerramienta==Herramienta.RECTANGULO)
-            vShape.add(new Rectangle2D.Double());
-        else if(this.tipoHerramienta==Herramienta.OVALO)
-            vShape.add(new Ellipse2D.Double());
-        
         }
-        
-        
+         
         
     }//GEN-LAST:event_formMousePressed
 
@@ -277,6 +424,7 @@ public class Lienzo2D extends javax.swing.JPanel {
         
         
         Imprimir("Draggeando en modo seleccion: "+modoSeleccion + "con figura: "+figuraMoviendo);
+        
          if(modoSeleccion==true){
              
              Imprimir("Modo selección en dragged");
@@ -285,30 +433,44 @@ public class Lienzo2D extends javax.swing.JPanel {
              //Si ha seleccionado alguna figura en el pressed tendremos alguna figura que mover
              if(figuraMoviendo!=-1){
 
+                 
+                 
+                 
+                 
                  //Si se trata de una Linea:
-                 if(vShape.get(figuraMoviendo).getClass().getName().contains("Linea")){
+                 if(vShape.get(figuraMoviendo).getClass().getName().contains("Linea"))
                      if(vShape.get(figuraMoviendo)!=null)
-                         ((Linea2D)vShape.get(figuraMoviendo)).setLocation(pB);
-                     Imprimir("Intentando mover una linea");
+                         /**
+                          * Esta forma de proceder nos dará un problema y es que nos moverá 
+                          */
+                         ((Linea)vShape.get(figuraMoviendo)).cambiarPosicion2(pB);
+ 
 
                  //Si se trata de un Rectángulo:
-                 }if(vShape.get(figuraMoviendo).getClass().getName().contains("Rectangle"))
+                 if(vShape.get(figuraMoviendo).getClass().getName().contains("Rectangulo"))
                      if(vShape.get(figuraMoviendo)!=null)
-                         ((Rectangle2D)vShape.get(figuraMoviendo)).setFrame(pB.x,pB.y,vShape.get(figuraMoviendo).getBounds2D().getWidth(),vShape.get(figuraMoviendo).getBounds2D().getHeight());                     
-
+                         ((Rectangulo)vShape.get(figuraMoviendo)).cambiarPosicion2(pB);
+                 
                  //Si se trata de una Ellipse:
-                 if(vShape.get(figuraMoviendo).getClass().getName().contains("Ellipse"))
+                 if(vShape.get(figuraMoviendo).getClass().getName().contains("Elipse"))
                      if(vShape.get(figuraMoviendo)!=null)
-                         ((Ellipse2D)vShape.get(figuraMoviendo)).setFrame(pB.x,pB.y,vShape.get(figuraMoviendo).getBounds2D().getWidth(),vShape.get(figuraMoviendo).getBounds2D().getHeight());
-                 }
+                         ((Elipse)vShape.get(figuraMoviendo)).cambiarPosicion2(pB);
+                  
+             } 
          
-         }else if(!vShape.isEmpty()){ //Por si el vector está vacío.
+         //Si no se encuentra en el modo selección entonces se está creando una figura (modificando la ultima creada) añadiendole coordenadas nuevas.
+         }else  if(!vShape.isEmpty()){ //Por si el vector está vacío.
        
         /* 
         Accedemos al último elemento del Array y según el tipo de figura que sea hacemos una
         u otra modificación haciendo un casting al tipo de figura que sea para poder acceder a sus métodos. 
         */        
         
+        if(this.tipoHerramienta==Herramienta.PUNTO){
+            
+            ((ManoAlzada)vShape.get(vShape.size()-1)).addPunto(pB);
+        }else
+             
         if(this.tipoHerramienta==Herramienta.LINEA){
             /*
             Con los métodos que la clase Line2D tiene para modificar la linea mientras arrastramos el ratón
@@ -318,7 +480,7 @@ public class Lienzo2D extends javax.swing.JPanel {
             que forzar a usar los dos.
             */
             Imprimir("Creando linea con los puntos A y B");
-            ((Linea2D)vShape.get(vShape.size()-1)).setLine(pA, pB);
+            ((Linea)vShape.get(vShape.size()-1)).cambiarPosicion(pA, pB);
         }else if(this.tipoHerramienta==Herramienta.RECTANGULO){
             /*
             Para modificarlo tenemos que volver a especificar el primer punto y calcular el ancho y alto del rectángulo
@@ -331,15 +493,16 @@ public class Lienzo2D extends javax.swing.JPanel {
             
             //Esta función de Rectangle2D permite enviar solo dos puntos y conseguir que independientemente del lugar donde
             //se encuentren se dibuje un rectangulo entre ellos.
-            ((Rectangle2D)vShape.get(vShape.size()-1)).setFrameFromDiagonal(pA, pB);
+            ((Rectangulo)vShape.get(vShape.size()-1)).cambiarPosicion(pA, pB);
             
             
         }
+        
         else if(this.tipoHerramienta==Herramienta.OVALO){
-            ((Ellipse2D)vShape.get(vShape.size()-1)).setFrameFromDiagonal(pA, pB);
+            ((Elipse)vShape.get(vShape.size()-1)).cambiarPosicion(pA,pB);
             //((Ellipse2D)vShape.get(vShape.size()-1)).setFrame(pA.x, pA.y, ancho, alto);
         }
-                        
+         
         
          }
         //Modificamos el objeto extraido seteandolo de nuevo con el punto A y el nuevo punto B a falta de un 
@@ -361,4 +524,6 @@ public class Lienzo2D extends javax.swing.JPanel {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables
+
+  
 }

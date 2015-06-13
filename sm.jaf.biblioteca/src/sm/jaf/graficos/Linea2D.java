@@ -52,6 +52,8 @@ public  class Linea2D extends Line2D.Double{
             double dy=pos.getY()-this.getY1();
             Point2D newp2 = new Point2D.Double(this.getX2()+dx,this.getY2()+dy);
             this.setLine(pos,newp2);
+            
+            
         }
         
         

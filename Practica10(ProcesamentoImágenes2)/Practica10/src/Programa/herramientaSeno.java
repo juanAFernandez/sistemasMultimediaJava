@@ -67,20 +67,33 @@ public class herramientaSeno extends javax.swing.JFrame {
     }
     
     
-    public ByteLookupTable seno(double w){
+    public void ImprimirTabla(short tabla[]){
+        for(int i=0; i<256; i++)
+            Imprimir(i+" :"+tabla[i] ); 
+    }
+    
+    /**
+     * Creat la tabla LookupTable pra el procesamiento
+     * @param w
+     * @return 
+     */
+    public ShortLookupTable seno(double w){
                 
         double K = 255;
       
         //La tabla de datos:
-        byte conversiones[]=new byte[256];
+        short tabla[]=new short[256];
         
         for(int i=0; i<256; i++){
-            conversiones[i]=(byte)Math.abs( Math.sin( Math.toRadians(w*i) ) ) ;
-            Imprimir(i+" :"+conversiones[i] );            
+            tabla[i]=(short)Math.abs( Math.sin( Math.toRadians(w*i) ) ) ; 
+            System.out.println((Math.sin( Math.toRadians(i)*w )));
         }
         
-        //Creamos la tabla y la devolvemos       
-        return new ByteLookupTable(0,conversiones);
+        //Imprimimos la tabla por terminal para ver como queda la conversión.
+        //ImprimirTabla(tabla);
+        
+        //Creamos la conversión a partir de nuestra tabla y la devolvemos       :
+        return new ShortLookupTable(0,tabla);
     }
     
     
@@ -88,10 +101,9 @@ public class herramientaSeno extends javax.swing.JFrame {
         
         
         try{ 
-           
-            //Creamos la tabla en el formato específico:
-            ByteLookupTable slt= seno(180);
-            LookupOp op = new LookupOp(slt,null);
+                       
+            //Creamos la operación usando la tabla que nos devuelve nuestra operación propia seno
+            LookupOp op = new LookupOp(seno(180/255),null);
                         
             if(vis!=null){
                 
@@ -135,7 +147,7 @@ public class herramientaSeno extends javax.swing.JFrame {
 
         jLabel1.setFont(new java.awt.Font("Sawasdee", 1, 24)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(204, 204, 255));
-        jLabel1.setText("Negativo");
+        jLabel1.setText("Seno");
 
         javax.swing.GroupLayout panelNorteLayout = new javax.swing.GroupLayout(panelNorte);
         panelNorte.setLayout(panelNorteLayout);
@@ -144,7 +156,7 @@ public class herramientaSeno extends javax.swing.JFrame {
             .addGroup(panelNorteLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel1)
-                .addContainerGap(300, Short.MAX_VALUE))
+                .addContainerGap(344, Short.MAX_VALUE))
         );
         panelNorteLayout.setVerticalGroup(
             panelNorteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -156,7 +168,7 @@ public class herramientaSeno extends javax.swing.JFrame {
 
         getContentPane().add(panelNorte, java.awt.BorderLayout.PAGE_START);
 
-        rotarBoton.setText("Negativo");
+        rotarBoton.setText("Aplicar");
         rotarBoton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 rotarBotonActionPerformed(evt);

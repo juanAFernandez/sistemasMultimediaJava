@@ -1,0 +1,9 @@
+hay que poner algo para que se de cuenta de que no es una ventana interna de imagen, 
+instanceOf(VentanaInternaImagen)
+
+También se puede sobrecargar el método getSelectedFrame.
+
+Hay que saber muy bien como gestiona los eventos netBeans
+
+El manejador de eventos tenemos que hacerlo nosotros, ahora tenemos que hacerlo a mano.
+Si estamos despistados ponemos un botón y gestionamos un evento para ver lo que hace.
