@@ -135,7 +135,7 @@ public class Ajustes extends javax.swing.JFrame {
         JColorChooser ventanaDeColores=new JColorChooser();
         Color color=ventanaDeColores.showDialog(null, "Seleccione un Color", Color.WHITE);
         botonColor.setBackground(color);
-        padre.setColorDefecto(color);
+//        padre.setColorDefecto(color);
         
     }//GEN-LAST:event_botonColorActionPerformed
 

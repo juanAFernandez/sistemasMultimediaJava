@@ -28,6 +28,7 @@ import sm.image.LookupTableProducer;
 import sm.jaf.graficos.Figura;
 import sm.jaf.graficos.Linea;
 import sm.jaf.graficos.Rectangulo;
+import sm.jaf.graficos.Trazo;
 
 /**
  * Herramienta de ajuste de trazado.
@@ -42,22 +43,9 @@ public final class herramientaTrazado extends javax.swing.JFrame {
     
     private VentanaInterna vis;
 
-    /**
-     * El stroke tiene seis parámetros así que necesitaremos controlarlos todos excepto el grosor que lo
-     * cogremos del padre.
-     */
+   
+    Trazo trazo;
     
-    /**
-     * La decoración de los finales de linea.
-     */
-    int cap;
-    
-    /**
-     * La decoración en la unión de segementos.
-     */
-    int join;
-    
-    float patronDiscontinuidad[];
     ArrayList<JSpinner> spinners;
     
 
@@ -72,22 +60,20 @@ public final class herramientaTrazado extends javax.swing.JFrame {
         //Creamos la referencia al padre
         this.padre=padre;
  
+        //Inicializamos la variable trazo
+        trazo = new Trazo();
+        trazo.setCopiaTrazo(padre.getTrazoDefecto());
         
-        //Cargamos lo valores por defecto en las variables y hacemos que se seleccionen los botones adecuados.
-        cap=BasicStroke.CAP_BUTT;
-        this.capButt.setSelected(true);
+        //AJuste de los botones
+        float [] patronDiscontinuidad2 = trazo.getPatronDiscontinuidad();
+                
+        for(int i=1; i<8; i++){
+            System.out.print(patronDiscontinuidad2[i]);
+           // spinners.get(i).setValue((int)patronDiscontinuidad[i]);
+        }
         
-        join=BasicStroke.JOIN_BEVEL;
-        this.joinBEVEL.setSelected(true);
-        
-
-         
-        
-         
-        //Establecemos el estilo por defecto para las muestras
-        Stroke stilo = new BasicStroke(10, cap, join, 1.0f, patronDiscontinuidad, 0.0f);
-
-        
+        //Imprimir(trazo.toString());
+                
         //Creamos las variables necesarias para montar las dos muestras:
         
         Point2D a = new Point2D.Double(50, 50);
@@ -95,16 +81,17 @@ public final class herramientaTrazado extends javax.swing.JFrame {
         
         Point2D c = new Point2D.Double(300, 30);
         Point2D d = new Point2D.Double(450, 70);
-        
-        
+                
         Rectangulo rectangulo = new Rectangulo();
         rectangulo.cambiarPosicion(c, d);
         
         Linea linea = new Linea(a, b);
         
-        linea.setTrazo(stilo);
-        rectangulo.setTrazo(stilo);
+        linea.setTrazo(trazo);
+        rectangulo.setTrazo(trazo);
         
+        
+
         //Las añadimos al vector de figuras:
         lienzoPrev.addFigure(linea);
         lienzoPrev.addFigure(rectangulo);
@@ -112,8 +99,8 @@ public final class herramientaTrazado extends javax.swing.JFrame {
         //Repintamos todo el vector de figuras:
         lienzoPrev.repaint();
         
-        
-                spinners = new ArrayList();
+                
+        spinners = new ArrayList();
         spinners.add(spinnerPatron0);
         spinners.add(spinnerPatron1);
         spinners.add(spinnerPatron2);
@@ -123,19 +110,19 @@ public final class herramientaTrazado extends javax.swing.JFrame {
         spinners.add(spinnerPatron6);
         spinners.add(spinnerPatron7);
         
-        patronDiscontinuidad = new float[8];
-        for(int i=0; i<8; i++)
-            if(i%2==0){
-                patronDiscontinuidad[i]=10.0f;
-                spinners.get(i).setValue(10);
-            }
-            else{
-                patronDiscontinuidad[i]=4.0f;
-                spinners.get(i).setValue(4);
-                
-            }
-
         
+               
+        //AJuste de los botones
+        float [] patronDiscontinuidad = trazo.getPatronDiscontinuidad();
+                
+        for(int i=0; i<8; i++){
+            System.out.print(patronDiscontinuidad[i]);
+            spinners.get(i).setValue((int)patronDiscontinuidad[i]);
+        }
+        
+        
+        
+
         
         this.addWindowListener(new java.awt.event.WindowAdapter() {
     @Override
@@ -540,18 +527,33 @@ public final class herramientaTrazado extends javax.swing.JFrame {
     }//GEN-LAST:event_exitButtonActionPerformed
 
     private void saveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveButtonActionPerformed
-        // TODO add your handling code here:
+        
+        /**
+         * Aplicamos el trazo a la previsualización y a las ventanas activas.
+         */
+        //padre.getMiniLienzo().setStroke(strokeFinal);
+        padre.getMiniLienzo().getFigura(0).setTrazo(trazo);
+        padre.getMiniLienzo().repaint();
+        
+        
+        if(padre.getPanelEscritorio().getSelectedFrame()!=null){
+            ((VentanaInterna)padre.getPanelEscritorio().getSelectedFrame()).getLienzo().setTrazo(trazo);
+        }
+                
+        //Cerramos la ventana
+        this.dispose();
+                
     }//GEN-LAST:event_saveButtonActionPerformed
 
     private void capButtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_capButtActionPerformed
           //Las modificaciones necesarias a las variables:
         
             //Cambiamos el estilo de los extremos de las lineas.
-            cap=BasicStroke.CAP_BUTT;
+            trazo.setDecoracionFinalLinea(BasicStroke.CAP_BUTT);
         
         //La aplicacion del nuevo estilo creado a las dos figuras de muestra:
         for(int i=0; i<2; i++){
-            lienzoPrev.getFigura(i).setTrazo(new BasicStroke(10, cap, join, 1.0f, patronDiscontinuidad, 0.0f));
+            lienzoPrev.getFigura(i).setTrazo(trazo);
         }
         //Repintamos todas las figuras del vector
         lienzoPrev.repaint();
@@ -563,11 +565,11 @@ public final class herramientaTrazado extends javax.swing.JFrame {
         //Las modificaciones necesarias a las variables:
         
             //Cambiamos el estilo de los extremos de las lineas.
-            cap=BasicStroke.CAP_ROUND;
+            trazo.setDecoracionFinalLinea(BasicStroke.CAP_ROUND);
         
         //La aplicacion del nuevo estilo creado a las dos figuras de muestra:
         for(int i=0; i<2; i++){
-            lienzoPrev.getFigura(i).setTrazo(new BasicStroke(10, cap, join, 1.0f, patronDiscontinuidad, 0.0f));
+            lienzoPrev.getFigura(i).setTrazo(trazo);
         }
         //Repintamos todas las figuras del vector
         lienzoPrev.repaint();
@@ -579,11 +581,11 @@ public final class herramientaTrazado extends javax.swing.JFrame {
         //Las modificaciones necesarias a las variables:
         
             //Cambiamos el estilo de los extremos de las lineas.
-            cap=BasicStroke.CAP_SQUARE;
+            trazo.setDecoracionFinalLinea(BasicStroke.CAP_SQUARE);
         
         //La aplicacion del nuevo estilo creado a las dos figuras de muestra:
         for(int i=0; i<2; i++){
-            lienzoPrev.getFigura(i).setTrazo(new BasicStroke(10, cap, join, 1.0f, patronDiscontinuidad, 0.0f));
+            lienzoPrev.getFigura(i).setTrazo(trazo);
         }
         //Repintamos todas las figuras del vector
         lienzoPrev.repaint();
@@ -593,11 +595,11 @@ public final class herramientaTrazado extends javax.swing.JFrame {
         //Las modificaciones necesarias a las variables:
         
             //Cambiamos el estilo de los extremos de las lineas.
-            join=BasicStroke.JOIN_BEVEL;
+            trazo.setDecoracionUnionLineas(BasicStroke.JOIN_BEVEL);           
         
         //La aplicacion del nuevo estilo creado a las dos figuras de muestra:
         for(int i=0; i<2; i++){
-            lienzoPrev.getFigura(i).setTrazo(new BasicStroke(10, cap, join, 1.0f, patronDiscontinuidad, 0.0f));
+            lienzoPrev.getFigura(i).setTrazo(trazo);
         }
         //Repintamos todas las figuras del vector
         lienzoPrev.repaint();
@@ -607,11 +609,11 @@ public final class herramientaTrazado extends javax.swing.JFrame {
         //Las modificaciones necesarias a las variables:
         
             //Cambiamos el estilo de los extremos de las lineas.
-            join=BasicStroke.JOIN_ROUND;
+            trazo.setDecoracionFinalLinea(BasicStroke.JOIN_ROUND);
         
         //La aplicacion del nuevo estilo creado a las dos figuras de muestra:
         for(int i=0; i<2; i++){
-            lienzoPrev.getFigura(i).setTrazo(new BasicStroke(10, cap, join, 1.0f, patronDiscontinuidad, 0.0f));
+            lienzoPrev.getFigura(i).setTrazo(trazo);
         }
         //Repintamos todas las figuras del vector
         lienzoPrev.repaint();
@@ -621,11 +623,11 @@ public final class herramientaTrazado extends javax.swing.JFrame {
         //Las modificaciones necesarias a las variables:
         
             //Cambiamos el estilo de los extremos de las lineas.
-            join=BasicStroke.JOIN_MITER;
+            trazo.setDecoracionFinalLinea(BasicStroke.JOIN_MITER);
         
         //La aplicacion del nuevo estilo creado a las dos figuras de muestra:
         for(int i=0; i<2; i++){
-            lienzoPrev.getFigura(i).setTrazo(new BasicStroke(10, cap, join, 1.0f, patronDiscontinuidad, 0.0f));
+            lienzoPrev.getFigura(i).setTrazo(trazo);
         }
         //Repintamos todas las figuras del vector
         lienzoPrev.repaint();
@@ -634,88 +636,121 @@ public final class herramientaTrazado extends javax.swing.JFrame {
     private void spinnerPatron0StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_spinnerPatron0StateChanged
         
         //Realizamos la modificación en el patrón de discontinuidad:
-        patronDiscontinuidad[0]=(float)(1.0*(int)spinners.get(0).getValue());
         
+        float [] patronSacado = trazo.getPatronDiscontinuidad();
+        patronSacado[0]=(float)(1.0*(int)spinners.get(0).getValue());
+        trazo.setPatronDiscontinuidad(patronSacado);
+                
         //Lo aplicamos a las dos figuras:
         for(int i=0; i<2; i++)
-            lienzoPrev.getFigura(i).setTrazo(new BasicStroke(10, cap, join, 1.0f, patronDiscontinuidad, 0.0f));
+            lienzoPrev.getFigura(i).setTrazo(trazo);
             
         this.lienzoPrev.repaint();
     }//GEN-LAST:event_spinnerPatron0StateChanged
 
     private void spinnerPatron1StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_spinnerPatron1StateChanged
-        //Realizamos la modificación en el patrón de discontinuidad:
-        patronDiscontinuidad[1]=(float)(1.0*(int)spinners.get(1).getValue());
+        
+        Imprimir("Pulsado boton patron 1");
+        
+        //Sasamos el patron del objeto trazo
+            float [] patronSacado = trazo.getPatronDiscontinuidad();
+        
+        //Lo imprimimos por pantalla
+            Imprimir("patron sacado: ");
+            for(int i=0; i<8; i++)
+                System.out.print(patronSacado[i]+" ");
+        
+        //Realizamos la modificación 
+            patronSacado[1]=(float)(1.0*(int)spinners.get(1).getValue());
+        
+        //Volvemos a imprimirlo
+            Imprimir("patron modificado: ");
+            for(int i=0; i<8; i++)
+                System.out.print(patronSacado[i]+" ");
+        
+        trazo.setPatronDiscontinuidad(patronSacado);
         
         //Lo aplicamos a las dos figuras:
         for(int i=0; i<2; i++)
-            lienzoPrev.getFigura(i).setTrazo(new BasicStroke(10, cap, join, 1.0f, patronDiscontinuidad, 0.0f));
+            lienzoPrev.getFigura(i).setTrazo(trazo);
             
         this.lienzoPrev.repaint();
     }//GEN-LAST:event_spinnerPatron1StateChanged
 
     private void spinnerPatron2StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_spinnerPatron2StateChanged
         //Realizamos la modificación en el patrón de discontinuidad:
-        patronDiscontinuidad[2]=(float)(1.0*(int)spinners.get(2).getValue());
+         float [] patronSacado = trazo.getPatronDiscontinuidad();
+        patronSacado[2]=(float)(1.0*(int)spinners.get(2).getValue());
+        trazo.setPatronDiscontinuidad(patronSacado);
         
         //Lo aplicamos a las dos figuras:
         for(int i=0; i<2; i++)
-            lienzoPrev.getFigura(i).setTrazo(new BasicStroke(10, cap, join, 1.0f, patronDiscontinuidad, 0.0f));
+            lienzoPrev.getFigura(i).setTrazo(trazo);
             
         this.lienzoPrev.repaint();
     }//GEN-LAST:event_spinnerPatron2StateChanged
 
     private void spinnerPatron3StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_spinnerPatron3StateChanged
         //Realizamos la modificación en el patrón de discontinuidad:
-        patronDiscontinuidad[3]=(float)(1.0*(int)spinners.get(3).getValue());
+         float [] patronSacado = trazo.getPatronDiscontinuidad();
+        patronSacado[3]=(float)(1.0*(int)spinners.get(3).getValue());
+        trazo.setPatronDiscontinuidad(patronSacado);
         
         //Lo aplicamos a las dos figuras:
         for(int i=0; i<2; i++)
-            lienzoPrev.getFigura(i).setTrazo(new BasicStroke(10, cap, join, 1.0f, patronDiscontinuidad, 0.0f));
+            lienzoPrev.getFigura(i).setTrazo(trazo);
             
         this.lienzoPrev.repaint();
     }//GEN-LAST:event_spinnerPatron3StateChanged
 
     private void spinnerPatron4StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_spinnerPatron4StateChanged
         //Realizamos la modificación en el patrón de discontinuidad:
-        patronDiscontinuidad[4]=(float)(1.0*(int)spinners.get(4).getValue());
+         float [] patronSacado = trazo.getPatronDiscontinuidad();
+        patronSacado[4]=(float)(1.0*(int)spinners.get(4).getValue());
+        trazo.setPatronDiscontinuidad(patronSacado);
         
         //Lo aplicamos a las dos figuras:
         for(int i=0; i<2; i++)
-            lienzoPrev.getFigura(i).setTrazo(new BasicStroke(10, cap, join, 1.0f, patronDiscontinuidad, 0.0f));
+            lienzoPrev.getFigura(i).setTrazo(trazo);
             
         this.lienzoPrev.repaint();
     }//GEN-LAST:event_spinnerPatron4StateChanged
 
     private void spinnerPatron5StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_spinnerPatron5StateChanged
         //Realizamos la modificación en el patrón de discontinuidad:
-        patronDiscontinuidad[5]=(float)(1.0*(int)spinners.get(5).getValue());
+         float [] patronSacado = trazo.getPatronDiscontinuidad();
+        patronSacado[5]=(float)(1.0*(int)spinners.get(5).getValue());
+        trazo.setPatronDiscontinuidad(patronSacado);
         
         //Lo aplicamos a las dos figuras:
         for(int i=0; i<2; i++)
-            lienzoPrev.getFigura(i).setTrazo(new BasicStroke(10, cap, join, 1.0f, patronDiscontinuidad, 0.0f));
+            lienzoPrev.getFigura(i).setTrazo(trazo);
             
         this.lienzoPrev.repaint();
     }//GEN-LAST:event_spinnerPatron5StateChanged
 
     private void spinnerPatron6StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_spinnerPatron6StateChanged
         //Realizamos la modificación en el patrón de discontinuidad:
-        patronDiscontinuidad[6]=(float)(1.0*(int)spinners.get(6).getValue());
+        float [] patronSacado = trazo.getPatronDiscontinuidad();
+        patronSacado[6]=(float)(1.0*(int)spinners.get(6).getValue());
+        trazo.setPatronDiscontinuidad(patronSacado);
         
         //Lo aplicamos a las dos figuras:
         for(int i=0; i<2; i++)
-            lienzoPrev.getFigura(i).setTrazo(new BasicStroke(10, cap, join, 1.0f, patronDiscontinuidad, 0.0f));
+            lienzoPrev.getFigura(i).setTrazo(trazo);
             
         this.lienzoPrev.repaint();
     }//GEN-LAST:event_spinnerPatron6StateChanged
 
     private void spinnerPatron7StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_spinnerPatron7StateChanged
         //Realizamos la modificación en el patrón de discontinuidad:
-        patronDiscontinuidad[7]=(float)(1.0*(int)spinners.get(7).getValue());
+         float [] patronSacado = trazo.getPatronDiscontinuidad();
+        patronSacado[7]=(float)(1.0*(int)spinners.get(7).getValue());
+        trazo.setPatronDiscontinuidad(patronSacado);
         
         //Lo aplicamos a las dos figuras:
         for(int i=0; i<2; i++)
-            lienzoPrev.getFigura(i).setTrazo(new BasicStroke(10, cap, join, 1.0f, patronDiscontinuidad, 0.0f));
+            lienzoPrev.getFigura(i).setTrazo(trazo);
             
         this.lienzoPrev.repaint();
     }//GEN-LAST:event_spinnerPatron7StateChanged

@@ -43,14 +43,11 @@ public class ManoAlzada extends Figura{
     @Override
     public void dibujateEn(Graphics2D g2d) {
               //Establecemos el color
-        g2d.setColor(color);
+        g2d.setColor(trazo.getColor());
         
-        //Establecemos el grosor del trazado
-        Stroke stilo;
-        stilo = new BasicStroke(this.getGrosorTrazo());
-        
+
         //Aplicamos el stilo que acabos de definir
-        g2d.setStroke(stilo);
+        g2d.setStroke(trazo.getStroke());
         
         //Recorremos el vector dibujarndo todos los elementos que contiene:
         for(int i=0; i<listaPuntos.size(); i++){
@@ -79,7 +76,7 @@ public class ManoAlzada extends Figura{
 
     @Override
     public String toString() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return "soy una mano alzada";
     }
     
 }

@@ -55,34 +55,12 @@ public class Linea extends Figura {
         
     @Override
     public void dibujateEn(Graphics2D g2d){
+                       
+        //Establecemos el color de la figura usando el objeto trazo.
+        g2d.setColor(trazo.getColor());        
         
-        
-        
-        
-        //Establecemos el color
-        g2d.setColor(color);
-        
-        /*
-        //Establecemos el grosor del trazado
-        Stroke stilo;                                             
-        
-        float patronDiscontinuidad[] = {15.0f, 15.0f};
-            trazo = new BasicStroke(10.0f,
-            BasicStroke.CAP_ROUND,
-            BasicStroke.JOIN_MITER, 1.0f,
-            patronDiscontinuidad, 0.0f);
-        stilo = new BasicStroke(10.0f,
-            BasicStroke.CAP_ROUND,
-            BasicStroke.JOIN_MITER, 1.0f,
-            patronDiscontinuidad, 0.0f);
-        */
-
-        
-       // Stroke stilo;
-       // stilo = new BasicStroke(this.getGrosorTrazo());
-        
-        //Aplicamos el stilo que acabos de definir
-        g2d.setStroke(trazo);
+        //Establecemos el estilo de trazo usando el objeto trazo.
+        g2d.setStroke(trazo.getStroke());
         
         //Hacemos que se dibujen los datos geométricos.
         g2d.draw(datosGeometricos);
@@ -105,6 +83,7 @@ public class Linea extends Figura {
     @Override
     public String toString() {
         return "linea";
+        
     }
 
     @Override

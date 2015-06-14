@@ -39,14 +39,11 @@ public class Elipse extends Figura{
     public void dibujateEn(Graphics2D g2d) {
           
         //Establecemos el color
-        g2d.setColor(color);
+        g2d.setColor(trazo.getColor());
         
-        //Establecemos el grosor del trazado
-        Stroke stilo;
-        stilo = new BasicStroke(this.getGrosorTrazo());
-        
+
         //Aplicamos el stilo que acabos de definir
-        g2d.setStroke(stilo);
+        g2d.setStroke(trazo.getStroke());
         
          if(relleno){
             g2d.fill(datosGeometricos);

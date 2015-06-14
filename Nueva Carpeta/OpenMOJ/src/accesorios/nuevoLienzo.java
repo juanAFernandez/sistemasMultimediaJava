@@ -273,8 +273,20 @@ public class nuevoLienzo extends javax.swing.JFrame {
             //3º Se introduce en la ventanaInterna
                VentanaInterna ventanaInterna;
                ventanaInterna=new VentanaInterna(padre);
-               ventanaInterna.getLienzo().setTipoHerramienta(Herramienta.PUNTO);
-               ventanaInterna.getLienzo().setColor(Color.BLACK);
+               
+               ventanaInterna.getLienzo().setTipoHerramienta(padre.herramienta);
+               
+               //Aplicamos el estilo de trazo que tiene por defecto el padre.
+               ventanaInterna.getLienzo().setTrazo(padre.getTrazoDefecto());
+               
+               //Aplicamos el estilo de relleno que tiene el padre en su variable por defecto:
+               ventanaInterna.getLienzo().setRelleno(padre.getRellenoDefecto());
+               if(padre.rellenoActivo)
+                ventanaInterna.getLienzo().setRelleno(true);
+               else
+                ventanaInterna.getLienzo().setRelleno(false);
+               
+               
                ventanaInterna.getLienzo().setMejoraRenderizacion(true);
                ventanaInterna.getLienzo().setImage(img);
             //4º Se introduce esa ventana nueva en el panel y la hacemos visible

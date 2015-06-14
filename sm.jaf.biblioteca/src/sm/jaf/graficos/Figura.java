@@ -5,8 +5,8 @@
  */
 package sm.jaf.graficos;
 
+import static extras.Imprimir.Imprimir;
 import java.awt.BasicStroke;
-import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Shape;
 import java.awt.Stroke;
@@ -27,81 +27,31 @@ public abstract class Figura {
     protected Shape datosGeometricos;
     
     /**
-     * Color de dibujado de la figura.
+     * Trazo. 
+     * Contiene todos los datos relativos a como se dibuja, desde color, grosor hasta continuidad y estilos de termianción.
      */
-    protected Color color;
-   
-    /**
-     * Grosor de trazo de la figua.
-     */
-    protected int grosorTrazo;
-    
-    protected Stroke trazo;
+    protected Trazo trazo;
     
     public Figura(){
-        trazo = new BasicStroke(grosorTrazo);
+        trazo = new Trazo();
     }
     
     
-    public Stroke getTrazo(){
+    public Trazo getTrazo(){
         return trazo;       
     }
-    public void setTrazo(Stroke nuevoTrazo){
-        trazo=nuevoTrazo;
-    }
     
-    
-    
-    public void setContinuidad(int valor){
-        
-          //Establecemos el grosor del trazado
-        Stroke stilo;                                             
-        
-        float patronDiscontinuidad[] = {15.0f, 15.0f};
-        
-            stilo = new BasicStroke(10.0f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_MITER, 1.0f, patronDiscontinuidad, 0.0f);
-
-            
-        this.setTrazo(stilo);
+    public void setTrazo(Trazo nuevoTrazo){
+        Imprimir("APlicando nuevo trazo"+nuevoTrazo.getGrosor());
+        trazo = new Trazo();
+        trazo.setCopiaTrazo(nuevoTrazo);
+        Imprimir("Aplicado trazo "+trazo.getGrosor());
     }
     
     
     
     
-    /**
-     * Para modificar el color con el que se dibujará la figura.
-     * @param nuevoColor El color que queremos que tenga la figura.
-     */
-    public void setColor(Color nuevoColor){
-        color=nuevoColor;        
-    }    
-    
-    /**
-     * Para conseguir el color establecido para la figura.
-     * @return El color que la figura tiene asignado.
-     */
-    public Color getColor(){
-        return color;
-    }
-    
-    /**
-     * Para modificar el grosor del trazo.
-     * @param grosor Nivel del grosor de trazo.
-     */
-    public void setGrosorTrazo(int grosor){
-        grosorTrazo=grosor;
-        trazo = new BasicStroke(grosorTrazo);
-    }
-    
-    /**
-     * Para obtener el grosor del trazo actual.
-     * @return Grosor del trazo.
-     */
-    public int getGrosorTrazo(){
-        return grosorTrazo;
-    }
-    
-    
+   
     /* Métodos abstractos que obligamos a que cada clase que herede los implemente porque cada objeto de tipo 
     * figura debe inmplementarlos aunque esta implementación cambie dependiendo del tipo de objeto.
     */

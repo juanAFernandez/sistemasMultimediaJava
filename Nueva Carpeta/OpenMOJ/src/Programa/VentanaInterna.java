@@ -11,6 +11,7 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.MouseEvent;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
+import sm.jaf.graficos.Relleno;
 import sm.jaf.iu.Lienzo2DImagen;
 
 /**
@@ -101,7 +102,10 @@ public class VentanaInterna extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
    
-
+    /**
+     * Programaicón de las tareas a realizar al pulsar sobre una ventana interna.
+     * @param evt 
+     */
     private void formInternalFrameActivated(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameActivated
         
         /*
@@ -112,16 +116,19 @@ public class VentanaInterna extends javax.swing.JInternalFrame {
         //Mensaje de depuración por terminal:
         Imprimir("Seleccionada ventana "+this.getNombreVentana());
         
-        //Herramienta
-//        parent.setTipoHerramienta(this.getLienzo().getTipoHerramienta());
+        Imprimir("Relleno en ventana:"+this.getLienzo().getRellenoBoolean());
         
-        //Color:
-        parent.setColor(this.getLienzo().getColor());
+        //Le enviamos al padre el trazo del lienzo para que ajuste las herrmientas de seleccion.
+        parent.setTrazoDefecto(this.getLienzo().getTrazo());
         
-        //Grosor de linea:
-        parent.setHerramientaGrosor(this.getLienzo().getGrosor());
-        
-        
+        //Le enviamos al padre el relleno del lienzo para que ajuste la herramienta
+        if(this.miLienzo2D.getRellenoBoolean()){
+            Imprimir("Tiene seleccionado el relleno");
+            
+            parent.setRellenoDefecto(this.getLienzo().getRelleno());
+        }else{
+            parent.desactivaRelleno();
+        }
         
         
         //Cuatro variables booleanas checkbox

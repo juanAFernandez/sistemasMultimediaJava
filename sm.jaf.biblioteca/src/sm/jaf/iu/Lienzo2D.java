@@ -7,7 +7,6 @@ package sm.jaf.iu;
 
 import static extras.Imprimir.Imprimir;
 import java.awt.BasicStroke;
-import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Paint;
@@ -31,6 +30,8 @@ import sm.jaf.graficos.Linea;
 import sm.jaf.graficos.Linea2D;
 import sm.jaf.graficos.ManoAlzada;
 import sm.jaf.graficos.Rectangulo;
+import sm.jaf.graficos.Relleno;
+import sm.jaf.graficos.Trazo;
 
 
 
@@ -43,7 +44,7 @@ public class Lienzo2D extends javax.swing.JPanel {
     
     
     /**
-     * Variables como color o grosorLinea son solo variables auxiliares que sirve para la creación de las figuras.
+     * Variables trazo son solo variables auxiliares que sirve para la creación de las figuras.
      * Estas variables no configurar la forma de dibujara todas las figuras. Son solo usadas para coger
      * las características que el usuario ha establecido a traveś de las herramientas de la Ventana Principal.
      * Esto es especialmente visible cuando no se selecciona ninguna al principio y se empiezan a usar con 
@@ -54,6 +55,20 @@ public class Lienzo2D extends javax.swing.JPanel {
      * herramientas activas del usuario en la vista principal del programa.
      */
 
+        
+    
+    /**
+     * El trazo contiene toda la información de trazada.
+     * Desde el color hasta el grosor, la continuidad y los adornos.
+     */
+    private Trazo trazo;
+
+    /**
+     * El relleno en el caso de que se use.
+     */
+    private Relleno rellenoPadre;
+    
+    
   //  private VentanaPrincipal padre;
     
     //Vector de objetos de tipo Shape (Java2D) que es del que heredan todos los tipos que vamos a usar:
@@ -61,26 +76,14 @@ public class Lienzo2D extends javax.swing.JPanel {
     
     private Point pA, pB;
     
-    private boolean relleno, sentidoContrario, modoSeleccion, mejoraRenderizacion, transparencia;
-    private Color color;
-    
-    
+    private boolean rellenoBoolean, sentidoContrario, modoSeleccion, mejoraRenderizacion, transparencia;
+
+   
     /**
      * Objeto temporal para cuando se hace una selección de una figura.
      */
     int figuraMoviendo;
-    
-    
-    /**
-     * Para almacenar el grosor de trazado de trabajo en el lienzo.
-     * ¿Por qué tendría que tener el Lienzo un grosor si eso es algo propio de las figuras?
-     * 
-     * Cuando se cambia el grosor del trazado en la ventana principal se está cambiando aquí.
-     * 
-     */
-    private int grosorLinea=1;
-    
-    
+
     private Herramienta tipoHerramienta;
 
     //Constructor de la clase Lienzo2D
@@ -91,8 +94,40 @@ public class Lienzo2D extends javax.swing.JPanel {
     public Lienzo2D() {
         initComponents();
         mejoraRenderizacion=false;
+        trazo=new Trazo();
+        rellenoPadre=null;
+        
+ 
     }
 
+    // ## FUNCIONES PARA ESTABLECER PARAMETROS DESDE EL PADRE QUE SERÁN LOS DE USO EN LA CREACIÓN DE FIGURAS NUEVAS ##
+    
+    
+    public void setTrazo(Trazo nuevoTrazo){
+        trazo = new Trazo();
+        trazo.setCopiaTrazo(nuevoTrazo);
+                
+                
+        Imprimir("Cambiado tipo de trazo");
+    }
+    public Trazo getTrazo(){
+        
+        Imprimir("Devolviendo el trazo");
+        return trazo;
+    }
+    
+    public void setRelleno(Relleno nuevoRelleno){
+        Imprimir("Introduciendo relleno a Lienzo2D del padre");
+        rellenoPadre = nuevoRelleno;
+        
+    }
+    public Relleno getRelleno(){
+        return rellenoPadre;
+    }
+    public boolean getRellenoBoolean(){
+        return rellenoBoolean;
+    }
+    
     //Get herramienta
     public Herramienta getTipoHerramienta(){
         
@@ -104,21 +139,11 @@ public class Lienzo2D extends javax.swing.JPanel {
         this.tipoHerramienta=herramienta;
     }
     
-     //Set/Get de color
-    public void setColor(Color color){
-        Imprimir("Cambiado color");
-        this.color=color;
-        //Para que al hacer el cambio de color este se aplique en todas las figuras a través del método setAtributos de paint()
-        this.repaint();
-    }
-    public Color getColor(){
-        return color;
-    }
-    
-    
+
+
     
     public void setRelleno(boolean relleno){
-        this.relleno=relleno;
+        this.rellenoBoolean=relleno;
         Imprimir("Cambiando relleno a "+relleno);
         this.repaint();
     }
@@ -142,26 +167,20 @@ public class Lienzo2D extends javax.swing.JPanel {
     public Figura getFigura(int pos){
         return vShape.get(pos);
     }
-    
+    public void delFigura(int pos){
+        vShape.remove(pos);
+    }
     public void setModoSeleccion(boolean modo){
         this.modoSeleccion=modo;
         System.out.println("Asignado modo seleccion: "+modoSeleccion);
     }
-    
-    public void setGrosor(int grosor){
-        grosorLinea = grosor;
-        Imprimir("Cambiando grosor a "+grosor);
-        this.repaint();
-    }
-    public int getGrosor(){
-        return grosorLinea;
-    }
-    
+  
     public void setTransparencia(boolean transparencia){
         this.transparencia=transparencia;
         this.repaint();
     }
     
+    /*
     public void setAtributos(Graphics2D g2d){
         //Declaramos un objeto de tipo stroke para cambiar atributos del trazo
         Stroke trazo;
@@ -169,12 +188,7 @@ public class Lienzo2D extends javax.swing.JPanel {
         trazo = new BasicStroke(grosorLinea);
         //Aplicamos el estilo creado al objeto Graphics2D
         g2d.setStroke(trazo);      
-        
-        /*
-        Paint rellenoPaint;
-        rellenoPaint = Color.BLACK;//new Color(color.getRed(),color.getGreen(),color.getBlue());
-        rellenoPaint = color;
-        */
+
         g2d.setPaint(color);
         
         
@@ -198,7 +212,7 @@ public class Lienzo2D extends javax.swing.JPanel {
         }
         
         
-    }
+    }*/
     
     //Sobreescritura del método paint
     @Override 
@@ -228,6 +242,7 @@ public class Lienzo2D extends javax.swing.JPanel {
             if(!vShape.isEmpty())
                 for(Figura figura:vShape){
                     figura.dibujateEn(g2d);
+                    Imprimir(figura.toString());
                    /*
                    //Imprimir(s.getClass().getName());
                     if( (s.getClass().getName().contains("Rectangle") || s.getClass().getName().contains("Ellipse")) && relleno==true)
@@ -336,20 +351,16 @@ public class Lienzo2D extends javax.swing.JPanel {
         
                 //Objeto temporal al que aplicaremos características antes de introducirlo en el vector.
                 Figura figuraTemporal;
+                
 
                 if(this.tipoHerramienta==Herramienta.PUNTO){
                 
                     figuraTemporal = new ManoAlzada();
-                    //Aplicamos el color 
-                    figuraTemporal.setColor(color);
                     
-                    /**
-                     * No tendría que estar cogiendo el grosor predeterminado de aquí, ya que no es una propiedad del lienzo
-                     * sino de la ventana principa, de los ajustes por defecto de los selecctores de herramientas.
-                     * 
-                     */
-                    
-                    figuraTemporal.setGrosorTrazo(grosorLinea);
+                    //Aplicamos el estilo de trazado.
+                    figuraTemporal.setTrazo(trazo);
+
+
                     
                     ((ManoAlzada)figuraTemporal).addPunto(pA);
                     
@@ -364,8 +375,11 @@ public class Lienzo2D extends javax.swing.JPanel {
                     figuraTemporal = new Linea();
 
                     //Aplicamos el color 
-                    figuraTemporal.setColor(color);
-                    figuraTemporal.setGrosorTrazo(grosorLinea);
+               //     figuraTemporal.getTrazo().setColor(color);
+                    
+                    
+                    //PRUEBA EXPLOSIVA//
+                    figuraTemporal.setTrazo(trazo);
 
                     vShape.add(figuraTemporal);
 
@@ -373,13 +387,19 @@ public class Lienzo2D extends javax.swing.JPanel {
                 if(this.tipoHerramienta==Herramienta.RECTANGULO){
                     //Construimos la figura como un rectángulo
                     figuraTemporal = new Rectangulo();
+                   
+                    //Aplicamos el estilo de trazado.
+                    figuraTemporal.setTrazo(trazo);
+                    
 
-                    figuraTemporal.setColor(color);
-                    figuraTemporal.setGrosorTrazo(grosorLinea);
+
 
                     //Si  ha espeficado quse quiere que la figu esté rellena
-                    if(relleno)
+                    if(rellenoBoolean){
+                                            
+                        ((Rectangulo)figuraTemporal).setRelleno(rellenoPadre);
                         ((Rectangulo)figuraTemporal).setRelleno(true);
+                    }
                     
                     vShape.add(figuraTemporal);
                 }
@@ -391,11 +411,13 @@ public class Lienzo2D extends javax.swing.JPanel {
                     //Construimos la figura como un rectángulo
                     figuraTemporal = new Elipse();
 
-                    figuraTemporal.setColor(color);
-                    figuraTemporal.setGrosorTrazo(grosorLinea);
+                   
+                    //Aplicamos el estilo de trazado.
+                    figuraTemporal.setTrazo(trazo);
+
                     
-                    //Si  ha espeficado quse quiere que la figu esté rellena
-                    if(relleno)
+                    //Si  ha espeficado quse quiere que la figu esté rellenar 
+                   if(rellenoBoolean)
                         ((Elipse)figuraTemporal).setRelleno(true);
 
                     vShape.add(figuraTemporal);
