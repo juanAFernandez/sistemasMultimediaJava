@@ -1081,6 +1081,9 @@ public class VentanaPrincipal extends JFrame {
     }
     
     public void setTrazoDefecto(Trazo nuevoTrazo){
+        
+        Imprimir("Grabando trazo por defecto");
+        
         //Cuando hacemos esto deben de reajustarse las herramientas de selección
         this.spinnerGrosor.setValue(nuevoTrazo.getGrosor());
         

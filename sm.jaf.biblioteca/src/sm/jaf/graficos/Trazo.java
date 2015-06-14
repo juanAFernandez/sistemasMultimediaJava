@@ -62,24 +62,24 @@ public class Trazo {
     public Trazo(){
         
         //El color es negro:
-     //   color = Color.RED;
+        color = Color.RED;
         
         //El grosor de la linea:
-     //   grosorLinea=1;
+        grosorLinea=1;
         
         //El final de las lineas es el primero:
-     //   cap = BasicStroke.CAP_BUTT;
+        cap = BasicStroke.CAP_BUTT;
     
         //La unión de esquinas es la más simple:
-     //   join = BasicStroke.JOIN_BEVEL;
+        join = BasicStroke.JOIN_BEVEL;
         
         //El patron de discontinuidad es simple (linea continua) 
         patronDiscontinuidad = new float[8];
-     //   patronDiscontinuidad[0]=15f;
-     //   for(int i=1; i<8; i++) patronDiscontinuidad[i]=0f;
+        patronDiscontinuidad[0]=1f;
+        for(int i=1; i<8; i++) patronDiscontinuidad[i]=0f;
         
         //Donde se comprime todod en el Stroke para aplicarlo de golpe.
-     //   trazo = new BasicStroke(grosorLinea, cap, join, 1.0f, patronDiscontinuidad, 0.0f);       
+        trazo = new BasicStroke(grosorLinea, cap, join, 1.0f, patronDiscontinuidad, 0.0f);       
      
     };
     
@@ -114,8 +114,12 @@ public class Trazo {
         return join;
     }
     public void setPatronDiscontinuidad(float[] patron){
-        //patronDiscontinuidad = patron;
-        patronDiscontinuidad = patron.clone();
+        
+        patronDiscontinuidad = new float [patron.length];
+        for(int i=0; i<patron.length; i++)
+            patronDiscontinuidad[i]=patron[i];
+        
+        
         Imprimir("\n\nAQUI patron aplicado: ");
         for(int i=0; i<8; i++)
             System.out.print(patronDiscontinuidad[i]+" ");        
