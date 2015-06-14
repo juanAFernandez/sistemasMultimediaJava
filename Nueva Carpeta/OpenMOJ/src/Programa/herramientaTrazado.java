@@ -120,9 +120,20 @@ public final class herramientaTrazado extends javax.swing.JFrame {
             spinners.get(i).setValue((int)patronDiscontinuidad[i]);
         }
         
+        //Tambien tenemos que cambiar los botones:
+        if(trazo.getDecoracionFinalLinea()==BasicStroke.CAP_BUTT)
+            this.capButt.setSelected(true);
+        if(trazo.getDecoracionFinalLinea()==BasicStroke.CAP_ROUND)
+            this.capRound.setSelected(true);
+        if(trazo.getDecoracionFinalLinea()==BasicStroke.CAP_SQUARE)
+            this.capSquared.setSelected(true);
+        if(trazo.getDecoracionUnionLineas()==BasicStroke.JOIN_BEVEL)
+            this.joinBEVEL.setSelected(true);
+        if(trazo.getDecoracionUnionLineas()==BasicStroke.JOIN_MITER)
+            this.joinMITTER.setSelected(true);
+        if(trazo.getDecoracionUnionLineas()==BasicStroke.JOIN_ROUND)
+            this.joinROUND.setSelected(true);
         
-        
-
         
         this.addWindowListener(new java.awt.event.WindowAdapter() {
     @Override
