@@ -23,6 +23,7 @@ import java.awt.AlphaComposite;
 import java.awt.Composite;
 import java.awt.RenderingHints;
 import java.awt.geom.Line2D;
+import java.awt.image.BufferedImage;
 import sm.jaf.graficos.Elipse;
 import sm.jaf.graficos.Figura;
 import sm.jaf.graficos.Linea;
@@ -76,8 +77,10 @@ public class Lienzo2D extends javax.swing.JPanel {
     
     private Point pA, pB;
     
-    private boolean rellenoBoolean, sentidoContrario, modoSeleccion, mejoraRenderizacion, transparencia;
+    private boolean rellenoBoolean, modoSeleccion, mejoraRenderizacion, transparencia;
 
+    
+    private BufferedImage img;
    
     /**
      * Objeto temporal para cuando se hace una selección de una figura.
@@ -99,8 +102,18 @@ public class Lienzo2D extends javax.swing.JPanel {
         
  
     }
-
+   
+    
+    public BufferedImage extraerImagen(){
+        
+        paint(img.createGraphics());
+        
+        return img;
+    }
+    
+    
     // ## FUNCIONES PARA ESTABLECER PARAMETROS DESDE EL PADRE QUE SERÁN LOS DE USO EN LA CREACIÓN DE FIGURAS NUEVAS ##
+    
     
     
     public void setTrazo(Trazo nuevoTrazo){
@@ -417,8 +430,11 @@ public class Lienzo2D extends javax.swing.JPanel {
 
                     
                     //Si  ha espeficado quse quiere que la figu esté rellenar 
-                   if(rellenoBoolean)
+                   if(rellenoBoolean){
+                                            
+                        ((Elipse)figuraTemporal).setRelleno(rellenoPadre);
                         ((Elipse)figuraTemporal).setRelleno(true);
+                    }
 
                     vShape.add(figuraTemporal);
 

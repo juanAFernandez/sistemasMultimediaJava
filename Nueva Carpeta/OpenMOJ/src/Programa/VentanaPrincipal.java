@@ -1225,6 +1225,8 @@ public class VentanaPrincipal extends JFrame {
     //Acción sobre el botón guardar:
     private void botonGuardarMenuArchivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonGuardarMenuArchivoActionPerformed
         
+        Imprimir("Intentado guardar imagen");
+        
         //Seleccionamos la ventana seleccionada:
         VentanaInterna ventanaInternaSeleccionada = (VentanaInterna)panelEscritorio.getSelectedFrame();
         if(ventanaInternaSeleccionada!=null){
@@ -1235,16 +1237,21 @@ public class VentanaPrincipal extends JFrame {
                 
                 try{
                     BufferedImage img =ventanaInternaSeleccionada.getLienzo().getImage();
+                    //ventanaInternaSeleccionada.getL
                     if(img!=null){
                         File f = dlg.getSelectedFile();
                         ImageIO.write(img, "jpg",f);
                         ventanaInternaSeleccionada.setTitle(f.getName());
+                    }else{
+                        JOptionPane.showMessageDialog(this, "No hay imagen que guardar");
                     }
                 }catch(Exception ex){
                     System.err.println("Error al guardar la imagen");
                 }
               
             }
+        }else{
+            JOptionPane.showMessageDialog(this, "Tienes que seleccionar una ventana.");
         }
         
         
