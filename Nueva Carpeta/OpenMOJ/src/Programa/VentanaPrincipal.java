@@ -1,5 +1,7 @@
 package Programa;
 
+import Herramientas.herramientaBrilloContraste;
+import Herramientas.herramientaNegativo;
 import accesorios.Ajustes;
 import accesorios.nuevoLienzo;
 import static extras.Imprimir.Imprimir;
@@ -1237,7 +1239,7 @@ public class VentanaPrincipal extends JFrame {
                 
                 try{
                     BufferedImage img =ventanaInternaSeleccionada.getLienzo().getImage();
-                    //ventanaInternaSeleccionada.getL
+                    
                     if(img!=null){
                         File f = dlg.getSelectedFile();
                         ImageIO.write(img, "jpg",f);
@@ -1246,7 +1248,7 @@ public class VentanaPrincipal extends JFrame {
                         JOptionPane.showMessageDialog(this, "No hay imagen que guardar");
                     }
                 }catch(Exception ex){
-                    System.err.println("Error al guardar la imagen");
+                    System.err.println("Error al guardar la imagen"+ex);
                 }
               
             }

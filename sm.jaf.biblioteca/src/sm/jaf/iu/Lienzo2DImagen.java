@@ -6,9 +6,15 @@
 package sm.jaf.iu;
 
 import static extras.Imprimir.Imprimir;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
+import sm.jaf.graficos.Figura;
+import sm.jaf.graficos.Rectangulo;
 
 /**
  *
@@ -60,8 +66,67 @@ public class Lienzo2DImagen extends Lienzo2D {
             
     
     public BufferedImage getImage(){
-        return imagen;
+        Imprimir("Llamando a getImage en Lienzo2DImagen");
+       
+        if(!vShape.isEmpty()){
+            return dibujarFiguras();
+        }
+        
+        return imagen;          
     }
+    
+    public BufferedImage dibujarFiguras(){
+        //Intentando dibujar figuras en imagen
+        
+        
+        if(imagen==null){
+            Imprimir("Aun no hay una imgaen donde guardar!");
+            crearImagen();
+            
+            paint(imagen.createGraphics());  //1ª forma de dibujar las formas que no funcionaba
+            return imagen;// 1ª forma que no funcionaba
+            
+        }else{
+            Imprimir("La imagen ya tiene contenido");
+        
+        
+        
+        //paint(imagen.createGraphics());     
+        
+        BufferedImage mImagen;
+        Dimension d = getSize();
+        int ancho = d.width, alto = d.height;
+        mImagen = new BufferedImage(ancho,alto, BufferedImage.TYPE_INT_RGB);
+        
+        //Tenemos que convertir esta imagen en blanca:
+        
+
+        
+        Graphics2D gOculta = mImagen.createGraphics();
+        
+      //  gOculta.setPaint(Color.WHITE);
+      //  gOculta.drawRect(0, 0, alto, ancho);
+        
+        gOculta.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        gOculta.drawImage(imagen, 0, 20, this);
+        
+        if(!vShape.isEmpty())
+            for(Figura figura:vShape)
+                figura.dibujateEn(gOculta);
+        
+        return mImagen;
+        }
+    
+      //  return imagen; 1ª forma que no funcionaba
+    }
+    
+    
+    public void crearImagen(){
+        Dimension d = getSize();
+        int ancho = d.width; int alto = d.height;
+        imagen = new BufferedImage(ancho, alto, BufferedImage.TYPE_INT_RGB);
+    }
+    
     
     @Override
     public void paintComponent(Graphics g){

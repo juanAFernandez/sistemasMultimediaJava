@@ -73,7 +73,7 @@ public class Lienzo2D extends javax.swing.JPanel {
   //  private VentanaPrincipal padre;
     
     //Vector de objetos de tipo Shape (Java2D) que es del que heredan todos los tipos que vamos a usar:
-    private ArrayList <Figura> vShape = new ArrayList();
+    protected ArrayList <Figura> vShape = new ArrayList();
     
     private Point pA, pB;
     
@@ -103,13 +103,8 @@ public class Lienzo2D extends javax.swing.JPanel {
  
     }
    
+
     
-    public BufferedImage extraerImagen(){
-        
-        paint(img.createGraphics());
-        
-        return img;
-    }
     
     
     // ## FUNCIONES PARA ESTABLECER PARAMETROS DESDE EL PADRE QUE SERÁN LOS DE USO EN LA CREACIÓN DE FIGURAS NUEVAS ##

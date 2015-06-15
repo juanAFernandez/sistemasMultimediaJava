@@ -1,5 +1,7 @@
-package Programa;
+package Herramientas;
 
+import Programa.VentanaInterna;
+import Programa.VentanaPrincipal;
 import static extras.Imprimir.Imprimir;
 import java.awt.Color;
 import java.awt.Component;
@@ -48,7 +50,13 @@ public final class herramientaBrilloContraste extends javax.swing.JFrame {
     private BufferedImage imagenTemporalParaOperaciones;
     private BufferedImage imgTMP;
      
-    static BufferedImage deepCopy(BufferedImage bi) {
+    
+    //Variables de control de número de aplicaciones:
+    private int nVecesNormal, nVecesIluminacion, nVecesOscurecimiento;
+    
+    
+    
+    public BufferedImage deepCopy(BufferedImage bi) {
         ColorModel cm = bi.getColorModel();
         boolean isAlphaPremultiplied = cm.isAlphaPremultiplied();
         WritableRaster raster = bi.copyData(null);
@@ -61,7 +69,10 @@ public final class herramientaBrilloContraste extends javax.swing.JFrame {
      */
     public herramientaBrilloContraste(VentanaPrincipal padre) {
         initComponents();
-                                    
+                          
+        nVecesNormal=nVecesIluminacion=nVecesOscurecimiento=0;
+        
+        
         //Creamos la referencia al padre
         this.padre=padre;
         
@@ -118,6 +129,7 @@ public final class herramientaBrilloContraste extends javax.swing.JFrame {
         //Ponemos a 0 el slider del brillo
         sliderBrillo.setValue(0);        
         
+        Imprimir("Reseteando imagen");
         //Enviamos la copia de la imagen que teníamos guadada deshaciendo cualquier operación anterior.
         vis.getLienzo().setImage(imagenTemporalParaOperaciones);
                
@@ -135,12 +147,12 @@ public final class herramientaBrilloContraste extends javax.swing.JFrame {
         //Sólo cuando se ha seleccionado una ventana interna se puede trabajar.                          
        
         if(vis!=null){
-         //Cargamos en nuestra variable privada la imagen que ese lienzo tiene.
+         //Cargamos en nuestras variables privada la imagen que ese lienzo tiene.
             this.imagenTemporalParaOperaciones=vis.getLienzo().getImage();
-            this.imgTMP=vis.getLienzo().getImage();
-            //Aplicamos el filtro a través de la convolución (operador creado):
-            //vis.getLienzo().setImage(cop.filter(imagenTemporalParaOperaciones, null));
-            //vis.repaint();
+            
+            imgTMP=this.deepCopy(imagenTemporalParaOperaciones);
+            //this.imgTMP=vis.getLienzo().getImage();
+
         }else{
             //Mostramos el mensaje de error
             JOptionPane.showMessageDialog(this, "Debes seleccionar una imagen antes de usar esta herramienta.", "Error", JOptionPane.WARNING_MESSAGE);
@@ -205,11 +217,11 @@ public final class herramientaBrilloContraste extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
         textNivelBrillo = new javax.swing.JLabel();
-        contrasteOscurecimiento = new javax.swing.JButton();
-        contrasteIluminacion = new javax.swing.JButton();
+        botonContrasteNormal = new javax.swing.JButton();
+        botonContrasteIluminacion = new javax.swing.JButton();
         textContrasteNormal = new javax.swing.JLabel();
         textContrasteOscurecimiento = new javax.swing.JLabel();
-        contrasteOscurecimiento1 = new javax.swing.JButton();
+        botonContrasteOscurecimiento = new javax.swing.JButton();
         textContrasteIluminacion = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
 
@@ -312,15 +324,17 @@ public final class herramientaBrilloContraste extends javax.swing.JFrame {
         textNivelBrillo.setFont(new java.awt.Font("Sawasdee", 0, 18)); // NOI18N
         textNivelBrillo.setText("0");
 
-        contrasteOscurecimiento.addActionListener(new java.awt.event.ActionListener() {
+        botonContrasteNormal.setText("0");
+        botonContrasteNormal.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                contrasteOscurecimientoActionPerformed(evt);
+                botonContrasteNormalActionPerformed(evt);
             }
         });
 
-        contrasteIluminacion.addActionListener(new java.awt.event.ActionListener() {
+        botonContrasteIluminacion.setText("0");
+        botonContrasteIluminacion.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                contrasteIluminacionActionPerformed(evt);
+                botonContrasteIluminacionActionPerformed(evt);
             }
         });
 
@@ -331,9 +345,10 @@ public final class herramientaBrilloContraste extends javax.swing.JFrame {
         textContrasteOscurecimiento.setText("Oscurecimiento");
         textContrasteOscurecimiento.setToolTipText("");
 
-        contrasteOscurecimiento1.addActionListener(new java.awt.event.ActionListener() {
+        botonContrasteOscurecimiento.setText("0");
+        botonContrasteOscurecimiento.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                contrasteOscurecimiento1ActionPerformed(evt);
+                botonContrasteOscurecimientoActionPerformed(evt);
             }
         });
 
@@ -356,16 +371,16 @@ public final class herramientaBrilloContraste extends javax.swing.JFrame {
                         .addComponent(jLabel9))
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addGap(67, 67, 67)
-                        .addComponent(contrasteOscurecimiento)
+                        .addComponent(botonContrasteNormal)
                         .addGap(18, 18, 18)
                         .addComponent(textContrasteNormal)
-                        .addGap(18, 18, 18)
-                        .addComponent(contrasteIluminacion)
+                        .addGap(24, 24, 24)
+                        .addComponent(botonContrasteIluminacion)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(textContrasteIluminacion)
                         .addGap(29, 29, 29)
-                        .addComponent(contrasteOscurecimiento1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(botonContrasteOscurecimiento)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(textContrasteOscurecimiento))
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addContainerGap()
@@ -394,19 +409,19 @@ public final class herramientaBrilloContraste extends javax.swing.JFrame {
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel9)
                     .addComponent(jLabel5))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(contrasteOscurecimiento, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(textContrasteNormal)
-                            .addComponent(textContrasteIluminacion))
-                        .addGroup(jPanel4Layout.createSequentialGroup()
-                            .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addComponent(textContrasteOscurecimiento)
-                                .addComponent(contrasteOscurecimiento1, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGap(3, 3, 3)))
-                    .addComponent(contrasteIluminacion, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(19, 19, 19)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(botonContrasteNormal, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(textContrasteNormal)
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(textContrasteIluminacion)
+                            .addComponent(botonContrasteIluminacion, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(textContrasteOscurecimiento)
+                            .addComponent(botonContrasteOscurecimiento, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(2, 2, 2)))
                 .addContainerGap())
         );
 
@@ -435,7 +450,8 @@ public final class herramientaBrilloContraste extends javax.swing.JFrame {
             lienzo así siempre tendremos una referencia del original.
                     
             */
-            vis.getLienzo().setImage(rop.filter(imagenTemporalParaOperaciones, null));
+           // imgTMP=rop.filter(imgTMP, null);
+            vis.getLienzo().setImage(rop.filter(imgTMP, null));
             
             
             
@@ -448,7 +464,7 @@ public final class herramientaBrilloContraste extends javax.swing.JFrame {
         
     }//GEN-LAST:event_sliderBrilloStateChanged
 
-    private void contrasteOscurecimientoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_contrasteOscurecimientoActionPerformed
+    private void botonContrasteNormalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonContrasteNormalActionPerformed
        
         Imprimir("Aplicando contraste normal");
         
@@ -485,11 +501,12 @@ public final class herramientaBrilloContraste extends javax.swing.JFrame {
         }
         
         
+        nVecesNormal++;
+        botonContrasteNormal.setText(Integer.toString(nVecesNormal));
         
-        
-    }//GEN-LAST:event_contrasteOscurecimientoActionPerformed
+    }//GEN-LAST:event_botonContrasteNormalActionPerformed
 
-    private void contrasteIluminacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_contrasteIluminacionActionPerformed
+    private void botonContrasteIluminacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonContrasteIluminacionActionPerformed
          Imprimir("Aplicando contraste normal");
         
         try{
@@ -523,9 +540,13 @@ public final class herramientaBrilloContraste extends javax.swing.JFrame {
         } catch(Exception e){
           System.err.println(e.getLocalizedMessage());
         }
-    }//GEN-LAST:event_contrasteIluminacionActionPerformed
+        
+        nVecesIluminacion++;
+        botonContrasteIluminacion.setText(Integer.toString(nVecesIluminacion));
+        
+    }//GEN-LAST:event_botonContrasteIluminacionActionPerformed
 
-    private void contrasteOscurecimiento1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_contrasteOscurecimiento1ActionPerformed
+    private void botonContrasteOscurecimientoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonContrasteOscurecimientoActionPerformed
          Imprimir("Aplicando contraste normal");
         
         try{
@@ -546,16 +567,37 @@ public final class herramientaBrilloContraste extends javax.swing.JFrame {
         } catch(Exception e){
           System.err.println(e.getLocalizedMessage());
         }
-    }//GEN-LAST:event_contrasteOscurecimiento1ActionPerformed
+        
+        nVecesOscurecimiento++;
+        botonContrasteOscurecimiento.setText(Integer.toString(nVecesOscurecimiento));
+    }//GEN-LAST:event_botonContrasteOscurecimientoActionPerformed
 
     /**
      * Función que recupera la imagen original y también el estado  de los botones
      */
     public void recuperarImagen(){
+            
+        //Ajustamos los valores de las herramientas:
             sliderBrillo.setValue(0);
             textNivelBrillo.setText("0");
+            this.botonContrasteIluminacion.setText("0");
+            this.botonContrasteNormal.setText("0");
+            this.botonContrasteOscurecimiento.setText("0");
+            
+            
+            
             vis.getLienzo().setImage(this.imagenTemporalParaOperaciones);
             vis.getLienzo().repaint();
+            
+            //Volvemos a realizar la copia para que no guarde los cambios anteriores.
+            imgTMP=this.deepCopy(imagenTemporalParaOperaciones);
+            /*
+            Recordamos que en java no se puede realizar la copia por valor con = si no se 
+            trata de tipos primitivos.
+            */
+            
+            
+            
     }
     
     private void resetButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_resetButtonActionPerformed
@@ -569,7 +611,8 @@ public final class herramientaBrilloContraste extends javax.swing.JFrame {
     }//GEN-LAST:event_exitButtonActionPerformed
 
     private void saveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveButtonActionPerformed
-        // TODO add your handling code here:
+        //Cerramos la ventana
+        this.dispose();
     }//GEN-LAST:event_saveButtonActionPerformed
 
     /**
@@ -629,9 +672,9 @@ public final class herramientaBrilloContraste extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton contrasteIluminacion;
-    private javax.swing.JButton contrasteOscurecimiento;
-    private javax.swing.JButton contrasteOscurecimiento1;
+    private javax.swing.JButton botonContrasteIluminacion;
+    private javax.swing.JButton botonContrasteNormal;
+    private javax.swing.JButton botonContrasteOscurecimiento;
     private javax.swing.JButton exitButton;
     private javax.swing.ButtonGroup grupoBotonesMatriz;
     private javax.swing.ButtonGroup grupoBotonesTipo;
