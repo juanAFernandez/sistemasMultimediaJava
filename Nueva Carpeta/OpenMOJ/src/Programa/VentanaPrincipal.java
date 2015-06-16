@@ -1,6 +1,7 @@
 package Programa;
 
 import Herramientas.herramientaBrilloContraste;
+import Herramientas.herramientaEmborronamiento;
 import Herramientas.herramientaNegativo;
 import accesorios.Ajustes;
 import accesorios.nuevoLienzo;
@@ -48,7 +49,7 @@ public class VentanaPrincipal extends JFrame {
     
     private herramientaEnfoque ventanaHerramientaEnfoque;
     private herramientaRelieve ventanaHerramientaRelieve;
-    private herramientaFronteras ventanaHerramientaFronteras;
+    private herramientaFronterasOld ventanaHerramientaFronteras;
     private herramientaRotar ventanaHerramientaRotar;
     private herramientaNegativo ventanaHerramientaNegativo;
     public herramientaBrilloContraste ventanaHerramientaBrilloContraste;
@@ -194,16 +195,7 @@ public class VentanaPrincipal extends JFrame {
         
         
         
-        //Ajustes particulares:
-        
-        // ##Ventana de herramienta BRILLO ##//
-//        nivelBrillo.setText("0");
-        
-        // ##Ventana de herramientas EMBORRONAMIENTO ##//
-        this.jPanel14.setBorder(BorderFactory.createTitledBorder("Tipo"));
-        this.jPanel15.setBorder(BorderFactory.createTitledBorder("Matriz"));
-        this.jPanel13.setBorder(BorderFactory.createTitledBorder("Pasadas"));
-        
+
         dimensionMatriz=0;
         
         
@@ -247,27 +239,6 @@ public class VentanaPrincipal extends JFrame {
         labelCC = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
-        ventanaHerramientaEmborronamiento = new javax.swing.JFrame();
-        jPanel9 = new javax.swing.JPanel();
-        botonReiniciarEmborronamiento = new javax.swing.JButton();
-        botonCancelarEmborronamiento = new javax.swing.JButton();
-        botonAceptarEmborronamiento = new javax.swing.JButton();
-        jPanel10 = new javax.swing.JPanel();
-        textoEmborronamiento = new javax.swing.JLabel();
-        jPanel11 = new javax.swing.JPanel();
-        jPanel12 = new javax.swing.JPanel();
-        jPanel14 = new javax.swing.JPanel();
-        botonTipoBinomial = new javax.swing.JRadioButton();
-        botonTipoMedio = new javax.swing.JRadioButton();
-        jPanel15 = new javax.swing.JPanel();
-        textoMatrizEmborronamiento = new javax.swing.JLabel();
-        botonMas = new javax.swing.JButton();
-        botonMenos = new javax.swing.JButton();
-        jPanel13 = new javax.swing.JPanel();
-        jSlider1 = new javax.swing.JSlider();
-        jLabel6 = new javax.swing.JLabel();
-        jLabel7 = new javax.swing.JLabel();
-        grupoBotonesTipoEmborronamiento = new javax.swing.ButtonGroup();
         jSeparator2 = new javax.swing.JSeparator();
         PanelNorte = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
@@ -319,22 +290,25 @@ public class VentanaPrincipal extends JFrame {
         botonAbrirAudio = new javax.swing.JMenuItem();
         botonGrabarAudio = new javax.swing.JMenuItem();
         botonAbrirWebCam = new javax.swing.JMenuItem();
+        botonEdicion = new javax.swing.JMenu();
+        jMenuItem7 = new javax.swing.JMenuItem();
+        jMenuItem8 = new javax.swing.JMenuItem();
         menuEdicion = new javax.swing.JMenu();
         pruebas = new javax.swing.JCheckBoxMenuItem();
         jCheckBoxMenuItem1 = new javax.swing.JCheckBoxMenuItem();
-        jMenu1 = new javax.swing.JMenu();
+        menuHerramientas = new javax.swing.JMenu();
         botonMenuEdicionBrillo = new javax.swing.JMenuItem();
         botonNegativo = new javax.swing.JMenuItem();
+        botonMenuHerramientasEmborronar = new javax.swing.JMenuItem();
         botonFronteras = new javax.swing.JMenuItem();
         jMenuItem2 = new javax.swing.JMenuItem();
         botonRotar = new javax.swing.JMenuItem();
         botonMenuRelieve = new javax.swing.JMenuItem();
         botonMenuherramientaEnfoque = new javax.swing.JMenuItem();
         jMenuItem1 = new javax.swing.JMenuItem();
-        botonMenuHerramientasEmborronar = new javax.swing.JMenuItem();
         botonMenuAbout = new javax.swing.JMenu();
-        jMenuItem5 = new javax.swing.JMenuItem();
-        jMenuItem6 = new javax.swing.JMenuItem();
+        botonAboutInfo = new javax.swing.JMenuItem();
+        botonAjustes = new javax.swing.JMenuItem();
 
         jLabel1.setText("jLabel1");
 
@@ -360,182 +334,6 @@ public class VentanaPrincipal extends JFrame {
         jPanel1.add(jLabel2, java.awt.BorderLayout.CENTER);
 
         dialogoAbout.getContentPane().add(jPanel1, java.awt.BorderLayout.PAGE_START);
-
-        ventanaHerramientaEmborronamiento.setTitle("Emborronamiento");
-        ventanaHerramientaEmborronamiento.setAlwaysOnTop(true);
-        ventanaHerramientaEmborronamiento.setBackground(java.awt.Color.lightGray);
-        ventanaHerramientaEmborronamiento.setBounds(new java.awt.Rectangle(0, 0, 400, 300));
-        ventanaHerramientaEmborronamiento.setMinimumSize(new java.awt.Dimension(500, 237));
-        ventanaHerramientaEmborronamiento.addComponentListener(new java.awt.event.ComponentAdapter() {
-            public void componentShown(java.awt.event.ComponentEvent evt) {
-                ventanaHerramientaEmborronamientoComponentShown(evt);
-            }
-            public void componentHidden(java.awt.event.ComponentEvent evt) {
-                ventanaHerramientaEmborronamientoComponentHidden(evt);
-            }
-        });
-
-        jPanel9.setBackground(new java.awt.Color(204, 204, 255));
-
-        botonReiniciarEmborronamiento.setText("Reiniciar");
-        jPanel9.add(botonReiniciarEmborronamiento);
-
-        botonCancelarEmborronamiento.setText("Cancelar");
-        jPanel9.add(botonCancelarEmborronamiento);
-
-        botonAceptarEmborronamiento.setText("Aceptar");
-        jPanel9.add(botonAceptarEmborronamiento);
-
-        ventanaHerramientaEmborronamiento.getContentPane().add(jPanel9, java.awt.BorderLayout.PAGE_END);
-
-        jPanel10.setBackground(new java.awt.Color(102, 102, 102));
-
-        textoEmborronamiento.setFont(new java.awt.Font("Ubuntu", 1, 24)); // NOI18N
-        textoEmborronamiento.setForeground(new java.awt.Color(204, 204, 204));
-        textoEmborronamiento.setText("Emborronamiento");
-
-        javax.swing.GroupLayout jPanel10Layout = new javax.swing.GroupLayout(jPanel10);
-        jPanel10.setLayout(jPanel10Layout);
-        jPanel10Layout.setHorizontalGroup(
-            jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel10Layout.createSequentialGroup()
-                .addGap(14, 14, 14)
-                .addComponent(textoEmborronamiento)
-                .addContainerGap(312, Short.MAX_VALUE))
-        );
-        jPanel10Layout.setVerticalGroup(
-            jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel10Layout.createSequentialGroup()
-                .addGap(14, 14, 14)
-                .addComponent(textoEmborronamiento)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-
-        ventanaHerramientaEmborronamiento.getContentPane().add(jPanel10, java.awt.BorderLayout.PAGE_START);
-
-        jPanel11.setBackground(new java.awt.Color(204, 204, 204));
-        jPanel11.setLayout(new java.awt.BorderLayout());
-
-        jPanel12.setLayout(new javax.swing.BoxLayout(jPanel12, javax.swing.BoxLayout.LINE_AXIS));
-
-        jPanel14.setBackground(new java.awt.Color(204, 204, 204));
-
-        grupoBotonesTipoEmborronamiento.add(botonTipoBinomial);
-        botonTipoBinomial.setText("Binomial");
-
-        grupoBotonesTipoEmborronamiento.add(botonTipoMedio);
-        botonTipoMedio.setText("Medio");
-        botonTipoMedio.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                botonTipoMedioActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout jPanel14Layout = new javax.swing.GroupLayout(jPanel14);
-        jPanel14.setLayout(jPanel14Layout);
-        jPanel14Layout.setHorizontalGroup(
-            jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel14Layout.createSequentialGroup()
-                .addContainerGap(113, Short.MAX_VALUE)
-                .addComponent(botonTipoMedio)
-                .addGap(27, 27, 27)
-                .addComponent(botonTipoBinomial)
-                .addGap(49, 49, 49))
-        );
-        jPanel14Layout.setVerticalGroup(
-            jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel14Layout.createSequentialGroup()
-                .addContainerGap(15, Short.MAX_VALUE)
-                .addGroup(jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(botonTipoMedio)
-                    .addComponent(botonTipoBinomial))
-                .addGap(27, 27, 27))
-        );
-
-        jPanel12.add(jPanel14);
-
-        jPanel15.setBackground(new java.awt.Color(204, 204, 204));
-
-        textoMatrizEmborronamiento.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
-        textoMatrizEmborronamiento.setText("3 x 3");
-
-        botonMas.setText("+");
-        botonMas.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                botonMasActionPerformed(evt);
-            }
-        });
-
-        botonMenos.setText("-");
-        botonMenos.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                botonMenosActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout jPanel15Layout = new javax.swing.GroupLayout(jPanel15);
-        jPanel15.setLayout(jPanel15Layout);
-        jPanel15Layout.setHorizontalGroup(
-            jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel15Layout.createSequentialGroup()
-                .addGap(22, 22, 22)
-                .addComponent(botonMenos)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(textoMatrizEmborronamiento)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(botonMas)
-                .addContainerGap(87, Short.MAX_VALUE))
-        );
-        jPanel15Layout.setVerticalGroup(
-            jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel15Layout.createSequentialGroup()
-                .addContainerGap(21, Short.MAX_VALUE)
-                .addGroup(jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(textoMatrizEmborronamiento)
-                    .addComponent(botonMas)
-                    .addComponent(botonMenos))
-                .addGap(12, 12, 12))
-        );
-
-        jPanel12.add(jPanel15);
-
-        jPanel11.add(jPanel12, java.awt.BorderLayout.PAGE_START);
-
-        jPanel13.setBackground(new java.awt.Color(204, 204, 204));
-
-        jLabel6.setFont(new java.awt.Font("Ubuntu", 0, 18)); // NOI18N
-        jLabel6.setText("0");
-
-        jLabel7.setFont(new java.awt.Font("Ubuntu", 0, 18)); // NOI18N
-        jLabel7.setText("15");
-
-        javax.swing.GroupLayout jPanel13Layout = new javax.swing.GroupLayout(jPanel13);
-        jPanel13.setLayout(jPanel13Layout);
-        jPanel13Layout.setHorizontalGroup(
-            jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel13Layout.createSequentialGroup()
-                .addGap(21, 21, 21)
-                .addComponent(jLabel6)
-                .addGap(18, 18, 18)
-                .addComponent(jSlider1, javax.swing.GroupLayout.DEFAULT_SIZE, 438, Short.MAX_VALUE)
-                .addGap(18, 18, 18)
-                .addComponent(jLabel7)
-                .addGap(18, 18, 18))
-        );
-        jPanel13Layout.setVerticalGroup(
-            jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel13Layout.createSequentialGroup()
-                .addContainerGap(28, Short.MAX_VALUE)
-                .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel7)
-                    .addComponent(jLabel6)
-                    .addComponent(jSlider1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(25, 25, 25))
-        );
-
-        jPanel11.add(jPanel13, java.awt.BorderLayout.CENTER);
-
-        ventanaHerramientaEmborronamiento.getContentPane().add(jPanel11, java.awt.BorderLayout.CENTER);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Open MOJ (Media Over Java) P10");
@@ -943,6 +741,18 @@ public class VentanaPrincipal extends JFrame {
 
         jMenuBar1.add(menuArchivo);
 
+        botonEdicion.setText("Editar");
+
+        jMenuItem7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/back.png"))); // NOI18N
+        jMenuItem7.setText("Deshacer");
+        botonEdicion.add(jMenuItem7);
+
+        jMenuItem8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/return.png"))); // NOI18N
+        jMenuItem8.setText("Rehacer");
+        botonEdicion.add(jMenuItem8);
+
+        jMenuBar1.add(botonEdicion);
+
         menuEdicion.setText("Ver");
 
         pruebas.setSelected(true);
@@ -955,7 +765,7 @@ public class VentanaPrincipal extends JFrame {
 
         jMenuBar1.add(menuEdicion);
 
-        jMenu1.setText("Herramientas");
+        menuHerramientas.setText("Herramientas");
 
         botonMenuEdicionBrillo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/brilloContrasteMini.png"))); // NOI18N
         botonMenuEdicionBrillo.setText(" Brillo y Contraste");
@@ -964,7 +774,7 @@ public class VentanaPrincipal extends JFrame {
                 botonMenuEdicionBrilloActionPerformed(evt);
             }
         });
-        jMenu1.add(botonMenuEdicionBrillo);
+        menuHerramientas.add(botonMenuEdicionBrillo);
 
         botonNegativo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/negative.png"))); // NOI18N
         botonNegativo.setText("Negativo");
@@ -973,7 +783,16 @@ public class VentanaPrincipal extends JFrame {
                 botonNegativoActionPerformed(evt);
             }
         });
-        jMenu1.add(botonNegativo);
+        menuHerramientas.add(botonNegativo);
+
+        botonMenuHerramientasEmborronar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/emborronamiento.png"))); // NOI18N
+        botonMenuHerramientasEmborronar.setText("Emborranamiento");
+        botonMenuHerramientasEmborronar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonMenuHerramientasEmborronarActionPerformed(evt);
+            }
+        });
+        menuHerramientas.add(botonMenuHerramientasEmborronar);
 
         botonFronteras.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/deteccionBordes.png"))); // NOI18N
         botonFronteras.setText("Detección fronteras");
@@ -982,7 +801,7 @@ public class VentanaPrincipal extends JFrame {
                 botonFronterasActionPerformed(evt);
             }
         });
-        jMenu1.add(botonFronteras);
+        menuHerramientas.add(botonFronteras);
 
         jMenuItem2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/umbralizacion.png"))); // NOI18N
         jMenuItem2.setText("Umbralizacion");
@@ -992,7 +811,7 @@ public class VentanaPrincipal extends JFrame {
                 jMenuItem2ActionPerformed(evt);
             }
         });
-        jMenu1.add(jMenuItem2);
+        menuHerramientas.add(jMenuItem2);
 
         botonRotar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/rotate.png"))); // NOI18N
         botonRotar.setText("Rotar");
@@ -1001,7 +820,7 @@ public class VentanaPrincipal extends JFrame {
                 botonRotarActionPerformed(evt);
             }
         });
-        jMenu1.add(botonRotar);
+        menuHerramientas.add(botonRotar);
 
         botonMenuRelieve.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/relieve.png"))); // NOI18N
         botonMenuRelieve.setText("Relieve");
@@ -1010,7 +829,7 @@ public class VentanaPrincipal extends JFrame {
                 botonMenuRelieveActionPerformed(evt);
             }
         });
-        jMenu1.add(botonMenuRelieve);
+        menuHerramientas.add(botonMenuRelieve);
 
         botonMenuherramientaEnfoque.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/enfoque.png"))); // NOI18N
         botonMenuherramientaEnfoque.setText("Enfoque");
@@ -1019,7 +838,7 @@ public class VentanaPrincipal extends JFrame {
                 botonMenuherramientaEnfoqueActionPerformed(evt);
             }
         });
-        jMenu1.add(botonMenuherramientaEnfoque);
+        menuHerramientas.add(botonMenuherramientaEnfoque);
 
         jMenuItem1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/seno.png"))); // NOI18N
         jMenuItem1.setText("FuncionSeno");
@@ -1028,32 +847,25 @@ public class VentanaPrincipal extends JFrame {
                 jMenuItem1ActionPerformed(evt);
             }
         });
-        jMenu1.add(jMenuItem1);
+        menuHerramientas.add(jMenuItem1);
 
-        botonMenuHerramientasEmborronar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/emborronamiento.png"))); // NOI18N
-        botonMenuHerramientasEmborronar.setText("Emborranamiento");
-        botonMenuHerramientasEmborronar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                botonMenuHerramientasEmborronarActionPerformed(evt);
-            }
-        });
-        jMenu1.add(botonMenuHerramientasEmborronar);
-
-        jMenuBar1.add(jMenu1);
+        jMenuBar1.add(menuHerramientas);
 
         botonMenuAbout.setText("Ayuda");
 
-        jMenuItem5.setText("Sobre MOJ");
-        jMenuItem5.setToolTipText("");
-        botonMenuAbout.add(jMenuItem5);
+        botonAboutInfo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/info.png"))); // NOI18N
+        botonAboutInfo.setText("Sobre MOJ");
+        botonAboutInfo.setToolTipText("");
+        botonMenuAbout.add(botonAboutInfo);
 
-        jMenuItem6.setText("Ajustes");
-        jMenuItem6.addActionListener(new java.awt.event.ActionListener() {
+        botonAjustes.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/settings.png"))); // NOI18N
+        botonAjustes.setText("Ajustes");
+        botonAjustes.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem6ActionPerformed(evt);
+                botonAjustesActionPerformed(evt);
             }
         });
-        botonMenuAbout.add(jMenuItem6);
+        botonMenuAbout.add(botonAjustes);
 
         jMenuBar1.add(botonMenuAbout);
 
@@ -1273,44 +1085,10 @@ public class VentanaPrincipal extends JFrame {
         
     }//GEN-LAST:event_botonMenuEdicionBrilloActionPerformed
 
-    private void ventanaHerramientaEmborronamientoComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_ventanaHerramientaEmborronamientoComponentShown
-        
-        Imprimir("Entrando en la sección de emborronamiento con parámetros por defecto.");
-        
-        //Creamos el nucleo de tipo medio (uno de los dos tipos disponibles).
-        Kernel k = KernelProducer.createKernel(KernelProducer.TYPE_MEDIA_3x3);
-        
-        //Kernel k = KernelProducer.createKernel(KernelProducer.TYPE_BINOMIAL_3x3);
-        
-        //Obtenemos el operador pasándole el kernel
-        ConvolveOp cop = new ConvolveOp(k,ConvolveOp.EDGE_NO_OP,null);
-        
-        //ConvolveOp cop = new ConvolveOp(k,ConvolveOp.EDGE_NO_OP,null);
-        
-        //Sacamos la imagen
-        VentanaInterna ventanaInternaSeleccionada = (VentanaInterna) (this.panelEscritorio.getSelectedFrame());
-        if(ventanaInternaSeleccionada != null){ //Nos aseguramos de haber seleccionado alguno.
-            //Cargamos en nuestra variable privada la imagen que ese lienzo tiene.
-            this.imagenTemporalParaOperaciones=ventanaInternaSeleccionada.getLienzo().getImage();
-            Imprimir("Imagen desde la ventana seleccionada");
-            
-             //Aplicamos el filtro a través de la convolución (operador creado):
-        ventanaInternaSeleccionada.getLienzo().setImage(cop.filter(imagenTemporalParaOperaciones, null));
-        ventanaInternaSeleccionada.repaint();
-        }
-        
-       
-        
-    }//GEN-LAST:event_ventanaHerramientaEmborronamientoComponentShown
-
     public Lienzo2D getMiniLienzo(){
         return this.miniLienzoMuestra;
     }
     
-    private void ventanaHerramientaEmborronamientoComponentHidden(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_ventanaHerramientaEmborronamientoComponentHidden
-        // TODO add your handling code here:
-    }//GEN-LAST:event_ventanaHerramientaEmborronamientoComponentHidden
-
     private void botonMenuHerramientasEmborronarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonMenuHerramientasEmborronarActionPerformed
         
 
@@ -1324,24 +1102,6 @@ public class VentanaPrincipal extends JFrame {
         ventana.setVisible(true);
         
     }//GEN-LAST:event_botonMenuHerramientasEmborronarActionPerformed
-
-    private void botonTipoMedioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonTipoMedioActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_botonTipoMedioActionPerformed
-
-    private void botonMasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonMasActionPerformed
-        Imprimir("Cambiado de estado spiner de emborronamiento");
-        dimensionMatriz++;
-        String valor=Integer.toString(dimensionMatriz);
-        this.textoMatrizEmborronamiento.setText(valor+" x "+valor);
-    }//GEN-LAST:event_botonMasActionPerformed
-
-    private void botonMenosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonMenosActionPerformed
-        Imprimir("Cambiado de estado spiner de emborronamiento");
-        dimensionMatriz--;
-        String valor=Integer.toString(dimensionMatriz);
-        this.textoMatrizEmborronamiento.setText(valor+" x "+valor);
-    }//GEN-LAST:event_botonMenosActionPerformed
 
     private void botonMenuherramientaEnfoqueActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonMenuherramientaEnfoqueActionPerformed
        
@@ -1359,7 +1119,7 @@ public class VentanaPrincipal extends JFrame {
     }//GEN-LAST:event_botonMenuRelieveActionPerformed
 
     private void botonFronterasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonFronterasActionPerformed
-        ventanaHerramientaFronteras = new herramientaFronteras(this);
+        ventanaHerramientaFronteras = new herramientaFronterasOld(this);
         ventanaHerramientaFronteras.setVisible(true);
     }//GEN-LAST:event_botonFronterasActionPerformed
 
@@ -1460,12 +1220,12 @@ public class VentanaPrincipal extends JFrame {
         
     }//GEN-LAST:event_botonAbrirWebCamActionPerformed
 
-    private void jMenuItem6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem6ActionPerformed
+    private void botonAjustesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonAjustesActionPerformed
         
         ventanaAjustes = new Ajustes(this);
         ventanaAjustes.setVisible(true);
         
-    }//GEN-LAST:event_jMenuItem6ActionPerformed
+    }//GEN-LAST:event_botonAjustesActionPerformed
 
     private void botonNegroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonNegroActionPerformed
         System.out.println("Pulsado boton NEGRO en ventana principal");
@@ -1680,18 +1440,19 @@ public class VentanaPrincipal extends JFrame {
     private javax.swing.ButtonGroup GrupoBotonesDibujo;
     private javax.swing.JPanel PanelNorte;
     private javax.swing.JPanel PanelSur;
+    private javax.swing.JMenuItem botonAboutInfo;
     private javax.swing.JMenuItem botonAbrirAudio;
     private javax.swing.JMenuItem botonAbrirMenuArchivo;
     private javax.swing.JMenuItem botonAbrirWebCam;
-    private javax.swing.JButton botonAceptarEmborronamiento;
+    private javax.swing.JMenuItem botonAjustes;
     private javax.swing.JCheckBox botonAlisar;
     private javax.swing.JToggleButton botonAmarillo;
     private javax.swing.JToggleButton botonAzul;
     private javax.swing.JToggleButton botonBlanco;
-    private javax.swing.JButton botonCancelarEmborronamiento;
     private javax.swing.JButton botonDirectoAbrir;
     private javax.swing.JButton botonDirectoGuardar;
     private javax.swing.JButton botonDirectoNuevo;
+    private javax.swing.JMenu botonEdicion;
     private javax.swing.JCheckBox botonEditar;
     private javax.swing.JButton botonEditarNombre;
     private javax.swing.JMenuItem botonFronteras;
@@ -1699,8 +1460,6 @@ public class VentanaPrincipal extends JFrame {
     private javax.swing.JMenuItem botonGuardarMenuArchivo;
     private javax.swing.JButton botonLapiz;
     private javax.swing.JButton botonLinea;
-    private javax.swing.JButton botonMas;
-    private javax.swing.JButton botonMenos;
     private javax.swing.JMenu botonMenuAbout;
     private javax.swing.JMenuItem botonMenuEdicionBrillo;
     private javax.swing.JMenuItem botonMenuHerramientasEmborronar;
@@ -1712,39 +1471,26 @@ public class VentanaPrincipal extends JFrame {
     private javax.swing.JButton botonOvalo;
     private javax.swing.JButton botonRELLENO;
     private javax.swing.JButton botonRectangulo;
-    private javax.swing.JButton botonReiniciarEmborronamiento;
     private javax.swing.JCheckBox botonRelleno;
     private javax.swing.JToggleButton botonRojo;
     private javax.swing.JMenuItem botonRotar;
-    private javax.swing.JRadioButton botonTipoBinomial;
-    private javax.swing.JRadioButton botonTipoMedio;
     private javax.swing.JCheckBox botonTransparencia;
     private javax.swing.JToggleButton botonVerde;
     private javax.swing.JLabel coordenadas;
     private javax.swing.JDialog dialogoAbout;
-    private javax.swing.ButtonGroup grupoBotonesTipoEmborronamiento;
     private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItem1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu5;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;
-    private javax.swing.JMenuItem jMenuItem5;
-    private javax.swing.JMenuItem jMenuItem6;
+    private javax.swing.JMenuItem jMenuItem7;
+    private javax.swing.JMenuItem jMenuItem8;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel10;
-    private javax.swing.JPanel jPanel11;
-    private javax.swing.JPanel jPanel12;
-    private javax.swing.JPanel jPanel13;
-    private javax.swing.JPanel jPanel14;
-    private javax.swing.JPanel jPanel15;
     private javax.swing.JPanel jPanel16;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
@@ -1752,17 +1498,16 @@ public class VentanaPrincipal extends JFrame {
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel8;
-    private javax.swing.JPanel jPanel9;
     private javax.swing.JPanel jPanelInfo;
     private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JSeparator jSeparator3;
     private javax.swing.JSeparator jSeparator4;
     private javax.swing.JSeparator jSeparator5;
-    private javax.swing.JSlider jSlider1;
     private javax.swing.JLabel labelCC;
     private javax.swing.JMenu menuArchivo;
     private javax.swing.JMenu menuEdicion;
+    private javax.swing.JMenu menuHerramientas;
     private sm.jaf.iu.Lienzo2D miniLienzoMuestra;
     private sm.jaf.iu.Lienzo2D miniLienzoRelleno;
     private javax.swing.JLabel nfoHerramienta;
@@ -1772,9 +1517,6 @@ public class VentanaPrincipal extends JFrame {
     private javax.swing.JCheckBoxMenuItem pruebas;
     private javax.swing.JSeparator separadorBarraInfo;
     private javax.swing.JSpinner spinnerGrosor;
-    private javax.swing.JLabel textoEmborronamiento;
-    private javax.swing.JLabel textoMatrizEmborronamiento;
-    private javax.swing.JFrame ventanaHerramientaEmborronamiento;
     // End of variables declaration//GEN-END:variables
 
     

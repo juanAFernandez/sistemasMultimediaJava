@@ -15,7 +15,7 @@ import sm.image.KernelProducer;
  *
  * @author juan
  */
-public class herramientaFronteras extends javax.swing.JFrame {
+public class herramientaFronterasOld extends javax.swing.JFrame {
 
     
     VentanaPrincipal padre;
@@ -34,7 +34,7 @@ public class herramientaFronteras extends javax.swing.JFrame {
      * Constructor    
      * @param padre //Le pasamos el propio padre que lo crea para acceder forma fácil a métodos de este.
      */
-    public herramientaFronteras(VentanaPrincipal padre) {
+    public herramientaFronterasOld(VentanaPrincipal padre) {
         initComponents();
         //Creamos la referencia al padre
         this.padre=padre;
@@ -267,8 +267,144 @@ public class herramientaFronteras extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(herramientaFronteras.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(herramientaFronterasOld.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        /*
+        /* Create and display the form
+        java.awt.EventQueue.invokeLater(new Runnable() {
+        public void run() {
+        new herramientaEmborronamiento(VentanaPrincipal padre).setVisible(true);
+        }
+        });*/
+        
+        //</editor-fold>
+
+        /*
+        /* Create and display the form 
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new herramientaEmborronamiento(VentanaPrincipal padre).setVisible(true);
+            }
+        //</editor-fold>
+        /*
+        /* Create and display the form
+        java.awt.EventQueue.invokeLater(new Runnable() {
+        public void run() {
+        new herramientaEmborronamiento(VentanaPrincipal padre).setVisible(true);
+        }
+        });*/
+        
+        //</editor-fold>
+
+        /*
+        /* Create and display the form 
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new herramientaEmborronamiento(VentanaPrincipal padre).setVisible(true);
+            }
+        //</editor-fold>
+        /*
+        /* Create and display the form
+        java.awt.EventQueue.invokeLater(new Runnable() {
+        public void run() {
+        new herramientaEmborronamiento(VentanaPrincipal padre).setVisible(true);
+        }
+        });*/
+        
+        //</editor-fold>
+
+        /*
+        /* Create and display the form 
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new herramientaEmborronamiento(VentanaPrincipal padre).setVisible(true);
+            }
+        //</editor-fold>
+        /*
+        /* Create and display the form
+        java.awt.EventQueue.invokeLater(new Runnable() {
+        public void run() {
+        new herramientaEmborronamiento(VentanaPrincipal padre).setVisible(true);
+        }
+        });*/
+        
+        //</editor-fold>
+
+        /*
+        /* Create and display the form 
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new herramientaEmborronamiento(VentanaPrincipal padre).setVisible(true);
+            }
+        //</editor-fold>
+        /*
+        /* Create and display the form
+        java.awt.EventQueue.invokeLater(new Runnable() {
+        public void run() {
+        new herramientaEmborronamiento(VentanaPrincipal padre).setVisible(true);
+        }
+        });*/
+        
+        //</editor-fold>
+
+        /*
+        /* Create and display the form 
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new herramientaEmborronamiento(VentanaPrincipal padre).setVisible(true);
+            }
+        //</editor-fold>
+        /*
+        /* Create and display the form
+        java.awt.EventQueue.invokeLater(new Runnable() {
+        public void run() {
+        new herramientaEmborronamiento(VentanaPrincipal padre).setVisible(true);
+        }
+        });*/
+        
+        //</editor-fold>
+
+        /*
+        /* Create and display the form 
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new herramientaEmborronamiento(VentanaPrincipal padre).setVisible(true);
+            }
+        //</editor-fold>
+        /*
+        /* Create and display the form
+        java.awt.EventQueue.invokeLater(new Runnable() {
+        public void run() {
+        new herramientaEmborronamiento(VentanaPrincipal padre).setVisible(true);
+        }
+        });*/
+        
+        //</editor-fold>
+
+        /*
+        /* Create and display the form 
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new herramientaEmborronamiento(VentanaPrincipal padre).setVisible(true);
+            }
+        //</editor-fold>
+        /*
+        /* Create and display the form
+        java.awt.EventQueue.invokeLater(new Runnable() {
+        public void run() {
+        new herramientaEmborronamiento(VentanaPrincipal padre).setVisible(true);
+        }
+        });*/
+        
+        //</editor-fold>
+
+        /*
+        /* Create and display the form 
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new herramientaEmborronamiento(VentanaPrincipal padre).setVisible(true);
+            }
         //</editor-fold>
         /*
         /* Create and display the form

@@ -3,9 +3,6 @@ package Herramientas;
 import Programa.VentanaInterna;
 import Programa.VentanaPrincipal;
 import static extras.Imprimir.Imprimir;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Container;
 import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 import java.awt.image.ColorModel;
@@ -15,10 +12,7 @@ import java.awt.image.LookupOp;
 import java.awt.image.LookupTable;
 import java.awt.image.RescaleOp;
 import java.awt.image.WritableRaster;
-import javax.swing.AbstractButton;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JRootPane;
 import sm.image.KernelProducer;
 import sm.image.LookupTableProducer;
 
@@ -503,6 +497,9 @@ public final class herramientaBrilloContraste extends javax.swing.JFrame {
         
         nVecesNormal++;
         botonContrasteNormal.setText(Integer.toString(nVecesNormal));
+        sliderBrillo.setValue(0);
+            textNivelBrillo.setText("0");
+
         
     }//GEN-LAST:event_botonContrasteNormalActionPerformed
 
@@ -543,6 +540,8 @@ public final class herramientaBrilloContraste extends javax.swing.JFrame {
         
         nVecesIluminacion++;
         botonContrasteIluminacion.setText(Integer.toString(nVecesIluminacion));
+                sliderBrillo.setValue(0);
+            textNivelBrillo.setText("0");
         
     }//GEN-LAST:event_botonContrasteIluminacionActionPerformed
 
@@ -570,6 +569,8 @@ public final class herramientaBrilloContraste extends javax.swing.JFrame {
         
         nVecesOscurecimiento++;
         botonContrasteOscurecimiento.setText(Integer.toString(nVecesOscurecimiento));
+        sliderBrillo.setValue(0);
+            textNivelBrillo.setText("0");
     }//GEN-LAST:event_botonContrasteOscurecimientoActionPerformed
 
     /**
@@ -580,9 +581,10 @@ public final class herramientaBrilloContraste extends javax.swing.JFrame {
         //Ajustamos los valores de las herramientas:
             sliderBrillo.setValue(0);
             textNivelBrillo.setText("0");
-            this.botonContrasteIluminacion.setText("0");
-            this.botonContrasteNormal.setText("0");
-            this.botonContrasteOscurecimiento.setText("0");
+            nVecesIluminacion=nVecesNormal=nVecesOscurecimiento=0;
+            botonContrasteIluminacion.setText("0");
+            botonContrasteNormal.setText("0");
+            botonContrasteOscurecimiento.setText("0");
             
             
             
