@@ -23,6 +23,12 @@ public class UmbralizacionOp extends BufferedImageOpAdapter {
         this.umbral=umbral;
     }
     
+    /**
+     * Función que realmente aplica el filtro:
+     * @param src
+     * @param dest
+     * @return 
+     */
     @Override
     public BufferedImage filter(BufferedImage src, BufferedImage dest) {
         
@@ -56,9 +62,9 @@ public class UmbralizacionOp extends BufferedImageOpAdapter {
                                
                 
                 if(media>=umbral){                    
-                    for(int i=0; i<numBandas; i++) pixel.sample[i]=255;                    
+                    for(int i=0; i<numBandas; i++) pixel.sample[i]=255; // 255 es BLANCO         
                 }else if (media<umbral){
-                    for(int i=0; i<numBandas; i++) pixel.sample[i]=0;
+                    for(int i=0; i<numBandas; i++) pixel.sample[i]=0; // 0 es NEGRO
                 }
                 
                 //Guardamos el pixel modificado en la imagen destino

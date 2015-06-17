@@ -2,7 +2,14 @@ package Programa;
 
 import Herramientas.herramientaBrilloContraste;
 import Herramientas.herramientaEmborronamiento;
+import Herramientas.herramientaEnfoque;
+import Herramientas.herramientaEscalar;
+import Herramientas.herramientaFronteras;
 import Herramientas.herramientaNegativo;
+import Herramientas.herramientaOpBinarias;
+import Herramientas.herramientaRelieve;
+import Herramientas.herramientaRotacion;
+import Herramientas.herramientaUmbralizacion;
 import accesorios.Ajustes;
 import accesorios.nuevoLienzo;
 import static extras.Imprimir.Imprimir;
@@ -49,12 +56,12 @@ public class VentanaPrincipal extends JFrame {
     
     private herramientaEnfoque ventanaHerramientaEnfoque;
     private herramientaRelieve ventanaHerramientaRelieve;
-    private herramientaFronterasOld ventanaHerramientaFronteras;
-    private herramientaRotar ventanaHerramientaRotar;
+    private herramientaFronteras ventanaHerramientaFronteras;
+    private herramientaRotacion ventanaHerramientaRotar;
     private herramientaNegativo ventanaHerramientaNegativo;
     public herramientaBrilloContraste ventanaHerramientaBrilloContraste;
     private herramientaSeno ventanaHerramientaSeno;
-    private herramientaUmbral ventanaHerramientaUmbral;
+    private herramientaUmbralizacion ventanaHerramientaUmbral;
     private herramientaTrazado ventanaHerramientaTrazado;
     private herramientaRelleno ventanaHerramientaRelleno;
     
@@ -241,7 +248,7 @@ public class VentanaPrincipal extends JFrame {
         jLabel2 = new javax.swing.JLabel();
         jSeparator2 = new javax.swing.JSeparator();
         PanelNorte = new javax.swing.JPanel();
-        jPanel2 = new javax.swing.JPanel();
+        panelComplementario = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
         botonDirectoNuevo = new javax.swing.JButton();
         botonDirectoAbrir = new javax.swing.JButton();
@@ -290,21 +297,24 @@ public class VentanaPrincipal extends JFrame {
         botonAbrirAudio = new javax.swing.JMenuItem();
         botonGrabarAudio = new javax.swing.JMenuItem();
         botonAbrirWebCam = new javax.swing.JMenuItem();
-        botonEdicion = new javax.swing.JMenu();
+        botonDeshacer = new javax.swing.JMenu();
         jMenuItem7 = new javax.swing.JMenuItem();
-        jMenuItem8 = new javax.swing.JMenuItem();
+        botonRehacer = new javax.swing.JMenuItem();
         menuEdicion = new javax.swing.JMenu();
-        pruebas = new javax.swing.JCheckBoxMenuItem();
-        jCheckBoxMenuItem1 = new javax.swing.JCheckBoxMenuItem();
+        botonBarraEstado = new javax.swing.JCheckBoxMenuItem();
+        botonHerramientasDibujo = new javax.swing.JCheckBoxMenuItem();
+        botonHistograma = new javax.swing.JCheckBoxMenuItem();
         menuHerramientas = new javax.swing.JMenu();
         botonMenuEdicionBrillo = new javax.swing.JMenuItem();
         botonNegativo = new javax.swing.JMenuItem();
         botonMenuHerramientasEmborronar = new javax.swing.JMenuItem();
         botonFronteras = new javax.swing.JMenuItem();
-        jMenuItem2 = new javax.swing.JMenuItem();
-        botonRotar = new javax.swing.JMenuItem();
         botonMenuRelieve = new javax.swing.JMenuItem();
+        botonRotar = new javax.swing.JMenuItem();
         botonMenuherramientaEnfoque = new javax.swing.JMenuItem();
+        botonEscalar = new javax.swing.JMenuItem();
+        jMenuItem2 = new javax.swing.JMenuItem();
+        botonOperacionBinarias = new javax.swing.JMenuItem();
         jMenuItem1 = new javax.swing.JMenuItem();
         botonMenuAbout = new javax.swing.JMenu();
         botonAboutInfo = new javax.swing.JMenuItem();
@@ -336,24 +346,39 @@ public class VentanaPrincipal extends JFrame {
         dialogoAbout.getContentPane().add(jPanel1, java.awt.BorderLayout.PAGE_START);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Open MOJ (Media Over Java) P10");
+        setTitle("Open MOJ (Media Over Java)");
 
         PanelNorte.setLayout(new java.awt.BorderLayout());
 
-        jPanel2.setLayout(new java.awt.BorderLayout());
+        panelComplementario.setLayout(new java.awt.BorderLayout());
 
         jPanel4.setLayout(new javax.swing.BoxLayout(jPanel4, javax.swing.BoxLayout.LINE_AXIS));
 
         botonDirectoNuevo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/iconNew.png"))); // NOI18N
+        botonDirectoNuevo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonDirectoNuevoActionPerformed(evt);
+            }
+        });
         jPanel4.add(botonDirectoNuevo);
 
         botonDirectoAbrir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/iconFolder.png"))); // NOI18N
+        botonDirectoAbrir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonDirectoAbrirActionPerformed(evt);
+            }
+        });
         jPanel4.add(botonDirectoAbrir);
 
         botonDirectoGuardar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/iconSave.png"))); // NOI18N
+        botonDirectoGuardar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonDirectoGuardarActionPerformed(evt);
+            }
+        });
         jPanel4.add(botonDirectoGuardar);
 
-        jPanel2.add(jPanel4, java.awt.BorderLayout.LINE_START);
+        panelComplementario.add(jPanel4, java.awt.BorderLayout.LINE_START);
 
         jPanel5.setLayout(new javax.swing.BoxLayout(jPanel5, javax.swing.BoxLayout.LINE_AXIS));
 
@@ -397,9 +422,9 @@ public class VentanaPrincipal extends JFrame {
         });
         jPanel5.add(botonOvalo);
 
-        jPanel2.add(jPanel5, java.awt.BorderLayout.CENTER);
+        panelComplementario.add(jPanel5, java.awt.BorderLayout.CENTER);
 
-        PanelNorte.add(jPanel2, java.awt.BorderLayout.PAGE_START);
+        PanelNorte.add(panelComplementario, java.awt.BorderLayout.PAGE_START);
 
         jPanel3.setLayout(new java.awt.BorderLayout());
 
@@ -741,27 +766,56 @@ public class VentanaPrincipal extends JFrame {
 
         jMenuBar1.add(menuArchivo);
 
-        botonEdicion.setText("Editar");
+        botonDeshacer.setText("Editar");
 
         jMenuItem7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/back.png"))); // NOI18N
         jMenuItem7.setText("Deshacer");
-        botonEdicion.add(jMenuItem7);
+        jMenuItem7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem7ActionPerformed(evt);
+            }
+        });
+        botonDeshacer.add(jMenuItem7);
 
-        jMenuItem8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/return.png"))); // NOI18N
-        jMenuItem8.setText("Rehacer");
-        botonEdicion.add(jMenuItem8);
+        botonRehacer.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/return.png"))); // NOI18N
+        botonRehacer.setText("Rehacer");
+        botonRehacer.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonRehacerActionPerformed(evt);
+            }
+        });
+        botonDeshacer.add(botonRehacer);
 
-        jMenuBar1.add(botonEdicion);
+        jMenuBar1.add(botonDeshacer);
 
         menuEdicion.setText("Ver");
 
-        pruebas.setSelected(true);
-        pruebas.setText("Barra de estado");
-        menuEdicion.add(pruebas);
+        botonBarraEstado.setSelected(true);
+        botonBarraEstado.setText("Barra de estado");
+        botonBarraEstado.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonBarraEstadoActionPerformed(evt);
+            }
+        });
+        menuEdicion.add(botonBarraEstado);
 
-        jCheckBoxMenuItem1.setSelected(true);
-        jCheckBoxMenuItem1.setText("Herramientas de dibujo");
-        menuEdicion.add(jCheckBoxMenuItem1);
+        botonHerramientasDibujo.setSelected(true);
+        botonHerramientasDibujo.setText("Herramientas de dibujo");
+        botonHerramientasDibujo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonHerramientasDibujoActionPerformed(evt);
+            }
+        });
+        menuEdicion.add(botonHerramientasDibujo);
+
+        botonHistograma.setSelected(true);
+        botonHistograma.setText("Histogramas");
+        botonHistograma.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonHistogramaActionPerformed(evt);
+            }
+        });
+        menuEdicion.add(botonHistograma);
 
         jMenuBar1.add(menuEdicion);
 
@@ -803,15 +857,14 @@ public class VentanaPrincipal extends JFrame {
         });
         menuHerramientas.add(botonFronteras);
 
-        jMenuItem2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/umbralizacion.png"))); // NOI18N
-        jMenuItem2.setText("Umbralizacion");
-        jMenuItem2.setToolTipText("");
-        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+        botonMenuRelieve.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/relieve.png"))); // NOI18N
+        botonMenuRelieve.setText("Relieve");
+        botonMenuRelieve.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem2ActionPerformed(evt);
+                botonMenuRelieveActionPerformed(evt);
             }
         });
-        menuHerramientas.add(jMenuItem2);
+        menuHerramientas.add(botonMenuRelieve);
 
         botonRotar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/rotate.png"))); // NOI18N
         botonRotar.setText("Rotar");
@@ -822,15 +875,6 @@ public class VentanaPrincipal extends JFrame {
         });
         menuHerramientas.add(botonRotar);
 
-        botonMenuRelieve.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/relieve.png"))); // NOI18N
-        botonMenuRelieve.setText("Relieve");
-        botonMenuRelieve.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                botonMenuRelieveActionPerformed(evt);
-            }
-        });
-        menuHerramientas.add(botonMenuRelieve);
-
         botonMenuherramientaEnfoque.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/enfoque.png"))); // NOI18N
         botonMenuherramientaEnfoque.setText("Enfoque");
         botonMenuherramientaEnfoque.addActionListener(new java.awt.event.ActionListener() {
@@ -839,6 +883,34 @@ public class VentanaPrincipal extends JFrame {
             }
         });
         menuHerramientas.add(botonMenuherramientaEnfoque);
+
+        botonEscalar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/scale.png"))); // NOI18N
+        botonEscalar.setText("Escalar");
+        botonEscalar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonEscalarActionPerformed(evt);
+            }
+        });
+        menuHerramientas.add(botonEscalar);
+
+        jMenuItem2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/umbralizacion.png"))); // NOI18N
+        jMenuItem2.setText("Umbralizacion");
+        jMenuItem2.setToolTipText("");
+        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem2ActionPerformed(evt);
+            }
+        });
+        menuHerramientas.add(jMenuItem2);
+
+        botonOperacionBinarias.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/plus_subtraction.png"))); // NOI18N
+        botonOperacionBinarias.setText("Op. Binarias");
+        botonOperacionBinarias.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonOperacionBinariasActionPerformed(evt);
+            }
+        });
+        menuHerramientas.add(botonOperacionBinarias);
 
         jMenuItem1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/seno.png"))); // NOI18N
         jMenuItem1.setText("FuncionSeno");
@@ -990,6 +1062,10 @@ public class VentanaPrincipal extends JFrame {
                 
     }//GEN-LAST:event_botonNuevoMenuArchivoActionPerformed
 
+    public JDesktopPane getEscritorio(){
+        return this.panelEscritorio;
+    }
+    
     //Acción sobre el botón abrir:
     private void botonAbrirMenuArchivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonAbrirMenuArchivoActionPerformed
         JFileChooser dlg = new JFileChooser();
@@ -1119,12 +1195,12 @@ public class VentanaPrincipal extends JFrame {
     }//GEN-LAST:event_botonMenuRelieveActionPerformed
 
     private void botonFronterasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonFronterasActionPerformed
-        ventanaHerramientaFronteras = new herramientaFronterasOld(this);
+        ventanaHerramientaFronteras = new herramientaFronteras(this);
         ventanaHerramientaFronteras.setVisible(true);
     }//GEN-LAST:event_botonFronterasActionPerformed
 
     private void botonRotarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonRotarActionPerformed
-        ventanaHerramientaRotar = new herramientaRotar(this);
+        ventanaHerramientaRotar = new herramientaRotacion(this);
         ventanaHerramientaRotar.setVisible(true);
     }//GEN-LAST:event_botonRotarActionPerformed
 
@@ -1139,7 +1215,7 @@ public class VentanaPrincipal extends JFrame {
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
-        ventanaHerramientaUmbral = new herramientaUmbral(this);
+        ventanaHerramientaUmbral = new herramientaUmbralizacion(this);
         ventanaHerramientaUmbral.setVisible(true);
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
@@ -1433,6 +1509,131 @@ public class VentanaPrincipal extends JFrame {
         
     }//GEN-LAST:event_botonRELLENOActionPerformed
 
+    private void botonEscalarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonEscalarActionPerformed
+        herramientaEscalar ventanaHerramientaEscalar = new herramientaEscalar(this);
+        ventanaHerramientaEscalar.setVisible(true);
+    }//GEN-LAST:event_botonEscalarActionPerformed
+
+    private void botonOperacionBinariasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonOperacionBinariasActionPerformed
+        herramientaOpBinarias opbinarias = new herramientaOpBinarias(this);
+        opbinarias.setVisible(true);
+    }//GEN-LAST:event_botonOperacionBinariasActionPerformed
+
+    private void botonRehacerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonRehacerActionPerformed
+        JOptionPane.showMessageDialog(this, "Esta funcionalidad aún no se ha implementado.","Oups!", JOptionPane.INFORMATION_MESSAGE);
+    }//GEN-LAST:event_botonRehacerActionPerformed
+
+    private void jMenuItem7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem7ActionPerformed
+        JOptionPane.showMessageDialog(this, "Esta funcionalidad aún no se ha implementado.","Oups!", JOptionPane.INFORMATION_MESSAGE);
+    }//GEN-LAST:event_jMenuItem7ActionPerformed
+
+    private void botonHistogramaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonHistogramaActionPerformed
+         JOptionPane.showMessageDialog(this, "Esta funcionalidad aún no se ha implementado.","Oups!", JOptionPane.INFORMATION_MESSAGE);
+    }//GEN-LAST:event_botonHistogramaActionPerformed
+
+    private void botonBarraEstadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonBarraEstadoActionPerformed
+        //Si el botón queda seleccionado.
+        if(botonBarraEstado.isSelected())
+            jPanelInfo.setVisible(true);
+        if(!botonBarraEstado.isSelected())
+            jPanelInfo.setVisible(false);
+            
+    }//GEN-LAST:event_botonBarraEstadoActionPerformed
+
+    private void botonHerramientasDibujoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonHerramientasDibujoActionPerformed
+        //Si el botón queda seleccionado.
+        if(botonHerramientasDibujo.isSelected()){
+            panelTrazoColoresHerramientas.setVisible(true);
+            panelComplementario.setVisible(true);
+        }
+        if(!botonHerramientasDibujo.isSelected()){
+            panelTrazoColoresHerramientas.setVisible(false);
+            panelComplementario.setVisible(false);
+        }
+    }//GEN-LAST:event_botonHerramientasDibujoActionPerformed
+
+    private void botonDirectoNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonDirectoNuevoActionPerformed
+       ventanaNuevoLienzo=new nuevoLienzo(this);        
+        //Se hace visible
+        ventanaNuevoLienzo.setVisible(true);
+    }//GEN-LAST:event_botonDirectoNuevoActionPerformed
+
+    private void botonDirectoAbrirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonDirectoAbrirActionPerformed
+         JFileChooser dlg = new JFileChooser();
+        int resp = dlg.showOpenDialog(this);
+        if(resp==JFileChooser.APPROVE_OPTION){
+            try{
+                File f = dlg.getSelectedFile();
+                Imprimir("Abriendo "+f.getPath());
+                
+                //Con ImageIO.read realizamos realmente la lectura de la imagen y la cargamos en la variable img
+                BufferedImage img = ImageIO.read(f);
+                
+                
+                //Aqui ya tenemos en el objeto img la imagen que hemos cargado desde la ruta que guardada en f.
+                
+                /* Las operaciones quet endríamos que hacer para ver el procesado de la imagen:
+                RescaleOp rop = new RescaleOp(1.0F, 100.0F, null);
+                BufferedImage imagenResultado = rop.filter(img, null);
+                */
+                
+                Imprimir("Tam: "+img.getHeight());
+                
+                Imprimir("open");
+                VentanaInterna vi = new VentanaInterna(this);
+                
+                vi.getLienzo().setImage(img);
+                
+                //Lo que mandaríamos para ver el ejemplo de procesado.
+                //vi.getLienzo().setImage(imagenResultado);
+                
+                
+                this.panelEscritorio.add(vi);
+                vi.setTitle(f.getName());
+                vi.setVisible(true);
+                
+                Imprimir("fin");
+            }catch(Exception ex){
+                //Si ocurre algun error al cargar la imagen mostramos una ventana de aviso.
+               // JOptionPane.showMessageDialog(this,"Error al leer la imagen", "Error", JOptionPane.WARNING_MESSAGE);
+                
+             //   System.err.println("Error al leer la imagen: "+ex);
+            }
+        }
+    }//GEN-LAST:event_botonDirectoAbrirActionPerformed
+
+    private void botonDirectoGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonDirectoGuardarActionPerformed
+         
+        Imprimir("Intentado guardar imagen");
+        
+        //Seleccionamos la ventana seleccionada:
+        VentanaInterna ventanaInternaSeleccionada = (VentanaInterna)panelEscritorio.getSelectedFrame();
+        if(ventanaInternaSeleccionada!=null){
+            JFileChooser dlg = new JFileChooser();
+            dlg.setSelectedFile(new File( ((VentanaInterna)panelEscritorio.getSelectedFrame()).getNombreVentana()  ));
+            int resp = dlg.showSaveDialog(this);
+            if(resp==JFileChooser.APPROVE_OPTION){
+                
+                try{
+                    BufferedImage img =ventanaInternaSeleccionada.getLienzo().getImage();
+                    
+                    if(img!=null){
+                        File f = dlg.getSelectedFile();
+                        ImageIO.write(img, "jpg",f);
+                        ventanaInternaSeleccionada.setTitle(f.getName());
+                    }else{
+                        JOptionPane.showMessageDialog(this, "No hay imagen que guardar");
+                    }
+                }catch(Exception ex){
+                    System.err.println("Error al guardar la imagen"+ex);
+                }
+              
+            }
+        }else{
+            JOptionPane.showMessageDialog(this, "Tienes que seleccionar una ventana.");
+        }
+    }//GEN-LAST:event_botonDirectoGuardarActionPerformed
+
     
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -1448,16 +1649,20 @@ public class VentanaPrincipal extends JFrame {
     private javax.swing.JCheckBox botonAlisar;
     private javax.swing.JToggleButton botonAmarillo;
     private javax.swing.JToggleButton botonAzul;
+    private javax.swing.JCheckBoxMenuItem botonBarraEstado;
     private javax.swing.JToggleButton botonBlanco;
+    private javax.swing.JMenu botonDeshacer;
     private javax.swing.JButton botonDirectoAbrir;
     private javax.swing.JButton botonDirectoGuardar;
     private javax.swing.JButton botonDirectoNuevo;
-    private javax.swing.JMenu botonEdicion;
     private javax.swing.JCheckBox botonEditar;
     private javax.swing.JButton botonEditarNombre;
+    private javax.swing.JMenuItem botonEscalar;
     private javax.swing.JMenuItem botonFronteras;
     private javax.swing.JMenuItem botonGrabarAudio;
     private javax.swing.JMenuItem botonGuardarMenuArchivo;
+    private javax.swing.JCheckBoxMenuItem botonHerramientasDibujo;
+    private javax.swing.JCheckBoxMenuItem botonHistograma;
     private javax.swing.JButton botonLapiz;
     private javax.swing.JButton botonLinea;
     private javax.swing.JMenu botonMenuAbout;
@@ -1468,9 +1673,11 @@ public class VentanaPrincipal extends JFrame {
     private javax.swing.JMenuItem botonNegativo;
     private javax.swing.JToggleButton botonNegro;
     private javax.swing.JMenuItem botonNuevoMenuArchivo;
+    private javax.swing.JMenuItem botonOperacionBinarias;
     private javax.swing.JButton botonOvalo;
     private javax.swing.JButton botonRELLENO;
     private javax.swing.JButton botonRectangulo;
+    private javax.swing.JMenuItem botonRehacer;
     private javax.swing.JCheckBox botonRelleno;
     private javax.swing.JToggleButton botonRojo;
     private javax.swing.JMenuItem botonRotar;
@@ -1478,7 +1685,6 @@ public class VentanaPrincipal extends JFrame {
     private javax.swing.JToggleButton botonVerde;
     private javax.swing.JLabel coordenadas;
     private javax.swing.JDialog dialogoAbout;
-    private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItem1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel4;
@@ -1489,10 +1695,8 @@ public class VentanaPrincipal extends JFrame {
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JMenuItem jMenuItem7;
-    private javax.swing.JMenuItem jMenuItem8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel16;
-    private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
@@ -1511,10 +1715,10 @@ public class VentanaPrincipal extends JFrame {
     private sm.jaf.iu.Lienzo2D miniLienzoMuestra;
     private sm.jaf.iu.Lienzo2D miniLienzoRelleno;
     private javax.swing.JLabel nfoHerramienta;
+    private javax.swing.JPanel panelComplementario;
     private javax.swing.JDesktopPane panelEscritorio;
     private javax.swing.JPanel panelTrazoColoresHerramientas;
     private javax.swing.JPopupMenu popUpAjustes;
-    private javax.swing.JCheckBoxMenuItem pruebas;
     private javax.swing.JSeparator separadorBarraInfo;
     private javax.swing.JSpinner spinnerGrosor;
     // End of variables declaration//GEN-END:variables

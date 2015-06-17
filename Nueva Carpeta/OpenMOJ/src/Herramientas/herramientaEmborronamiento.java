@@ -76,7 +76,7 @@ public final class herramientaEmborronamiento extends javax.swing.JFrame {
         this.addWindowListener(new java.awt.event.WindowAdapter() {
     @Override
     public void windowClosing(java.awt.event.WindowEvent windowEvent) {
-        System.out.println("Cerrando putita ventana");
+        System.out.println("Cerrando ventana");
         recuperarImagen();
     }
 });

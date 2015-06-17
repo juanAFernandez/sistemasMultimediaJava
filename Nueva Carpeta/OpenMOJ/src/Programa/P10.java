@@ -37,7 +37,7 @@ public class P10 {
         }
         //</editor-fold>
 
-        System.out.println("Programa principal de entornoVisualPractica9");
+        System.out.println("Programa principal");
         
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {

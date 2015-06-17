@@ -7,23 +7,28 @@ import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 import java.awt.image.ByteLookupTable;
 import java.awt.image.ColorModel;
+import java.awt.image.ConvolveOp;
+import java.awt.image.Kernel;
 import java.awt.image.LookupOp;
 import java.awt.image.WritableRaster;
 import javax.swing.JOptionPane;
+import sm.image.KernelProducer;
 
 
 /**
  *
  * @author Juan A. Fernández Sánchez
  */
-public final class herramientaNegativo extends javax.swing.JFrame {
+public final class herramientaEnfoque extends javax.swing.JFrame {
 
     
     private VentanaPrincipal padre;
     
     private VentanaInterna vis;
         
+    Kernel k;
     
+    ConvolveOp cop;
     //Las dos imagenes que gestionamos. Una copia de la original y el resultado de las operaciones.
     private BufferedImage imagenTemporalParaOperaciones;    
      
@@ -32,7 +37,7 @@ public final class herramientaNegativo extends javax.swing.JFrame {
      * Constructor    
      * @param padre //Le pasamos el propio padre que lo crea para acceder forma fácil a métodos de este.     
      */
-    public herramientaNegativo(VentanaPrincipal padre) {
+    public herramientaEnfoque(VentanaPrincipal padre) {
         initComponents();
                           
     
@@ -42,8 +47,18 @@ public final class herramientaNegativo extends javax.swing.JFrame {
         
 
         
-        //Sacamos la imagen del lienzo
+               //Sacamos la imagen del lienzo
         sacarImagen();
+        
+        //Establecemos el tipo de matriz por defecto.
+        /**
+         * Para este filtro ahora mismo solo se aplica el tipo de matriz laplaciana de 3x3
+         * 
+         */
+         k= KernelProducer.createKernel(KernelProducer.TYPE_ENFOQUE_3x3);
+         
+         
+         cop= new ConvolveOp(k,ConvolveOp.EDGE_NO_OP,null);
         
 
         
@@ -95,31 +110,14 @@ public final class herramientaNegativo extends javax.swing.JFrame {
         }
     }
     
+    
     private void aplicar(){
-        
-        
-        try{ 
-
-            //Creamos el contenido de la tabla de transformaciones 
-            byte it[]= new byte[256];
-            for(int i=0; i<256; i++)
-                it[i]=(byte)(255-i); //El contrario, efecto: negativo
-            
-            //Creamos la tabla en el formato específico:
-            ByteLookupTable slt= new ByteLookupTable(0,it);
-            LookupOp op = new LookupOp(slt,null);
-                        
-            if(vis!=null){
-                
-                    Imprimir("Intentando aplicar transformación");
-
-                    vis.getLienzo().setImage(op.filter(imagenTemporalParaOperaciones, null));
-                    vis.repaint();
-
-            }
-         }catch (Exception e){
-            System.out.println("Error: "+e);
-            JOptionPane.showMessageDialog(this,e, "Error", JOptionPane.WARNING_MESSAGE);
+ 
+        if(vis!=null){
+            //Enviamos la imagen al lienzo
+            vis.getLienzo().setImage(cop.filter(imagenTemporalParaOperaciones, null));
+            //Hacemos que se repinte para ver el resultado
+            vis.repaint();
         }
     }
     
@@ -135,6 +133,7 @@ public final class herramientaNegativo extends javax.swing.JFrame {
         grupoBotonesTipo = new javax.swing.ButtonGroup();
         grupoBotonesMatriz = new javax.swing.ButtonGroup();
         jLayeredPane1 = new javax.swing.JLayeredPane();
+        jLabel5 = new javax.swing.JLabel();
         panelNorte = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
@@ -144,6 +143,7 @@ public final class herramientaNegativo extends javax.swing.JFrame {
         jPanel4 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         botonAplicar = new javax.swing.JButton();
+        jLabel4 = new javax.swing.JLabel();
 
         javax.swing.GroupLayout jLayeredPane1Layout = new javax.swing.GroupLayout(jLayeredPane1);
         jLayeredPane1.setLayout(jLayeredPane1Layout);
@@ -156,6 +156,9 @@ public final class herramientaNegativo extends javax.swing.JFrame {
             .addGap(0, 100, Short.MAX_VALUE)
         );
 
+        jLabel5.setFont(new java.awt.Font("DejaVu Sans", 2, 12)); // NOI18N
+        jLabel5.setText("Aun no se han implementado todas las características de esta herramienta.");
+
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setAlwaysOnTop(true);
 
@@ -163,9 +166,9 @@ public final class herramientaNegativo extends javax.swing.JFrame {
 
         jLabel1.setFont(new java.awt.Font("Sawasdee", 1, 18)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(51, 51, 51));
-        jLabel1.setText("Negativo");
+        jLabel1.setText("Enfoque");
 
-        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/negative.png"))); // NOI18N
+        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/enfoque.png"))); // NOI18N
 
         exitButton.setBackground(new java.awt.Color(255, 135, 135));
         exitButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/cancel.png"))); // NOI18N
@@ -203,7 +206,7 @@ public final class herramientaNegativo extends javax.swing.JFrame {
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 265, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 299, Short.MAX_VALUE)
                 .addComponent(exitButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(resetButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -228,32 +231,42 @@ public final class herramientaNegativo extends javax.swing.JFrame {
         jLabel2.setFont(new java.awt.Font("Sawasdee", 1, 14)); // NOI18N
         jLabel2.setText("Aplicar:");
 
-        botonAplicar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/negative.png"))); // NOI18N
+        botonAplicar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/enfoque.png"))); // NOI18N
         botonAplicar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 botonAplicarActionPerformed(evt);
             }
         });
 
+        jLabel4.setFont(new java.awt.Font("DejaVu Sans", 2, 12)); // NOI18N
+        jLabel4.setText("Aun no se han implementado todas las características de esta herramienta.");
+
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addGap(169, 169, 169)
-                .addComponent(jLabel2)
-                .addGap(26, 26, 26)
-                .addComponent(botonAplicar)
-                .addContainerGap(212, Short.MAX_VALUE))
+                .addContainerGap(31, Short.MAX_VALUE)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(botonAplicar)
+                        .addGap(223, 223, 223))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                        .addComponent(jLabel4)
+                        .addContainerGap())))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
-                .addContainerGap(46, Short.MAX_VALUE)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addContainerGap(58, Short.MAX_VALUE)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(botonAplicar)
                     .addComponent(jLabel2))
-                .addGap(25, 25, 25))
+                .addGap(27, 27, 27)
+                .addComponent(jLabel4)
+                .addGap(23, 23, 23))
         );
 
         getContentPane().add(jPanel4, java.awt.BorderLayout.LINE_START);
@@ -306,8 +319,212 @@ public final class herramientaNegativo extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(herramientaNegativo.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(herramientaEnfoque.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        /*
+        /* Create and display the form
+        java.awt.EventQueue.invokeLater(new Runnable() {
+        public void run() {
+        new herramientaEmborronamiento(VentanaPrincipal padre).setVisible(true);
+        }
+        });*/
+        
+        //</editor-fold>
+
+        /*
+        /* Create and display the form 
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new herramientaEmborronamiento(VentanaPrincipal padre).setVisible(true);
+            }
+        //</editor-fold>
+        /*
+        /* Create and display the form
+        java.awt.EventQueue.invokeLater(new Runnable() {
+        public void run() {
+        new herramientaEmborronamiento(VentanaPrincipal padre).setVisible(true);
+        }
+        });*/
+        
+        //</editor-fold>
+
+        /*
+        /* Create and display the form 
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new herramientaEmborronamiento(VentanaPrincipal padre).setVisible(true);
+            }
+        //</editor-fold>
+        /*
+        /* Create and display the form
+        java.awt.EventQueue.invokeLater(new Runnable() {
+        public void run() {
+        new herramientaEmborronamiento(VentanaPrincipal padre).setVisible(true);
+        }
+        });*/
+        
+        //</editor-fold>
+
+        /*
+        /* Create and display the form 
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new herramientaEmborronamiento(VentanaPrincipal padre).setVisible(true);
+            }
+        //</editor-fold>
+        /*
+        /* Create and display the form
+        java.awt.EventQueue.invokeLater(new Runnable() {
+        public void run() {
+        new herramientaEmborronamiento(VentanaPrincipal padre).setVisible(true);
+        }
+        });*/
+        
+        //</editor-fold>
+
+        /*
+        /* Create and display the form 
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new herramientaEmborronamiento(VentanaPrincipal padre).setVisible(true);
+            }
+        //</editor-fold>
+        /*
+        /* Create and display the form
+        java.awt.EventQueue.invokeLater(new Runnable() {
+        public void run() {
+        new herramientaEmborronamiento(VentanaPrincipal padre).setVisible(true);
+        }
+        });*/
+        
+        //</editor-fold>
+
+        /*
+        /* Create and display the form 
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new herramientaEmborronamiento(VentanaPrincipal padre).setVisible(true);
+            }
+        //</editor-fold>
+        /*
+        /* Create and display the form
+        java.awt.EventQueue.invokeLater(new Runnable() {
+        public void run() {
+        new herramientaEmborronamiento(VentanaPrincipal padre).setVisible(true);
+        }
+        });*/
+        
+        //</editor-fold>
+
+        /*
+        /* Create and display the form 
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new herramientaEmborronamiento(VentanaPrincipal padre).setVisible(true);
+            }
+        //</editor-fold>
+        /*
+        /* Create and display the form
+        java.awt.EventQueue.invokeLater(new Runnable() {
+        public void run() {
+        new herramientaEmborronamiento(VentanaPrincipal padre).setVisible(true);
+        }
+        });*/
+        
+        //</editor-fold>
+
+        /*
+        /* Create and display the form 
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new herramientaEmborronamiento(VentanaPrincipal padre).setVisible(true);
+            }
+        //</editor-fold>
+        /*
+        /* Create and display the form
+        java.awt.EventQueue.invokeLater(new Runnable() {
+        public void run() {
+        new herramientaEmborronamiento(VentanaPrincipal padre).setVisible(true);
+        }
+        });*/
+        
+        //</editor-fold>
+
+        /*
+        /* Create and display the form 
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new herramientaEmborronamiento(VentanaPrincipal padre).setVisible(true);
+            }
+        //</editor-fold>
+        /*
+        /* Create and display the form
+        java.awt.EventQueue.invokeLater(new Runnable() {
+        public void run() {
+        new herramientaEmborronamiento(VentanaPrincipal padre).setVisible(true);
+        }
+        });*/
+        
+        //</editor-fold>
+
+        /*
+        /* Create and display the form 
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new herramientaEmborronamiento(VentanaPrincipal padre).setVisible(true);
+            }
+        //</editor-fold>
+        /*
+        /* Create and display the form
+        java.awt.EventQueue.invokeLater(new Runnable() {
+        public void run() {
+        new herramientaEmborronamiento(VentanaPrincipal padre).setVisible(true);
+        }
+        });*/
+        
+        //</editor-fold>
+
+        /*
+        /* Create and display the form 
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new herramientaEmborronamiento(VentanaPrincipal padre).setVisible(true);
+            }
+        //</editor-fold>
+        /*
+        /* Create and display the form
+        java.awt.EventQueue.invokeLater(new Runnable() {
+        public void run() {
+        new herramientaEmborronamiento(VentanaPrincipal padre).setVisible(true);
+        }
+        });*/
+        
+        //</editor-fold>
+
+        /*
+        /* Create and display the form 
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new herramientaEmborronamiento(VentanaPrincipal padre).setVisible(true);
+            }
+        //</editor-fold>
+        /*
+        /* Create and display the form
+        java.awt.EventQueue.invokeLater(new Runnable() {
+        public void run() {
+        new herramientaEmborronamiento(VentanaPrincipal padre).setVisible(true);
+        }
+        });*/
+        
+        //</editor-fold>
+
+        /*
+        /* Create and display the form 
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new herramientaEmborronamiento(VentanaPrincipal padre).setVisible(true);
+            }
         //</editor-fold>
         /*
         /* Create and display the form
@@ -387,6 +604,8 @@ public final class herramientaNegativo extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JLayeredPane jLayeredPane1;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel panelNorte;

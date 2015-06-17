@@ -10,20 +10,21 @@ import java.awt.image.ColorModel;
 import java.awt.image.LookupOp;
 import java.awt.image.WritableRaster;
 import javax.swing.JOptionPane;
+import sm.jaf.imagen.UmbralizacionOp;
 
 
 /**
  *
  * @author Juan A. Fernández Sánchez
  */
-public final class herramientaNegativo extends javax.swing.JFrame {
+public final class herramientaUmbralizacion extends javax.swing.JFrame {
 
     
     private VentanaPrincipal padre;
     
     private VentanaInterna vis;
         
-    
+    private int umbral;
     //Las dos imagenes que gestionamos. Una copia de la original y el resultado de las operaciones.
     private BufferedImage imagenTemporalParaOperaciones;    
      
@@ -32,7 +33,7 @@ public final class herramientaNegativo extends javax.swing.JFrame {
      * Constructor    
      * @param padre //Le pasamos el propio padre que lo crea para acceder forma fácil a métodos de este.     
      */
-    public herramientaNegativo(VentanaPrincipal padre) {
+    public herramientaUmbralizacion(VentanaPrincipal padre) {
         initComponents();
                           
     
@@ -45,13 +46,16 @@ public final class herramientaNegativo extends javax.swing.JFrame {
         //Sacamos la imagen del lienzo
         sacarImagen();
         
-
+        umbral=128;
+        
+        
+        aplicar();
         
         
         this.addWindowListener(new java.awt.event.WindowAdapter() {
     @Override
     public void windowClosing(java.awt.event.WindowEvent windowEvent) {
-        System.out.println("Cerrando ventana");
+        System.out.println("Cerrando putita ventana");
         recuperarImagen();
     }
 });
@@ -96,31 +100,26 @@ public final class herramientaNegativo extends javax.swing.JFrame {
     }
     
     private void aplicar(){
-        
-        
+         
         try{ 
-
-            //Creamos el contenido de la tabla de transformaciones 
-            byte it[]= new byte[256];
-            for(int i=0; i<256; i++)
-                it[i]=(byte)(255-i); //El contrario, efecto: negativo
+                         
             
-            //Creamos la tabla en el formato específico:
-            ByteLookupTable slt= new ByteLookupTable(0,it);
-            LookupOp op = new LookupOp(slt,null);
-                        
-            if(vis!=null){
+                UmbralizacionOp umbralOp = new UmbralizacionOp(umbral);
                 
-                    Imprimir("Intentando aplicar transformación");
+                Imprimir("Intentando aplicar umbralización");
 
-                    vis.getLienzo().setImage(op.filter(imagenTemporalParaOperaciones, null));
-                    vis.repaint();
+                vis.getLienzo().setImage(umbralOp.filter(imagenTemporalParaOperaciones, null));
+                vis.repaint();
+            
+                        
 
-            }
+
+            
          }catch (Exception e){
             System.out.println("Error: "+e);
             JOptionPane.showMessageDialog(this,e, "Error", JOptionPane.WARNING_MESSAGE);
         }
+
     }
     
     /**
@@ -143,7 +142,11 @@ public final class herramientaNegativo extends javax.swing.JFrame {
         saveButton = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
-        botonAplicar = new javax.swing.JButton();
+        sliderUmbral = new javax.swing.JSlider();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        textoUmbral = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
 
         javax.swing.GroupLayout jLayeredPane1Layout = new javax.swing.GroupLayout(jLayeredPane1);
         jLayeredPane1.setLayout(jLayeredPane1Layout);
@@ -163,9 +166,9 @@ public final class herramientaNegativo extends javax.swing.JFrame {
 
         jLabel1.setFont(new java.awt.Font("Sawasdee", 1, 18)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(51, 51, 51));
-        jLabel1.setText("Negativo");
+        jLabel1.setText("Umbralización");
 
-        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/negative.png"))); // NOI18N
+        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/umbralizacion.png"))); // NOI18N
 
         exitButton.setBackground(new java.awt.Color(255, 135, 135));
         exitButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/cancel.png"))); // NOI18N
@@ -226,34 +229,69 @@ public final class herramientaNegativo extends javax.swing.JFrame {
         getContentPane().add(panelNorte, java.awt.BorderLayout.PAGE_START);
 
         jLabel2.setFont(new java.awt.Font("Sawasdee", 1, 14)); // NOI18N
-        jLabel2.setText("Aplicar:");
+        jLabel2.setText("Umbral:");
 
-        botonAplicar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/negative.png"))); // NOI18N
-        botonAplicar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                botonAplicarActionPerformed(evt);
+        sliderUmbral.setMaximum(255);
+        sliderUmbral.setValue(128);
+        sliderUmbral.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                sliderUmbralStateChanged(evt);
             }
         });
+
+        jLabel4.setFont(new java.awt.Font("Sawasdee", 1, 14)); // NOI18N
+        jLabel4.setText("0");
+
+        jLabel5.setFont(new java.awt.Font("Sawasdee", 1, 14)); // NOI18N
+        jLabel5.setText("255");
+
+        textoUmbral.setFont(new java.awt.Font("Sawasdee", 1, 24)); // NOI18N
+        textoUmbral.setText("128");
+
+        jLabel6.setFont(new java.awt.Font("Sawasdee", 1, 14)); // NOI18N
+        jLabel6.setText("Todo pixel cuya media (de los tres canales rgb) supere el ubral será llevado BLANCO");
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addGap(169, 169, 169)
-                .addComponent(jLabel2)
-                .addGap(26, 26, 26)
-                .addComponent(botonAplicar)
-                .addContainerGap(212, Short.MAX_VALUE))
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addGap(36, 36, 36)
+                        .addComponent(jLabel2)
+                        .addGap(46, 46, 46)
+                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(sliderUmbral, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(27, 27, 27)
+                        .addComponent(textoUmbral, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addGap(14, 14, 14)
+                        .addComponent(jLabel6)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
-                .addContainerGap(46, Short.MAX_VALUE)
+            .addGroup(jPanel4Layout.createSequentialGroup()
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(botonAplicar)
-                    .addComponent(jLabel2))
-                .addGap(25, 25, 25))
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addGap(13, 13, 13)
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel5)
+                            .addComponent(textoUmbral, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addGap(34, 34, 34)
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(jLabel4)
+                                .addComponent(jLabel2))
+                            .addComponent(sliderUmbral, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel6)
+                .addContainerGap(14, Short.MAX_VALUE))
         );
 
         getContentPane().add(jPanel4, java.awt.BorderLayout.LINE_START);
@@ -285,9 +323,11 @@ public final class herramientaNegativo extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_saveButtonActionPerformed
 
-    private void botonAplicarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonAplicarActionPerformed
+    private void sliderUmbralStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_sliderUmbralStateChanged
+        umbral=(int)sliderUmbral.getValue();
+        textoUmbral.setText(Integer.toString(umbral));
         aplicar();
-    }//GEN-LAST:event_botonAplicarActionPerformed
+    }//GEN-LAST:event_sliderUmbralStateChanged
 
     /**
      * @param args the command line arguments
@@ -306,8 +346,76 @@ public final class herramientaNegativo extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(herramientaNegativo.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(herramientaUmbralizacion.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        /*
+        /* Create and display the form
+        java.awt.EventQueue.invokeLater(new Runnable() {
+        public void run() {
+        new herramientaEmborronamiento(VentanaPrincipal padre).setVisible(true);
+        }
+        });*/
+        
+        //</editor-fold>
+
+        /*
+        /* Create and display the form 
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new herramientaEmborronamiento(VentanaPrincipal padre).setVisible(true);
+            }
+        //</editor-fold>
+        /*
+        /* Create and display the form
+        java.awt.EventQueue.invokeLater(new Runnable() {
+        public void run() {
+        new herramientaEmborronamiento(VentanaPrincipal padre).setVisible(true);
+        }
+        });*/
+        
+        //</editor-fold>
+
+        /*
+        /* Create and display the form 
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new herramientaEmborronamiento(VentanaPrincipal padre).setVisible(true);
+            }
+        //</editor-fold>
+        /*
+        /* Create and display the form
+        java.awt.EventQueue.invokeLater(new Runnable() {
+        public void run() {
+        new herramientaEmborronamiento(VentanaPrincipal padre).setVisible(true);
+        }
+        });*/
+        
+        //</editor-fold>
+
+        /*
+        /* Create and display the form 
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new herramientaEmborronamiento(VentanaPrincipal padre).setVisible(true);
+            }
+        //</editor-fold>
+        /*
+        /* Create and display the form
+        java.awt.EventQueue.invokeLater(new Runnable() {
+        public void run() {
+        new herramientaEmborronamiento(VentanaPrincipal padre).setVisible(true);
+        }
+        });*/
+        
+        //</editor-fold>
+
+        /*
+        /* Create and display the form 
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new herramientaEmborronamiento(VentanaPrincipal padre).setVisible(true);
+            }
         //</editor-fold>
         /*
         /* Create and display the form
@@ -380,17 +488,21 @@ public final class herramientaNegativo extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton botonAplicar;
     private javax.swing.JButton exitButton;
     private javax.swing.ButtonGroup grupoBotonesMatriz;
     private javax.swing.ButtonGroup grupoBotonesTipo;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JLayeredPane jLayeredPane1;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel panelNorte;
     private javax.swing.JButton resetButton;
     private javax.swing.JButton saveButton;
+    private javax.swing.JSlider sliderUmbral;
+    private javax.swing.JLabel textoUmbral;
     // End of variables declaration//GEN-END:variables
 }
