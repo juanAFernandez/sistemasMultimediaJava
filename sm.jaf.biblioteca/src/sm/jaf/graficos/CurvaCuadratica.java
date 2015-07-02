@@ -5,10 +5,13 @@
  */
 package sm.jaf.graficos;
 
+import static extras.Imprimir.Imprimir;
 import java.awt.Graphics2D;
+import java.awt.geom.Dimension2D;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.QuadCurve2D;
+import java.awt.geom.Rectangle2D;
 
 /**
  *
@@ -17,7 +20,9 @@ import java.awt.geom.QuadCurve2D;
 public class CurvaCuadratica extends Figura {
                     
  
-    private Point2D.Double puntoControl;
+    private Point2D puntoControl = new Point2D.Double();
+    Ellipse2D elipsePuntoControl;
+
     
     private boolean modoEdicion=false;
     
@@ -52,7 +57,12 @@ public class CurvaCuadratica extends Figura {
         //Las coordenadas del punto medio de un segmento coinciden con la semisuma de las coordenadas de los puntos extremos.
         puntoControl = new Point2D.Double((A.getX()+B.getX())/2, (A.getY()+B.getY())/2);
     }
-    
+    public void cambiarPuntoControl(Point2D nvc){
+        //Se modifica el punto de control
+        puntoControl= nvc;
+        //Se modifica la linea usando sus mismos datos anteriores y modifcando el punto de control
+       ((QuadCurve2D)datosGeometricos).setCurve( ((QuadCurve2D)datosGeometricos).getX1(),((QuadCurve2D)datosGeometricos).getY1(), puntoControl.getX(), puntoControl.getY(), ((QuadCurve2D)datosGeometricos).getX2(),((QuadCurve2D)datosGeometricos).getY2());
+    }
     @Override
     public void cambiarPosicion(Point2D nuevoPuntoA, Point2D nuevoPuntoB){
  
@@ -62,6 +72,10 @@ public class CurvaCuadratica extends Figura {
         
     }
         
+    public void setModoEdicion(boolean modo){
+        modoEdicion=modo;
+    }
+    
     @Override
     public void dibujateEn(Graphics2D g2d){
                        
@@ -75,13 +89,15 @@ public class CurvaCuadratica extends Figura {
         g2d.draw(datosGeometricos);
         
         
-        //Si la figura está en modo edición se verá el punto de control:
+        //Si la figura está en modo edición TAMBIÉN se verá el punto de control:
 
         if(modoEdicion){
-            //Creamos una elipse que represente el punto de control
-            Ellipse2D puntoC = new Ellipse2D.Double(puntoControl.getX()-5,puntoControl.getY()-5, 10, 10);       
+            //Creamos una elipse que represente el punto de control, que será de nuestros tipos para poder seleccionarla bien.
+                      
+            elipsePuntoControl = new Ellipse2D.Double(puntoControl.getX()-5,puntoControl.getY()-5, 10, 10);                 
             //La dibujamos
-            g2d.draw(puntoC);
+            g2d.draw(elipsePuntoControl);
+            
         }
 
         
@@ -90,13 +106,30 @@ public class CurvaCuadratica extends Figura {
     @Override
     public boolean contiene(Point2D punto){
         
+        
+         if(elipsePuntoControl.contains(punto)){
+             Imprimir("Has dado en el clavo!");
+             return true;
+         }else
+             return false;
+
+
+
+
+
+
         //Posiblemente falle como en el caso de la linea:
+        
+        
+        
+        /*
         
         if( ((QuadCurve2D)datosGeometricos).contains(punto) )
             return true;
         else
             return false;
-
+        */
+                
     }
 
     @Override

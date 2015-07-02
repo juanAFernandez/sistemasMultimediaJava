@@ -181,8 +181,35 @@ public class Lienzo2D extends javax.swing.JPanel {
         vShape.remove(pos);
     }
     public void setModoSeleccion(boolean modo){
+        
+        //Antes;
         this.modoSeleccion=modo;
         System.out.println("Asignado modo seleccion: "+modoSeleccion);
+        //>>>>>
+        
+
+        if(modo==true){
+            //Podemos decirle a todas las figuras del vector que se entra en modo editar para que dibujen sus puntos de control.        
+            //Para eso recorremos el vector:
+            //POR AHORA SOLO VAMOS A PROBAR CON LA CURVA
+            //Le decimos a las figuras de tipo Curva que se está en modo edición.
+            for(Figura figura: vShape)
+                if(figura.getClass().getName().contains("Curva"))
+                    ((CurvaCuadratica)figura).setModoEdicion(true);
+
+            //Se repinta el vector para que se pinten los puntos de control que se han activado en las figuras de tipo Curva.
+            this.repaint();
+        }else{
+            //Le decimos a todas las figuras que no:
+            for(Figura figura: vShape)
+                if(figura.getClass().getName().contains("Curva"))
+                    ((CurvaCuadratica)figura).setModoEdicion(false);
+            
+            
+            this.repaint();
+
+        }
+        
     }
   
     public void setTransparencia(boolean transparencia){
@@ -522,10 +549,11 @@ public class Lienzo2D extends javax.swing.JPanel {
                          ((Linea)vShape.get(figuraMoviendo)).cambiarPosicion2(pB);
  
                  //Si se trata de una curva cuadrática:
-                 if(vShape.get(figuraMoviendo).getClass().getName().contentEquals("CurvaCuadratica")){
-                     Imprimir("Moviendo una curva cuadratica");
+                 if(vShape.get(figuraMoviendo).getClass().getName().contains("CurvaCuadratica")){
+                     Imprimir("#####Moviendo una curva cuadratica en DRAGGED###");
                      if(vShape.get(figuraMoviendo)!=null)
-                         ((CurvaCuadratica)vShape.get(figuraMoviendo)).cambiarPosicion2(pB);
+                         //((CurvaCuadratica)vShape.get(figuraMoviendo)).cambiarPosicion2(pB);
+                         ((CurvaCuadratica)vShape.get(figuraMoviendo)).cambiarPuntoControl(pB);
                  }
 
                  //Si se trata de un Rectángulo:
