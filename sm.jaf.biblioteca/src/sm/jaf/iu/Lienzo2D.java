@@ -24,6 +24,7 @@ import java.awt.Composite;
 import java.awt.RenderingHints;
 import java.awt.geom.Line2D;
 import java.awt.image.BufferedImage;
+import sm.jaf.graficos.CurvaCuadratica;
 import sm.jaf.graficos.Elipse;
 import sm.jaf.graficos.Figura;
 import sm.jaf.graficos.Linea;
@@ -31,6 +32,7 @@ import sm.jaf.graficos.Linea;
 import sm.jaf.graficos.Linea2D;
 import sm.jaf.graficos.ManoAlzada;
 import sm.jaf.graficos.Rectangulo;
+import sm.jaf.graficos.RectanguloRedondeado;
 import sm.jaf.graficos.Relleno;
 import sm.jaf.graficos.Trazo;
 
@@ -355,6 +357,9 @@ public class Lienzo2D extends javax.swing.JPanel {
             
             
         //Si no se encuentra en el modo selección (entonces se quiere dibujar):
+            
+        // ## ACCIÓN DE DIBUJADO ## //
+            
         }else{
         
                 //Objeto temporal al que aplicaremos características antes de introducirlo en el vector.
@@ -392,6 +397,21 @@ public class Lienzo2D extends javax.swing.JPanel {
                     vShape.add(figuraTemporal);
 
                 }else 
+                     //Si ha sido seleccionada la herramienta Curva Cuadratica del buttonGroup
+                if(this.tipoHerramienta==Herramienta.CURVA_CUADRATICA){
+                    //Construimos la figura como una Linea
+                    figuraTemporal = new CurvaCuadratica();
+
+                    //Aplicamos el color 
+               //     figuraTemporal.getTrazo().setColor(color);
+                    
+                    
+                    //PRUEBA EXPLOSIVA//
+                    figuraTemporal.setTrazo(trazo);
+
+                    vShape.add(figuraTemporal);
+
+                }else 
                 if(this.tipoHerramienta==Herramienta.RECTANGULO){
                     //Construimos la figura como un rectángulo
                     figuraTemporal = new Rectangulo();
@@ -410,6 +430,29 @@ public class Lienzo2D extends javax.swing.JPanel {
                     }
                     
                     vShape.add(figuraTemporal);
+                }
+                
+                else if(this.tipoHerramienta==Herramienta.RECTANGULO_REDONDEADO){
+                    
+                    System.out.println("Añadiendo figura rectangulo redondeado");
+                    
+                    //Construimos la figura como un rectángulo
+                    figuraTemporal = new RectanguloRedondeado();
+
+                   
+                    //Aplicamos el estilo de trazado.
+                    figuraTemporal.setTrazo(trazo);
+
+                    
+                    //Si  ha espeficado quse quiere que la figura esté rellena 
+                   if(rellenoBoolean){
+                                            
+                        ((RectanguloRedondeado)figuraTemporal).setRelleno(rellenoPadre);
+                        ((RectanguloRedondeado)figuraTemporal).setRelleno(true);
+                    }
+
+                    vShape.add(figuraTemporal);
+
                 }
                 
                 else if(this.tipoHerramienta==Herramienta.OVALO){
@@ -461,7 +504,7 @@ public class Lienzo2D extends javax.swing.JPanel {
          if(modoSeleccion==true){
              
              Imprimir("Modo selección en dragged");
-             //Imprimir("FiguraMoviendo: " + vShape.get(figuraMoviendo).getClass().getName());
+             Imprimir("Moviendo figura: " + vShape.get(figuraMoviendo).getClass().getName());
             
              //Si ha seleccionado alguna figura en el pressed tendremos alguna figura que mover
              if(figuraMoviendo!=-1){
@@ -478,11 +521,26 @@ public class Lienzo2D extends javax.swing.JPanel {
                           */
                          ((Linea)vShape.get(figuraMoviendo)).cambiarPosicion2(pB);
  
+                 //Si se trata de una curva cuadrática:
+                 if(vShape.get(figuraMoviendo).getClass().getName().contentEquals("CurvaCuadratica")){
+                     Imprimir("Moviendo una curva cuadratica");
+                     if(vShape.get(figuraMoviendo)!=null)
+                         ((CurvaCuadratica)vShape.get(figuraMoviendo)).cambiarPosicion2(pB);
+                 }
 
                  //Si se trata de un Rectángulo:
-                 if(vShape.get(figuraMoviendo).getClass().getName().contains("Rectangulo"))
+                 if(vShape.get(figuraMoviendo).getClass().getName().contentEquals("sm.jaf.graficos.Rectangulo")){
+                     Imprimir("Moviendo un rectantulo");
                      if(vShape.get(figuraMoviendo)!=null)
                          ((Rectangulo)vShape.get(figuraMoviendo)).cambiarPosicion2(pB);
+                 }
+                 
+                 //Si se trata de un RectánguloRedondeado:
+                 if(vShape.get(figuraMoviendo).getClass().getName().contentEquals("sm.jaf.graficos.RectanguloRedondeado")){
+                     Imprimir("Moviendo un rectangulo redondeado");
+                     if(vShape.get(figuraMoviendo)!=null)
+                         ((RectanguloRedondeado)vShape.get(figuraMoviendo)).cambiarPosicion2(pB);
+                 }
                  
                  //Si se trata de una Ellipse:
                  if(vShape.get(figuraMoviendo).getClass().getName().contains("Elipse"))
@@ -491,7 +549,7 @@ public class Lienzo2D extends javax.swing.JPanel {
                   
              } 
          
-         //Si no se encuentra en el modo selección entonces se está creando una figura (modificando la ultima creada) añadiendole coordenadas nuevas.
+         //Si NO SE ENCUENTRA EN MODO SELECCIÓN entonces se está creando una figura (modificando la ultima creada) añadiendole coordenadas nuevas.
          }else  if(!vShape.isEmpty()){ //Por si el vector está vacío.
        
         /* 
@@ -514,6 +572,37 @@ public class Lienzo2D extends javax.swing.JPanel {
             */
             Imprimir("Creando linea con los puntos A y B");
             ((Linea)vShape.get(vShape.size()-1)).cambiarPosicion(pA, pB);
+            
+        }else 
+            
+            if(this.tipoHerramienta==Herramienta.CURVA_CUADRATICA){
+            /*
+            Con los métodos que la clase Line2D tiene para modificar la linea mientras arrastramos el ratón
+            debemos modificar los dos puntos con el método setLine.            
+            ***Posible mejora de diseño***
+            Sería mucho más lógico tener un set para cada uno de los puntos de la linea sin que nos tuviera
+            que forzar a usar los dos.
+            */
+            Imprimir("Creando curva cuadrática con los puntos A y B");
+            ((CurvaCuadratica)vShape.get(vShape.size()-1)).cambiarPosicion(pA, pB);
+            
+        }else 
+            
+            if(this.tipoHerramienta==Herramienta.RECTANGULO_REDONDEADO){
+            /*
+            Para modificarlo tenemos que volver a especificar el primer punto y calcular el ancho y alto del rectángulo
+            ***Posible mejora de diseño***
+            Un método mucho más útil y simple que debería tener la clase sería aquel que permitiera especificar un nuevo
+            rectángulo a partir de dos puntos (haciendo el los cálculos dentro para se pudiera hacer en cualquier dirección y 
+            también debería tener un par de métodos set para los dos puntos que representan las esquinas del rectángulo.
+            */                      
+            //((Rectangle2D)vShape.get(vShape.size()-1)).setRect(pA.x, pA.y, ancho, alto);
+            
+            //Esta función de Rectangle2D permite enviar solo dos puntos y conseguir que independientemente del lugar donde
+            //se encuentren se dibuje un rectangulo entre ellos.
+            ((RectanguloRedondeado)vShape.get(vShape.size()-1)).cambiarPosicion(pA, pB);
+            
+            
         }else if(this.tipoHerramienta==Herramienta.RECTANGULO){
             /*
             Para modificarlo tenemos que volver a especificar el primer punto y calcular el ancho y alto del rectángulo

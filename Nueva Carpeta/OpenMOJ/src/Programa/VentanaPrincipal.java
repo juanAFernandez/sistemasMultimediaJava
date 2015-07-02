@@ -257,7 +257,9 @@ public class VentanaPrincipal extends JFrame {
         jSeparator5 = new javax.swing.JSeparator();
         botonLapiz = new javax.swing.JButton();
         botonLinea = new javax.swing.JButton();
+        botonCurvaCuadratica = new javax.swing.JButton();
         botonRectangulo = new javax.swing.JButton();
+        botonRoundRectangulo = new javax.swing.JButton();
         botonOvalo = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jPanel6 = new javax.swing.JPanel();
@@ -404,6 +406,16 @@ public class VentanaPrincipal extends JFrame {
         });
         jPanel5.add(botonLinea);
 
+        botonCurvaCuadratica.setText("QuadCurve");
+        botonCurvaCuadratica.setToolTipText("");
+        GrupoBotonesDibujo.add(botonCurvaCuadratica);
+        botonCurvaCuadratica.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonCurvaCuadraticaActionPerformed(evt);
+            }
+        });
+        jPanel5.add(botonCurvaCuadratica);
+
         botonRectangulo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/Rectangulo.gif"))); // NOI18N
         GrupoBotonesDibujo.add(botonRectangulo);
         botonRectangulo.addActionListener(new java.awt.event.ActionListener() {
@@ -412,6 +424,16 @@ public class VentanaPrincipal extends JFrame {
             }
         });
         jPanel5.add(botonRectangulo);
+
+        botonRoundRectangulo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/RoundRectangulo.gif"))); // NOI18N
+        GrupoBotonesDibujo.add(botonRoundRectangulo);
+        botonRoundRectangulo.setSelected(true);
+        botonRoundRectangulo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonRoundRectanguloActionPerformed(evt);
+            }
+        });
+        jPanel5.add(botonRoundRectangulo);
 
         botonOvalo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/Ovalo.gif"))); // NOI18N
         GrupoBotonesDibujo.add(botonOvalo);
@@ -1634,6 +1656,22 @@ public class VentanaPrincipal extends JFrame {
         }
     }//GEN-LAST:event_botonDirectoGuardarActionPerformed
 
+    private void botonRoundRectanguloActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonRoundRectanguloActionPerformed
+       //Mensaje en la barra de estado inferior:
+        this.nfoHerramienta.setText("Rectángulo redondeado");
+        //Tenemos que enviar un mensaje a la ventana seleccionada:       
+        if(panelEscritorio.getSelectedFrame()!=null)
+            ((VentanaInterna)panelEscritorio.getSelectedFrame()).getLienzo().setTipoHerramienta(Herramienta.RECTANGULO_REDONDEADO); 
+    }//GEN-LAST:event_botonRoundRectanguloActionPerformed
+
+    private void botonCurvaCuadraticaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonCurvaCuadraticaActionPerformed
+       //Mensaje en la barra de estado inferior:
+        this.nfoHerramienta.setText("Curva cuadrática");
+        //Tenemos que enviar un mensaje a la ventana seleccionada:       
+        if(panelEscritorio.getSelectedFrame()!=null)
+            ((VentanaInterna)panelEscritorio.getSelectedFrame()).getLienzo().setTipoHerramienta(Herramienta.CURVA_CUADRATICA); 
+    }//GEN-LAST:event_botonCurvaCuadraticaActionPerformed
+
     
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -1651,6 +1689,7 @@ public class VentanaPrincipal extends JFrame {
     private javax.swing.JToggleButton botonAzul;
     private javax.swing.JCheckBoxMenuItem botonBarraEstado;
     private javax.swing.JToggleButton botonBlanco;
+    private javax.swing.JButton botonCurvaCuadratica;
     private javax.swing.JMenu botonDeshacer;
     private javax.swing.JButton botonDirectoAbrir;
     private javax.swing.JButton botonDirectoGuardar;
@@ -1681,6 +1720,7 @@ public class VentanaPrincipal extends JFrame {
     private javax.swing.JCheckBox botonRelleno;
     private javax.swing.JToggleButton botonRojo;
     private javax.swing.JMenuItem botonRotar;
+    private javax.swing.JButton botonRoundRectangulo;
     private javax.swing.JCheckBox botonTransparencia;
     private javax.swing.JToggleButton botonVerde;
     private javax.swing.JLabel coordenadas;

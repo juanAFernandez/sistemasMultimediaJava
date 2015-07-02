@@ -12,7 +12,9 @@ package extras;
 public enum Herramienta {
     PUNTO,
     LINEA,
+    CURVA_CUADRATICA,
     RECTANGULO,
+    RECTANGULO_REDONDEADO,
     OVALO
 //    enum Herramienta{PUNTO,LINEA,RECTANGULO,OVALO};
 }
