@@ -18,10 +18,20 @@ import java.awt.geom.Rectangle2D;
  * @author Juan A. Fernández Sánchez
  */
 public class CurvaCuadratica extends Figura {
-                    
- 
+     
+    
     private Point2D puntoControl = new Point2D.Double();
-    Ellipse2D elipsePuntoControl;
+    
+    private Ellipse2D elipsePuntoControl;    
+    boolean seleccionadoPuntoControl=false;
+    
+    Ellipse2D elipsePuntoA;
+    boolean seleccionadoPuntoA=false;
+    
+    Ellipse2D elipsePuntoB;
+    boolean seleccionadoPuntoB=false;
+    
+    
 
     
     private boolean modoEdicion=false;
@@ -58,10 +68,21 @@ public class CurvaCuadratica extends Figura {
         puntoControl = new Point2D.Double((A.getX()+B.getX())/2, (A.getY()+B.getY())/2);
     }
     public void cambiarPuntoControl(Point2D nvc){
-        //Se modifica el punto de control
-        puntoControl= nvc;
-        //Se modifica la linea usando sus mismos datos anteriores y modifcando el punto de control
-       ((QuadCurve2D)datosGeometricos).setCurve( ((QuadCurve2D)datosGeometricos).getX1(),((QuadCurve2D)datosGeometricos).getY1(), puntoControl.getX(), puntoControl.getY(), ((QuadCurve2D)datosGeometricos).getX2(),((QuadCurve2D)datosGeometricos).getY2());
+            
+        if(seleccionadoPuntoControl){
+            //Se modifica el punto de control
+            puntoControl= nvc;
+            //Se modifica la linea usando sus mismos datos anteriores y modifcando el punto de control
+           ((QuadCurve2D)datosGeometricos).setCurve( ((QuadCurve2D)datosGeometricos).getX1(),((QuadCurve2D)datosGeometricos).getY1(), puntoControl.getX(), puntoControl.getY(), ((QuadCurve2D)datosGeometricos).getX2(),((QuadCurve2D)datosGeometricos).getY2());
+        }
+        if(seleccionadoPuntoA){
+            //Solo cambiamos el punto A con el nuevo punto pasado.
+            ((QuadCurve2D)datosGeometricos).setCurve( nvc.getX(),nvc.getY(), puntoControl.getX(), puntoControl.getY(), ((QuadCurve2D)datosGeometricos).getX2(),((QuadCurve2D)datosGeometricos).getY2());
+        }
+        if(seleccionadoPuntoB){
+            //Solo cambiamos el punto A con el nuevo punto pasado.
+           ((QuadCurve2D)datosGeometricos).setCurve( ((QuadCurve2D)datosGeometricos).getX1(),((QuadCurve2D)datosGeometricos).getY1(), puntoControl.getX(), puntoControl.getY(), nvc.getX(),nvc.getY());
+        }
     }
     @Override
     public void cambiarPosicion(Point2D nuevoPuntoA, Point2D nuevoPuntoB){
@@ -92,11 +113,16 @@ public class CurvaCuadratica extends Figura {
         //Si la figura está en modo edición TAMBIÉN se verá el punto de control:
 
         if(modoEdicion){
-            //Creamos una elipse que represente el punto de control, que será de nuestros tipos para poder seleccionarla bien.
-                      
+            //Creamos una elipse que represente el punto de control, que será de nuestros tipos para poder seleccionarla bien.                      
             elipsePuntoControl = new Ellipse2D.Double(puntoControl.getX()-5,puntoControl.getY()-5, 10, 10);                 
             //La dibujamos
             g2d.draw(elipsePuntoControl);
+                                   
+            elipsePuntoA = new Ellipse2D.Double(((QuadCurve2D)datosGeometricos).getX1()-5, ((QuadCurve2D)datosGeometricos).getY1()-5,10,10 );
+            g2d.draw(elipsePuntoA);
+            
+            elipsePuntoB = new Ellipse2D.Double(((QuadCurve2D)datosGeometricos).getX2()-5, ((QuadCurve2D)datosGeometricos).getY2()-5,10,10 );
+            g2d.draw(elipsePuntoB);
             
         }
 
@@ -106,12 +132,35 @@ public class CurvaCuadratica extends Figura {
     @Override
     public boolean contiene(Point2D punto){
         
+        seleccionadoPuntoControl=false;
+        seleccionadoPuntoA=false;
+        seleccionadoPuntoB=false;
         
+         //¿Se ha seleccionado el punto de control?//
          if(elipsePuntoControl.contains(punto)){
              Imprimir("Has dado en el clavo!");
+             this.seleccionadoPuntoControl=true;
+             seleccionadoPuntoA=false;             
              return true;
          }else
-             return false;
+             if(elipsePuntoA.contains(punto)){
+                 Imprimir("Has dado en el punto A!");
+                 this.seleccionadoPuntoA=true;
+                 return true;
+             }
+             else if(elipsePuntoB.contains(punto)){
+                 Imprimir("Has dado en el punto B!");
+                 this.seleccionadoPuntoB=true;
+                 return true;
+             }else{
+                 
+                 seleccionadoPuntoControl=false;
+                 seleccionadoPuntoA=false;
+                 seleccionadoPuntoB=false;
+                 
+                 return false;
+             } 
+                
 
 
 
