@@ -255,12 +255,12 @@ public class VentanaPrincipal extends JFrame {
         botonDirectoGuardar = new javax.swing.JButton();
         jPanel5 = new javax.swing.JPanel();
         jSeparator5 = new javax.swing.JSeparator();
-        botonLapiz = new javax.swing.JButton();
-        botonLinea = new javax.swing.JButton();
-        botonCurvaCuadratica = new javax.swing.JButton();
-        botonRectangulo = new javax.swing.JButton();
-        botonRoundRectangulo = new javax.swing.JButton();
-        botonOvalo = new javax.swing.JButton();
+        buttonLapiz = new javax.swing.JToggleButton();
+        buttonLinea = new javax.swing.JToggleButton();
+        buttonQuadCurve = new javax.swing.JToggleButton();
+        buttonRectangulo = new javax.swing.JToggleButton();
+        buttonElipse = new javax.swing.JToggleButton();
+        buttonRoundRectangulo = new javax.swing.JToggleButton();
         jPanel3 = new javax.swing.JPanel();
         jPanel6 = new javax.swing.JPanel();
         jSeparator4 = new javax.swing.JSeparator();
@@ -388,61 +388,59 @@ public class VentanaPrincipal extends JFrame {
         jSeparator5.setMaximumSize(new java.awt.Dimension(10, 32767));
         jPanel5.add(jSeparator5);
 
-        botonLapiz.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/Lapiz.gif"))); // NOI18N
-        GrupoBotonesDibujo.add(botonLapiz);
-        botonLapiz.addActionListener(new java.awt.event.ActionListener() {
+        GrupoBotonesDibujo.add(buttonLapiz);
+        buttonLapiz.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/Lapiz.gif"))); // NOI18N
+        buttonLapiz.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                botonLapizActionPerformed(evt);
+                buttonLapizActionPerformed(evt);
             }
         });
-        jPanel5.add(botonLapiz);
+        jPanel5.add(buttonLapiz);
 
-        botonLinea.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/Linea.gif"))); // NOI18N
-        GrupoBotonesDibujo.add(botonLinea);
-        botonLinea.addActionListener(new java.awt.event.ActionListener() {
+        GrupoBotonesDibujo.add(buttonLinea);
+        buttonLinea.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/Linea.gif"))); // NOI18N
+        buttonLinea.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                botonLineaActionPerformed(evt);
+                buttonLineaActionPerformed(evt);
             }
         });
-        jPanel5.add(botonLinea);
+        jPanel5.add(buttonLinea);
 
-        botonCurvaCuadratica.setText("QuadCurve");
-        botonCurvaCuadratica.setToolTipText("");
-        GrupoBotonesDibujo.add(botonCurvaCuadratica);
-        botonCurvaCuadratica.addActionListener(new java.awt.event.ActionListener() {
+        GrupoBotonesDibujo.add(buttonQuadCurve);
+        buttonQuadCurve.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/quadcurve.gif"))); // NOI18N
+        buttonQuadCurve.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                botonCurvaCuadraticaActionPerformed(evt);
+                buttonQuadCurveActionPerformed(evt);
             }
         });
-        jPanel5.add(botonCurvaCuadratica);
+        jPanel5.add(buttonQuadCurve);
 
-        botonRectangulo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/Rectangulo.gif"))); // NOI18N
-        GrupoBotonesDibujo.add(botonRectangulo);
-        botonRectangulo.addActionListener(new java.awt.event.ActionListener() {
+        GrupoBotonesDibujo.add(buttonRectangulo);
+        buttonRectangulo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/Rectangulo.gif"))); // NOI18N
+        buttonRectangulo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                botonRectanguloActionPerformed(evt);
+                buttonRectanguloActionPerformed(evt);
             }
         });
-        jPanel5.add(botonRectangulo);
+        jPanel5.add(buttonRectangulo);
 
-        botonRoundRectangulo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/RoundRectangulo.gif"))); // NOI18N
-        GrupoBotonesDibujo.add(botonRoundRectangulo);
-        botonRoundRectangulo.setSelected(true);
-        botonRoundRectangulo.addActionListener(new java.awt.event.ActionListener() {
+        GrupoBotonesDibujo.add(buttonElipse);
+        buttonElipse.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/Ovalo.gif"))); // NOI18N
+        buttonElipse.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                botonRoundRectanguloActionPerformed(evt);
+                buttonElipseActionPerformed(evt);
             }
         });
-        jPanel5.add(botonRoundRectangulo);
+        jPanel5.add(buttonElipse);
 
-        botonOvalo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/Ovalo.gif"))); // NOI18N
-        GrupoBotonesDibujo.add(botonOvalo);
-        botonOvalo.addActionListener(new java.awt.event.ActionListener() {
+        GrupoBotonesDibujo.add(buttonRoundRectangulo);
+        buttonRoundRectangulo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/RoundRectangulo.gif"))); // NOI18N
+        buttonRoundRectangulo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                botonOvaloActionPerformed(evt);
+                buttonRoundRectanguloActionPerformed(evt);
             }
         });
-        jPanel5.add(botonOvalo);
+        jPanel5.add(buttonRoundRectangulo);
 
         panelComplementario.add(jPanel5, java.awt.BorderLayout.CENTER);
 
@@ -1476,48 +1474,6 @@ public class VentanaPrincipal extends JFrame {
         }
     }//GEN-LAST:event_spinnerGrosorStateChanged
 
-    private void botonRectanguloActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonRectanguloActionPerformed
-
-        //Mensaje en la barra de estado inferior:
-        this.nfoHerramienta.setText("Rectángulo");
-        //Tenemos que enviar un mensaje a la ventana seleccionada:       
-        if(panelEscritorio.getSelectedFrame()!=null)
-            ((VentanaInterna)panelEscritorio.getSelectedFrame()).getLienzo().setTipoHerramienta(Herramienta.RECTANGULO); 
-
-        
-    }//GEN-LAST:event_botonRectanguloActionPerformed
-
-    private void botonLapizActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonLapizActionPerformed
-       
-        //Mensaje en la barra de estado inferior:
-        this.nfoHerramienta.setText("Lápiz");
-        //Tenemos que enviar un mensaje a la ventana seleccionada:       
-        if(panelEscritorio.getSelectedFrame()!=null)
-            ((VentanaInterna)panelEscritorio.getSelectedFrame()).getLienzo().setTipoHerramienta(Herramienta.PUNTO); 
-        
-    }//GEN-LAST:event_botonLapizActionPerformed
-
-    private void botonLineaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonLineaActionPerformed
-        
-        //Mensaje en la barra de estado inferior:
-        this.nfoHerramienta.setText("Línea");
-        //Tenemos que enviar un mensaje a la ventana seleccionada:       
-        if(panelEscritorio.getSelectedFrame()!=null)
-            ((VentanaInterna)panelEscritorio.getSelectedFrame()).getLienzo().setTipoHerramienta(Herramienta.LINEA); 
-        
-    }//GEN-LAST:event_botonLineaActionPerformed
-
-    private void botonOvaloActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonOvaloActionPerformed
-        
-        //Mensaje en la barra de estado inferior:
-        this.nfoHerramienta.setText("Óvalo");
-        //Tenemos que enviar un mensaje a la ventana seleccionada:       
-        if(panelEscritorio.getSelectedFrame()!=null)
-            ((VentanaInterna)panelEscritorio.getSelectedFrame()).getLienzo().setTipoHerramienta(Herramienta.OVALO); 
-        
-        
-    }//GEN-LAST:event_botonOvaloActionPerformed
-
     private void botonEditarNombreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonEditarNombreActionPerformed
         
         ventanaHerramientaTrazado = new herramientaTrazado(this);
@@ -1656,21 +1612,62 @@ public class VentanaPrincipal extends JFrame {
         }
     }//GEN-LAST:event_botonDirectoGuardarActionPerformed
 
-    private void botonRoundRectanguloActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonRoundRectanguloActionPerformed
+    private void buttonLapizActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonLapizActionPerformed
+            
+        //Mensaje en la barra de estado inferior:
+        this.nfoHerramienta.setText("Lápiz");
+        //Tenemos que enviar un mensaje a la ventana seleccionada:       
+        if(panelEscritorio.getSelectedFrame()!=null)
+            ((VentanaInterna)panelEscritorio.getSelectedFrame()).getLienzo().setTipoHerramienta(Herramienta.PUNTO); 
+        
+    }//GEN-LAST:event_buttonLapizActionPerformed
+
+    private void buttonLineaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonLineaActionPerformed
+                
+        //Mensaje en la barra de estado inferior:
+        this.nfoHerramienta.setText("Línea");
+        //Tenemos que enviar un mensaje a la ventana seleccionada:       
+        if(panelEscritorio.getSelectedFrame()!=null)
+            ((VentanaInterna)panelEscritorio.getSelectedFrame()).getLienzo().setTipoHerramienta(Herramienta.LINEA); 
+        
+    }//GEN-LAST:event_buttonLineaActionPerformed
+
+    private void buttonQuadCurveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonQuadCurveActionPerformed
+             //Mensaje en la barra de estado inferior:
+        this.nfoHerramienta.setText("Curva cuadrática");
+        //Tenemos que enviar un mensaje a la ventana seleccionada:       
+        if(panelEscritorio.getSelectedFrame()!=null)
+            ((VentanaInterna)panelEscritorio.getSelectedFrame()).getLienzo().setTipoHerramienta(Herramienta.CURVA_CUADRATICA); 
+    }//GEN-LAST:event_buttonQuadCurveActionPerformed
+
+    private void buttonRectanguloActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonRectanguloActionPerformed
+        //Mensaje en la barra de estado inferior:
+        this.nfoHerramienta.setText("Rectángulo");
+        //Tenemos que enviar un mensaje a la ventana seleccionada:       
+        if(panelEscritorio.getSelectedFrame()!=null)
+            ((VentanaInterna)panelEscritorio.getSelectedFrame()).getLienzo().setTipoHerramienta(Herramienta.RECTANGULO); 
+
+        
+    }//GEN-LAST:event_buttonRectanguloActionPerformed
+
+    private void buttonRoundRectanguloActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonRoundRectanguloActionPerformed
        //Mensaje en la barra de estado inferior:
         this.nfoHerramienta.setText("Rectángulo redondeado");
         //Tenemos que enviar un mensaje a la ventana seleccionada:       
         if(panelEscritorio.getSelectedFrame()!=null)
             ((VentanaInterna)panelEscritorio.getSelectedFrame()).getLienzo().setTipoHerramienta(Herramienta.RECTANGULO_REDONDEADO); 
-    }//GEN-LAST:event_botonRoundRectanguloActionPerformed
+    }//GEN-LAST:event_buttonRoundRectanguloActionPerformed
 
-    private void botonCurvaCuadraticaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonCurvaCuadraticaActionPerformed
-       //Mensaje en la barra de estado inferior:
-        this.nfoHerramienta.setText("Curva cuadrática");
+    private void buttonElipseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonElipseActionPerformed
+          
+        //Mensaje en la barra de estado inferior:
+        this.nfoHerramienta.setText("Óvalo");
         //Tenemos que enviar un mensaje a la ventana seleccionada:       
         if(panelEscritorio.getSelectedFrame()!=null)
-            ((VentanaInterna)panelEscritorio.getSelectedFrame()).getLienzo().setTipoHerramienta(Herramienta.CURVA_CUADRATICA); 
-    }//GEN-LAST:event_botonCurvaCuadraticaActionPerformed
+            ((VentanaInterna)panelEscritorio.getSelectedFrame()).getLienzo().setTipoHerramienta(Herramienta.OVALO); 
+        
+        
+    }//GEN-LAST:event_buttonElipseActionPerformed
 
     
 
@@ -1689,7 +1686,6 @@ public class VentanaPrincipal extends JFrame {
     private javax.swing.JToggleButton botonAzul;
     private javax.swing.JCheckBoxMenuItem botonBarraEstado;
     private javax.swing.JToggleButton botonBlanco;
-    private javax.swing.JButton botonCurvaCuadratica;
     private javax.swing.JMenu botonDeshacer;
     private javax.swing.JButton botonDirectoAbrir;
     private javax.swing.JButton botonDirectoGuardar;
@@ -1702,8 +1698,6 @@ public class VentanaPrincipal extends JFrame {
     private javax.swing.JMenuItem botonGuardarMenuArchivo;
     private javax.swing.JCheckBoxMenuItem botonHerramientasDibujo;
     private javax.swing.JCheckBoxMenuItem botonHistograma;
-    private javax.swing.JButton botonLapiz;
-    private javax.swing.JButton botonLinea;
     private javax.swing.JMenu botonMenuAbout;
     private javax.swing.JMenuItem botonMenuEdicionBrillo;
     private javax.swing.JMenuItem botonMenuHerramientasEmborronar;
@@ -1713,16 +1707,19 @@ public class VentanaPrincipal extends JFrame {
     private javax.swing.JToggleButton botonNegro;
     private javax.swing.JMenuItem botonNuevoMenuArchivo;
     private javax.swing.JMenuItem botonOperacionBinarias;
-    private javax.swing.JButton botonOvalo;
     private javax.swing.JButton botonRELLENO;
-    private javax.swing.JButton botonRectangulo;
     private javax.swing.JMenuItem botonRehacer;
     private javax.swing.JCheckBox botonRelleno;
     private javax.swing.JToggleButton botonRojo;
     private javax.swing.JMenuItem botonRotar;
-    private javax.swing.JButton botonRoundRectangulo;
     private javax.swing.JCheckBox botonTransparencia;
     private javax.swing.JToggleButton botonVerde;
+    private javax.swing.JToggleButton buttonElipse;
+    private javax.swing.JToggleButton buttonLapiz;
+    private javax.swing.JToggleButton buttonLinea;
+    private javax.swing.JToggleButton buttonQuadCurve;
+    private javax.swing.JToggleButton buttonRectangulo;
+    private javax.swing.JToggleButton buttonRoundRectangulo;
     private javax.swing.JLabel coordenadas;
     private javax.swing.JDialog dialogoAbout;
     private javax.swing.JLabel jLabel1;
