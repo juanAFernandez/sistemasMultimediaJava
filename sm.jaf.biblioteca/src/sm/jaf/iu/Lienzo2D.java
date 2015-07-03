@@ -1,35 +1,33 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+        This program is free software: you can redistribute it and/or modify
+        it under the terms of the GNU General Public License as published by
+        the Free Software Foundation, either version 3 of the License, or
+        (at your option) any later version.
+        This program is distributed in the hope that it will be useful,
+        but WITHOUT ANY WARRANTY; without even the implied warranty of
+        MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+        GNU General Public License for more details.
+        You should have received a copy of the GNU General Public License
+        along with this program. If not, see <http://www.gnu.org/licenses/>.
+      
+        Copyright 2015 Juan A. Fernández Sánchez
+*/
 package sm.jaf.iu;
 
 import static extras.Imprimir.Imprimir;
-import java.awt.BasicStroke;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Paint;
 import java.awt.Point;
-import java.awt.Shape;
-import java.awt.Stroke;
-import java.awt.geom.Ellipse2D;
-//import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
-import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import extras.Herramienta;
-import java.awt.AlphaComposite;
-import java.awt.Composite;
 import java.awt.RenderingHints;
-import java.awt.geom.Line2D;
 import java.awt.image.BufferedImage;
 import sm.jaf.graficos.CurvaCuadratica;
+import sm.jaf.graficos.CurvaCubica;
 import sm.jaf.graficos.Elipse;
 import sm.jaf.graficos.Figura;
 import sm.jaf.graficos.Linea;
-//import java.awt.geom.Line2D;
-import sm.jaf.graficos.Linea2D;
 import sm.jaf.graficos.ManoAlzada;
 import sm.jaf.graficos.Rectangulo;
 import sm.jaf.graficos.RectanguloRedondeado;
@@ -193,18 +191,23 @@ public class Lienzo2D extends javax.swing.JPanel {
             //Para eso recorremos el vector:
             //POR AHORA SOLO VAMOS A PROBAR CON LA CURVA
             //Le decimos a las figuras de tipo Curva que se está en modo edición.
-            for(Figura figura: vShape)
-                if(figura.getClass().getName().contains("Curva"))
+            for(Figura figura: vShape){
+                if(figura.getClass().getName().contains("Cuadratica"))
                     ((CurvaCuadratica)figura).setModoEdicion(true);
+                if(figura.getClass().getName().contains("Cubica"))
+                    ((CurvaCubica)figura).setModoEdicion(true);
+            }
 
             //Se repinta el vector para que se pinten los puntos de control que se han activado en las figuras de tipo Curva.
             this.repaint();
         }else{
             //Le decimos a todas las figuras que no:
-            for(Figura figura: vShape)
-                if(figura.getClass().getName().contains("Curva"))
+            for(Figura figura: vShape){
+                if(figura.getClass().getName().contains("Cuadratica"))
                     ((CurvaCuadratica)figura).setModoEdicion(false);
-            
+                if(figura.getClass().getName().contains("Cubica"))
+                    ((CurvaCubica)figura).setModoEdicion(false);
+            }
             
             this.repaint();
 
@@ -439,6 +442,21 @@ public class Lienzo2D extends javax.swing.JPanel {
                     vShape.add(figuraTemporal);
 
                 }else 
+                //Si ha sido seleccionada la herramienta Curva Cúbica del buttonGroup
+                if(this.tipoHerramienta==Herramienta.CURVA_CUBICA){
+                    //Construimos la figura como una Linea
+                    figuraTemporal = new CurvaCubica();
+
+                    //Aplicamos el color 
+               //     figuraTemporal.getTrazo().setColor(color);
+                    
+                    
+                    //PRUEBA EXPLOSIVA//
+                    figuraTemporal.setTrazo(trazo);
+
+                    vShape.add(figuraTemporal);
+
+                }else 
                 if(this.tipoHerramienta==Herramienta.RECTANGULO){
                     //Construimos la figura como un rectángulo
                     figuraTemporal = new Rectangulo();
@@ -555,6 +573,14 @@ public class Lienzo2D extends javax.swing.JPanel {
                          //((CurvaCuadratica)vShape.get(figuraMoviendo)).cambiarPosicion2(pB);
                          ((CurvaCuadratica)vShape.get(figuraMoviendo)).cambiarPuntoControl(pB);
                  }
+                 
+                 //Si se trata de una curva cubica:
+                 if(vShape.get(figuraMoviendo).getClass().getName().contains("Cubica")){
+                     Imprimir("#####Moviendo una curva cubica en DRAGGED###");
+                     if(vShape.get(figuraMoviendo)!=null)
+                         //((CurvaCuadratica)vShape.get(figuraMoviendo)).cambiarPosicion2(pB);
+                         ((CurvaCubica)vShape.get(figuraMoviendo)).cambiarPuntosControl(pB);
+                 }
 
                  //Si se trata de un Rectángulo:
                  if(vShape.get(figuraMoviendo).getClass().getName().contentEquals("sm.jaf.graficos.Rectangulo")){
@@ -613,6 +639,19 @@ public class Lienzo2D extends javax.swing.JPanel {
             */
             Imprimir("Creando curva cuadrática con los puntos A y B");
             ((CurvaCuadratica)vShape.get(vShape.size()-1)).cambiarPosicion(pA, pB);
+            
+        }else 
+            
+            if(this.tipoHerramienta==Herramienta.CURVA_CUBICA){
+            /*
+            Con los métodos que la clase Line2D tiene para modificar la linea mientras arrastramos el ratón
+            debemos modificar los dos puntos con el método setLine.            
+            ***Posible mejora de diseño***
+            Sería mucho más lógico tener un set para cada uno de los puntos de la linea sin que nos tuviera
+            que forzar a usar los dos.
+            */
+            Imprimir("Creando curva cubica con los puntos A y B");
+            ((CurvaCubica)vShape.get(vShape.size()-1)).cambiarPosicion(pA, pB);               
             
         }else 
             

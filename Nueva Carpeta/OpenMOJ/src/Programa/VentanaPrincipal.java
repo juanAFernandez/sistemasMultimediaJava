@@ -258,6 +258,7 @@ public class VentanaPrincipal extends JFrame {
         buttonLapiz = new javax.swing.JToggleButton();
         buttonLinea = new javax.swing.JToggleButton();
         buttonQuadCurve = new javax.swing.JToggleButton();
+        buttonCubicCurve = new javax.swing.JToggleButton();
         buttonRectangulo = new javax.swing.JToggleButton();
         buttonElipse = new javax.swing.JToggleButton();
         buttonRoundRectangulo = new javax.swing.JToggleButton();
@@ -414,6 +415,15 @@ public class VentanaPrincipal extends JFrame {
             }
         });
         jPanel5.add(buttonQuadCurve);
+
+        GrupoBotonesDibujo.add(buttonCubicCurve);
+        buttonCubicCurve.setText("CC");
+        buttonCubicCurve.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonCubicCurveActionPerformed(evt);
+            }
+        });
+        jPanel5.add(buttonCubicCurve);
 
         GrupoBotonesDibujo.add(buttonRectangulo);
         buttonRectangulo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/Rectangulo.gif"))); // NOI18N
@@ -1669,6 +1679,14 @@ public class VentanaPrincipal extends JFrame {
         
     }//GEN-LAST:event_buttonElipseActionPerformed
 
+    private void buttonCubicCurveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonCubicCurveActionPerformed
+              //Mensaje en la barra de estado inferior:
+        this.nfoHerramienta.setText("Curva cubica");
+        //Tenemos que enviar un mensaje a la ventana seleccionada:       
+        if(panelEscritorio.getSelectedFrame()!=null)
+            ((VentanaInterna)panelEscritorio.getSelectedFrame()).getLienzo().setTipoHerramienta(Herramienta.CURVA_CUBICA); 
+    }//GEN-LAST:event_buttonCubicCurveActionPerformed
+
     
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -1714,6 +1732,7 @@ public class VentanaPrincipal extends JFrame {
     private javax.swing.JMenuItem botonRotar;
     private javax.swing.JCheckBox botonTransparencia;
     private javax.swing.JToggleButton botonVerde;
+    private javax.swing.JToggleButton buttonCubicCurve;
     private javax.swing.JToggleButton buttonElipse;
     private javax.swing.JToggleButton buttonLapiz;
     private javax.swing.JToggleButton buttonLinea;
