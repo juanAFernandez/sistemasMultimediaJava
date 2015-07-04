@@ -102,7 +102,7 @@ public final class herramientaTexto extends javax.swing.JFrame {
     
     public herramientaTexto(Lienzo2D padre, Texto textoAModificar){
         
-        Imprimir("Modificando texto: "+textoAModificar.getText());
+        Imprimir("CONSTRUCTOR2: "+textoAModificar.getText());
         
         //Inicializamos los componentes gráficos de la herramienta.
         initComponents();
@@ -132,6 +132,13 @@ public final class herramientaTexto extends javax.swing.JFrame {
         
         //Modificamos el spinner del tamaño del texto al tamaño que tenga el que nos pasan:
         spinnerGrosor.setValue(texto.getGrosor());
+        
+        
+           // padre.getLastTexto().setText(texto.getText());
+            
+            
+           // padre.repaint();
+        
     }
     
     /**
@@ -252,7 +259,7 @@ public final class herramientaTexto extends javax.swing.JFrame {
             
         //Sacamos el texto del padre y le cambiamos el grosor:
         if(!padre.isEmptyTextos()){
-            padre.getLastTexto().setGrosor((int)spinnerGrosor.getValue());
+            padre.getText(padre.getTextoSeleccionado()).setGrosor((int)spinnerGrosor.getValue());
             padre.repaint();
         }
         
@@ -263,7 +270,7 @@ public final class herramientaTexto extends javax.swing.JFrame {
       Imprimir("Contendio del campo de texto: "+campoTexto.getText());
       textoInicio=campoTexto.getText();
        if(!padre.isEmptyTextos()){
-            padre.getLastTexto().setText(textoInicio);
+            padre.getText(padre.getTextoSeleccionado()).setText(textoInicio);
             padre.repaint();
         }
     }//GEN-LAST:event_campoTextoCaretUpdate
@@ -271,7 +278,7 @@ public final class herramientaTexto extends javax.swing.JFrame {
     private void comboBoxFuentesSistemaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboBoxFuentesSistemaActionPerformed
         String fuente=(String)comboBoxFuentesSistema.getSelectedItem();
         if(!padre.isEmptyTextos()){
-            padre.getLastTexto().setFuente(fuente);
+            padre.getText(padre.getTextoSeleccionado()).setFuente(fuente);
             padre.repaint();
         }
        

@@ -186,8 +186,11 @@ public class Lienzo2D extends javax.swing.JPanel {
     public void delFigura(int pos){
         vShape.remove(pos);
     }
-    public Texto getLastTexto(){
-        return vTextos.get(vTextos.size()-1);
+    public int getTextoSeleccionado(){
+        return textoMoviendo;
+    }
+    public Texto getText(int pos){
+        return vTextos.get(pos);
     }
     public boolean isEmptyTextos(){
         return vTextos.isEmpty();
@@ -195,6 +198,7 @@ public class Lienzo2D extends javax.swing.JPanel {
     
     public void setTexto(Texto nuevo){
         vTextos.add(nuevo);
+        textoMoviendo=vTextos.indexOf(nuevo);
     }
     
     public void setModoSeleccion(boolean modo){
@@ -823,6 +827,8 @@ public class Lienzo2D extends javax.swing.JPanel {
                   
                     if(texto!=null){                
 
+                        //sacamos el texto que se está moviendo
+                        textoMoviendo=vTextos.indexOf(texto);
                         //Extraemos la posición dentro del vector de textos de esta para tenerla localizada.
                         //numTexto = vTextos.indexOf(texto);
                        // System.out.println("double clicked en texto "+texto.getText());
