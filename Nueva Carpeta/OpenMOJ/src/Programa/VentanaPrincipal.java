@@ -9,6 +9,7 @@ import Herramientas.herramientaNegativo;
 import Herramientas.herramientaOpBinarias;
 import Herramientas.herramientaRelieve;
 import Herramientas.herramientaRotacion;
+import extras.herramientaTexto;
 import Herramientas.herramientaUmbralizacion;
 import accesorios.Ajustes;
 import accesorios.nuevoLienzo;
@@ -22,6 +23,7 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import extras.Herramienta;
 import java.awt.BasicStroke;
+import java.awt.GraphicsEnvironment;
 import java.awt.Stroke;
 import java.awt.geom.Line2D;
 import java.awt.image.BufferedImage;
@@ -32,9 +34,11 @@ import java.awt.image.LookupTable;
 import java.awt.image.RescaleOp;
 import java.io.FileFilter;
 import java.io.IOException;
+import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JDesktopPane;
 import sm.image.KernelProducer;
 import sm.image.LookupTableProducer;
@@ -46,7 +50,10 @@ import sm.jaf.iu.Lienzo2D;
 
 public class VentanaPrincipal extends JFrame {
 
+    
     private String []fuentesSistema;
+    
+    
     BufferedImage imagenTemporalParaOperaciones;
     
     private boolean guardar=false;
@@ -83,10 +90,14 @@ public class VentanaPrincipal extends JFrame {
 
     public Herramienta herramienta = Herramienta.PUNTO;
     
+
     
     public VentanaPrincipal() {
         
         initComponents();
+        
+        
+
         
         colorLienzoDefecto = Color.WHITE;
         
@@ -262,6 +273,7 @@ public class VentanaPrincipal extends JFrame {
         buttonRectangulo = new javax.swing.JToggleButton();
         buttonElipse = new javax.swing.JToggleButton();
         buttonRoundRectangulo = new javax.swing.JToggleButton();
+        buttonTexto = new javax.swing.JToggleButton();
         jPanel3 = new javax.swing.JPanel();
         jPanel6 = new javax.swing.JPanel();
         jSeparator4 = new javax.swing.JSeparator();
@@ -451,6 +463,15 @@ public class VentanaPrincipal extends JFrame {
             }
         });
         jPanel5.add(buttonRoundRectangulo);
+
+        GrupoBotonesDibujo.add(buttonTexto);
+        buttonTexto.setText("Text");
+        buttonTexto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonTextoActionPerformed(evt);
+            }
+        });
+        jPanel5.add(buttonTexto);
 
         panelComplementario.add(jPanel5, java.awt.BorderLayout.CENTER);
 
@@ -1687,6 +1708,13 @@ public class VentanaPrincipal extends JFrame {
             ((VentanaInterna)panelEscritorio.getSelectedFrame()).getLienzo().setTipoHerramienta(Herramienta.CURVA_CUBICA); 
     }//GEN-LAST:event_buttonCubicCurveActionPerformed
 
+    private void buttonTextoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonTextoActionPerformed
+        this.nfoHerramienta.setText("Texto");
+        //Tenemos que enviar un mensaje a la ventana seleccionada:       
+        if(panelEscritorio.getSelectedFrame()!=null)
+            ((VentanaInterna)panelEscritorio.getSelectedFrame()).getLienzo().setTipoHerramienta(Herramienta.TEXTO);    
+    }//GEN-LAST:event_buttonTextoActionPerformed
+
     
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -1739,6 +1767,7 @@ public class VentanaPrincipal extends JFrame {
     private javax.swing.JToggleButton buttonQuadCurve;
     private javax.swing.JToggleButton buttonRectangulo;
     private javax.swing.JToggleButton buttonRoundRectangulo;
+    private javax.swing.JToggleButton buttonTexto;
     private javax.swing.JLabel coordenadas;
     private javax.swing.JDialog dialogoAbout;
     private javax.swing.JLabel jLabel1;

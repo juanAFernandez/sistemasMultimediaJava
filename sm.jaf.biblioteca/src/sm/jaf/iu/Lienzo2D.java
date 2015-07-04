@@ -21,6 +21,8 @@ import java.awt.Point;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import extras.Herramienta;
+import extras.herramientaTexto;
+import java.awt.Font;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import sm.jaf.graficos.CurvaCuadratica;
@@ -32,6 +34,7 @@ import sm.jaf.graficos.ManoAlzada;
 import sm.jaf.graficos.Rectangulo;
 import sm.jaf.graficos.RectanguloRedondeado;
 import sm.jaf.graficos.Relleno;
+import sm.jaf.graficos.Texto;
 import sm.jaf.graficos.Trazo;
 
 
@@ -70,10 +73,12 @@ public class Lienzo2D extends javax.swing.JPanel {
     private Relleno rellenoPadre;
     
     
-  //  private VentanaPrincipal padre;
+    
     
     //Vector de objetos de tipo Shape (Java2D) que es del que heredan todos los tipos que vamos a usar:
     protected ArrayList <Figura> vShape = new ArrayList();
+    
+    protected ArrayList <Texto> vTextos = new ArrayList();
     
     private Point pA, pB;
     
@@ -87,6 +92,9 @@ public class Lienzo2D extends javax.swing.JPanel {
      */
     int figuraMoviendo;
 
+    //Idem que figuraMoviendo pero para texto.
+    int textoMoviendo;
+    
     private Herramienta tipoHerramienta;
 
     //Constructor de la clase Lienzo2D
@@ -178,6 +186,17 @@ public class Lienzo2D extends javax.swing.JPanel {
     public void delFigura(int pos){
         vShape.remove(pos);
     }
+    public Texto getLastTexto(){
+        return vTextos.get(vTextos.size()-1);
+    }
+    public boolean isEmptyTextos(){
+        return vTextos.isEmpty();
+    }
+    
+    public void setTexto(Texto nuevo){
+        vTextos.add(nuevo);
+    }
+    
     public void setModoSeleccion(boolean modo){
         
         //Antes;
@@ -279,7 +298,16 @@ public class Lienzo2D extends javax.swing.JPanel {
         de figuras.
         */
         
+        //Pruebas:
+     //   Font fuente;
+     //   fuente = new Font("Arial", Font.BOLD | Font.ITALIC, 45);
+     //   g2d.setFont(fuente);
+        
+      //  g2d.drawString("Hola",30,220);
+       
+        
             if(!vShape.isEmpty())
+
                 for(Figura figura:vShape){
                     figura.dibujateEn(g2d);
                     Imprimir(figura.toString());
@@ -292,7 +320,10 @@ public class Lienzo2D extends javax.swing.JPanel {
                     */
                 }
         
-        
+            //Después de recorrer el vector de figuras se recorre el vector de textos:
+            if(!vTextos.isEmpty())
+                for(Texto texto: vTextos)
+                    texto.dibujateEn(g2d);
         
     }
     
@@ -313,6 +344,9 @@ public class Lienzo2D extends javax.swing.JPanel {
             }
             public void mouseReleased(java.awt.event.MouseEvent evt) {
                 formMouseReleased(evt);
+            }
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                formMouseClicked(evt);
             }
         });
         addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
@@ -351,6 +385,18 @@ public class Lienzo2D extends javax.swing.JPanel {
         return null;
     }
     
+      public Texto getTextoSeleccionado(Point2D puntoClicado){
+        
+        //Se recorre todas los textos almacenadas en el vector a ver en cual coincide el punto. Cuando
+        //damos con ella la devolvemos
+        for(Texto texto: vTextos)
+            if(texto.contiene(puntoClicado))
+                return texto;
+        /* En el caso de que el niguna función devolviera true significaría que el punto no pertenece a ninguna y devolvemos null
+        para indicarlo asi. */
+        return null;
+    }
+    
     /**
      * Gestion del evento presionar ratón.
      * @param evt Evento en gestión.
@@ -366,25 +412,48 @@ public class Lienzo2D extends javax.swing.JPanel {
             
             //Con el punto obtenido buscamos en el vector de figuras amacenadas aquella que hayamos podido seleccionar.
             Figura figura = getFiguraSeleccionada(pA);
+            Texto texto = getTextoSeleccionado(pA);
             
-            //Si ha ocurrido una selección:
-            if(figura!=null){                
-                                
-                //Extraemos la posición dentro del vector de figuras de esta para tenerla localizada.
-                figuraMoviendo = vShape.indexOf(figura);
-                
-                System.out.println("Se ha seleccionado una figura n1 "+figuraMoviendo+" : "+figura.toString());
-                
-            //Si no ha ocurrido una selección:
-            }else{
-                
-                System.out.println("No se ha seleccionado ninguna figura.");
+                    //Si ha ocurrido una selección de una figura
+                  
+                    if(figura!=null){                
+
+                        //Extraemos la posición dentro del vector de figuras de esta para tenerla localizada.
+                        figuraMoviendo = vShape.indexOf(figura);
+
+                        System.out.println("Se ha seleccionado una figura n1 "+figuraMoviendo+" : "+figura.toString());
+
+                    //Si no ha ocurrido una selección:
+                    }else{
+
+                        System.out.println("No se ha seleccionado ninguna figura.");
+
+                        //Para controlar que no se ha seleccionado ninguna figura del vector se usa el valor de control -1
+                        figuraMoviendo=-1;
+
+                    }
+                    
+                    //Si ha ocurrido una selección de un texto
+                  
+                    if(texto!=null){                
+
+                        //Extraemos la posición dentro del vector de textos de esta para tenerla localizada.
+                        textoMoviendo = vTextos.indexOf(texto);
+
+                        System.out.println("Se ha seleccionado el texto num  "+textoMoviendo+" : "+texto.toString());
+
+                    //Si no ha ocurrido una selección:
+                    }else{
+
+                        System.out.println("No se ha seleccionado ningun texto.");
+
+                        //Para controlar que no se ha seleccionado ninguna figura del vector se usa el valor de control -1
+                        textoMoviendo=-1;
+
+                    }
             
-                //Para controlar que no se ha seleccionado ninguna figura del vector se usa el valor de control -1
-                figuraMoviendo=-1;
-                
-             }
-            
+                    
+                    
             
         //Si no se encuentra en el modo selección (entonces se quiere dibujar):
             
@@ -521,6 +590,17 @@ public class Lienzo2D extends javax.swing.JPanel {
 
                     vShape.add(figuraTemporal);
 
+                } else if(this.tipoHerramienta==Herramienta.TEXTO){
+                    
+                  
+                    
+                    herramientaTexto hT = new herramientaTexto(this, pA);
+                    hT.setVisible(true);
+                    
+                    //Tengo que avisar al padre para que habra el menú de la herramienta
+                    
+                    //Sólo en este caso repintamos ya.
+                    this.repaint();
                 }
                 
          
@@ -545,16 +625,17 @@ public class Lienzo2D extends javax.swing.JPanel {
         
         
         Imprimir("Draggeando en modo seleccion: "+modoSeleccion + "con figura: "+figuraMoviendo);
+        Imprimir("Draggeando en modo seleccion: "+modoSeleccion + "con texto: "+textoMoviendo);
         
          if(modoSeleccion==true){
              
-             Imprimir("Modo selección en dragged");
-             Imprimir("Moviendo figura: " + vShape.get(figuraMoviendo).getClass().getName());
+             
+             
             
              //Si ha seleccionado alguna figura en el pressed tendremos alguna figura que mover
              if(figuraMoviendo!=-1){
 
-                 
+                 Imprimir("Moviendo figura: " + vShape.get(figuraMoviendo).getClass().getName());
                  
                  
                  
@@ -602,6 +683,13 @@ public class Lienzo2D extends javax.swing.JPanel {
                          ((Elipse)vShape.get(figuraMoviendo)).cambiarPosicion2(pB);
                   
              } 
+             
+             
+             //Si se ha seleccionado agún texto tendremos un texto que mover:
+              if(textoMoviendo!=-1){
+              Imprimir("Vamos a mover un texto");
+                    vTextos.get(textoMoviendo).cambiarPosicion(pB);
+              }
          
          //Si NO SE ENCUENTRA EN MODO SELECCIÓN entonces se está creando una figura (modificando la ultima creada) añadiendole coordenadas nuevas.
          }else  if(!vShape.isEmpty()){ //Por si el vector está vacío.
@@ -706,9 +794,52 @@ public class Lienzo2D extends javax.swing.JPanel {
     }//GEN-LAST:event_formMouseDragged
 
     private void formMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseReleased
-        //Número de objetos:
-        System.out.print("Elementos en vShape: "+vShape.size()+"\n");
+        //Número de objetos en ambos vectores:
+        Imprimir("Elementos en vShape: "+vShape.size());
+        Imprimir("Elementos de texto en vTextos: "+vTextos.size());
     }//GEN-LAST:event_formMouseReleased
+
+    
+    /**
+     * Programaicón del doble click de ratón.
+     * @param evt 
+     */
+    private void formMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseClicked
+        
+        int numTexto;
+        Texto texto = new Texto();
+        
+        if (evt.getClickCount() == 2) {
+            
+            //Extraemos el punto de click
+            pB=evt.getPoint();
+            
+            if(modoSeleccion==true){
+                
+                //Extraemos el texto seleccionado si es que lo hubiese
+                texto = getTextoSeleccionado(pB);
+                            
+                    //Si ha ocurrido una selección de un texto
+                  
+                    if(texto!=null){                
+
+                        //Extraemos la posición dentro del vector de textos de esta para tenerla localizada.
+                        //numTexto = vTextos.indexOf(texto);
+                       // System.out.println("double clicked en texto "+texto.getText());
+                        
+                        //Abrimos la herramienta de texto pasando el texto que queremos modificar.
+                        herramientaTexto hT = new herramientaTexto(this, texto);
+                        Imprimir("Abriendo "+texto.getText());
+                        hT.setVisible(true);
+                        
+                    }
+                
+            }
+            
+                
+        }
+        
+    }//GEN-LAST:event_formMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

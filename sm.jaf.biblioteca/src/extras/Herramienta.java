@@ -25,5 +25,6 @@ public enum Herramienta {
     CURVA_CUBICA,
     RECTANGULO,
     RECTANGULO_REDONDEADO,
-    OVALO
+    OVALO,
+    TEXTO
 }
