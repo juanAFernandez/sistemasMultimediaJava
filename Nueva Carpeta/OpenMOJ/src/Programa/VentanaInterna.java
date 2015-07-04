@@ -34,7 +34,11 @@ public class VentanaInterna extends javax.swing.JInternalFrame {
         super("Sin título " + (++contadorVentanas),true,true,true,true);
         this.parent=v;
       //  nombreVentana="Sin título "+contadorVentanas;
-        initComponents();                       
+        initComponents();      
+        //Solo las ventanas internas tendrán habilitada la zona de cliping para que de la sensación de estar
+        //dibujando en un lienzo fintio. Para eso le decimos que este es el centra y con una variable booelana
+        //al redibujar se mostrará la zona de cliping.
+        this.miLienzo2D.setCentral(true);
     }
     
    
@@ -80,6 +84,12 @@ public class VentanaInterna extends javax.swing.JInternalFrame {
                 formInternalFrameActivated(evt);
             }
             public void internalFrameDeactivated(javax.swing.event.InternalFrameEvent evt) {
+            }
+        });
+
+        miLienzo2D.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseMoved(java.awt.event.MouseEvent evt) {
+                miLienzo2DMouseMoved(evt);
             }
         });
 
@@ -136,6 +146,9 @@ public class VentanaInterna extends javax.swing.JInternalFrame {
         
     }//GEN-LAST:event_formInternalFrameActivated
 
+    private void miLienzo2DMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_miLienzo2DMouseMoved
+       parent.setCoordenadas(evt.getPoint());
+    }//GEN-LAST:event_miLienzo2DMouseMoved
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private sm.jaf.iu.Lienzo2DImagen miLienzo2D;

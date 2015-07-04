@@ -62,7 +62,7 @@ public class Trazo {
     public Trazo(){
         
         //El color es negro:
-        color = Color.RED;
+        color = Color.BLACK;
         
         //El grosor de la linea:
         grosorLinea=1;
@@ -113,12 +113,15 @@ public class Trazo {
     public int getDecoracionUnionLineas(){
         return join;
     }
+    
+    
     public void setPatronDiscontinuidad(float[] patron){
-        
+    
+        //Si el patrón no tiene 8 elementos no debería dejar que lo intentase copiar.
         patronDiscontinuidad = new float [patron.length];
         for(int i=0; i<patron.length; i++)
             patronDiscontinuidad[i]=patron[i];
-        
+        // TB: System.arraycopy(patron, 0, patronDiscontinuidad, 0, patron.length);
         
         Imprimir("\n\nAQUI patron aplicado: ");
         for(int i=0; i<8; i++)

@@ -22,8 +22,11 @@ import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import extras.Herramienta;
 import extras.herramientaTexto;
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.RenderingHints;
+import java.awt.Shape;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import sm.jaf.graficos.CurvaCuadratica;
 import sm.jaf.graficos.CurvaCubica;
@@ -59,7 +62,7 @@ public class Lienzo2D extends javax.swing.JPanel {
      * herramientas activas del usuario en la vista principal del programa.
      */
 
-        
+    private boolean central=false;
     
     /**
      * El trazo contiene toda la información de trazada.
@@ -117,7 +120,9 @@ public class Lienzo2D extends javax.swing.JPanel {
     
     // ## FUNCIONES PARA ESTABLECER PARAMETROS DESDE EL PADRE QUE SERÁN LOS DE USO EN LA CREACIÓN DE FIGURAS NUEVAS ##
     
-    
+    public void setCentral(boolean opcion){
+        central=opcion;
+    }
     
     public void setTrazo(Trazo nuevoTrazo){
         trazo = new Trazo();
@@ -302,14 +307,24 @@ public class Lienzo2D extends javax.swing.JPanel {
         de figuras.
         */
         
-        //Pruebas:
-     //   Font fuente;
-     //   fuente = new Font("Arial", Font.BOLD | Font.ITALIC, 45);
-     //   g2d.setFont(fuente);
-        
-      //  g2d.drawString("Hola",30,220);
-       
-        
+     //   Imprimir("Nombre del objeto"+this.getClass().);
+            //Habría que conseguir que esto sólo se hiciera para la sección central
+                //Pruebas de recorte:
+        if(central){
+                Shape clipArea = new Rectangle2D.Double(0,0,300,300);
+                g2d.setClip(clipArea);
+                //fin de prueba de recorte                                
+                Figura clip = new Rectangulo();
+                clip.cambiarPosicion(new Point2D.Double(0, 0), new Point2D.Double(299,299));
+                Trazo miTrazo = new Trazo();
+                float patron[] = {10,10,2,10,0,0,0,0};
+                miTrazo.setPatronDiscontinuidad(patron);
+                miTrazo.setColor(Color.GRAY);
+                clip.setTrazo(miTrazo);                
+               // Shape clipArea2 = new Rectangle2D.Double(0,0,199,199);
+                //g2d.draw(clipArea2);
+                clip.dibujateEn(g2d);
+        }
             if(!vShape.isEmpty())
 
                 for(Figura figura:vShape){
@@ -341,7 +356,7 @@ public class Lienzo2D extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        setBackground(new java.awt.Color(255, 255, 255));
+        setBackground(new java.awt.Color(204, 204, 204));
         addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 formMousePressed(evt);

@@ -32,6 +32,9 @@
       <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
       <SubComponents>
         <Container class="sm.jaf.iu.Lienzo2DImagen" name="miLienzo2D">
+          <Events>
+            <EventHandler event="mouseMoved" listener="java.awt.event.MouseMotionListener" parameters="java.awt.event.MouseEvent" handler="miLienzo2DMouseMoved"/>
+          </Events>
 
           <Layout>
             <DimensionLayout dim="0">

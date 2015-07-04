@@ -1002,7 +1002,7 @@ public class VentanaPrincipal extends JFrame {
         strokeIntermedio=nuevoStroke;
     }
     */
-    private void setCoordenadas(Point2D puntoRaton){
+    public void setCoordenadas(Point2D puntoRaton){
         this.coordenadas.setText("x "+(int)puntoRaton.getX()+" y "+(int)puntoRaton.getY());
     }
     
