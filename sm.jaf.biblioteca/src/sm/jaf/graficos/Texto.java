@@ -14,11 +14,13 @@
 */
 package sm.jaf.graficos;
 
-import static extras.Imprimir.Imprimir;
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
+import java.awt.font.TextAttribute;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
+import java.util.Map;
 
 /**
  * Clase que abstrae el concepto de texto. 
@@ -38,6 +40,16 @@ public class Texto {
      * Grosor del texto.
      */
     int grosor;
+    
+    Color color;
+    
+    /**
+     * Variables boleanas de estado.
+     */
+    boolean negrita;
+    boolean cursiva;
+    boolean subrayado;
+    boolean tachado;
     
     /**
      * Texto propiamente.
@@ -74,9 +86,10 @@ public class Texto {
     
     
     
-    public Texto(String texto, int grosor, Point2D posicion, String fuente){
+    public Texto(String texto, int grosor, Color color, Point2D posicion, String fuente){
         this.texto=texto;
         this.grosor=grosor;
+        this.color=color;
         this.posicion=posicion;
         this.nombreFuente=fuente;
     }
@@ -98,25 +111,76 @@ public class Texto {
     }
     public void setFuente(String nombre){
         nombreFuente=nombre;
+    }    
+    public String getFuente(){
+        return nombreFuente;
     }
+    public void setColor(Color nuevoColor){
+        color=nuevoColor;
+    }
+    public Color getColor(){
+        return color;
+    }
+    public void setNetrita(boolean decision){
+        negrita=decision;
+    }
+    public boolean getNegrita(){
+        return negrita;
+    }
+    public void setCursiva(boolean decision){
+        cursiva=decision;
+    }
+    public boolean getCursiva(){
+        return cursiva;
+    }
+    public void setSubrayado(boolean decision){
+        subrayado=decision;       
+    }
+    public boolean getSubrayado(){
+        return subrayado;
+    }
+    public void setTachado(boolean decision){
+        tachado=decision;
+    }
+    public boolean getTachado(){
+        return tachado;            
+    }
+    
+    
     
     /**
      * Para dibujar el texto en un entorno Graphics2D pasado.
      * @param g2d Entorno Graphics2D pasado
      */
     public void dibujateEn(Graphics2D g2d){
-                       
+                 
+        //Tomamos una referencia del Graphics2D padre que nos servirá para conocer si un click contiene el texto.
         g2dPadre=g2d;
         
-        fuente = new Font(nombreFuente, Font.BOLD | Font.ITALIC, grosor);
-        //Aplicamos la fuente
-        g2d.setFont(fuente);
+        if(negrita && !cursiva)
+            fuente = new Font(nombreFuente, Font.BOLD, grosor); 
+        if(cursiva && !negrita)
+            fuente = new Font(nombreFuente, Font.ITALIC, grosor); 
+        if(negrita && cursiva)
+            fuente = new Font(nombreFuente, Font.BOLD | Font.ITALIC, grosor); 
+        if(!negrita && !cursiva)
+            fuente = new Font(nombreFuente,Font.PLAIN, grosor);        
+          
         
-        //Sacamos el tamaño:
-      //  Rectangle2D rectanguloContenido = fuente.getStringBounds(texto, g2d.getFontRenderContext());
-      //  Imprimir("ancho: "+rectanguloContenido.getWidth()+" alto: "+rectanguloContenido.getHeight());
-                
-                
+        Map atributosTexto = fuente.getAttributes();
+        if(subrayado)                    
+            atributosTexto.put(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
+        if(tachado)
+            atributosTexto.put(TextAttribute.STRIKETHROUGH, TextAttribute.STRIKETHROUGH_ON);
+        
+        g2d.setFont(fuente.deriveFont(atributosTexto));
+      
+        //Aplicamos la fuente
+       // g2d.setFont(fuente);
+        
+        //Aplicamos el color:
+         g2d.setColor(color);
+                                
         //Dibujamos el texto con la fuente aplicada antes en una posición específica:
         g2d.drawString(texto, (float)posicion.getX(),(float)posicion.getY());        
         

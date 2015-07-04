@@ -465,7 +465,7 @@ public class VentanaPrincipal extends JFrame {
         jPanel5.add(buttonRoundRectangulo);
 
         GrupoBotonesDibujo.add(buttonTexto);
-        buttonTexto.setText("Text");
+        buttonTexto.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/Texto.gif"))); // NOI18N
         buttonTexto.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 buttonTextoActionPerformed(evt);
