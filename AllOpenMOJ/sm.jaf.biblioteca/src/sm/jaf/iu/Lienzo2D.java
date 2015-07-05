@@ -685,8 +685,10 @@ public class Lienzo2D extends javax.swing.JPanel {
                  //Si se trata de un Rectángulo:
                  if(vShape.get(figuraMoviendo).getClass().getName().contentEquals("sm.jaf.graficos.Rectangulo")){
                      Imprimir("Moviendo un rectantulo");
-                     if(vShape.get(figuraMoviendo)!=null)
-                         ((Rectangulo)vShape.get(figuraMoviendo)).cambiarPosicion2(pB);
+                     if(vShape.get(figuraMoviendo)!=null){
+                         ((Rectangulo)vShape.get(figuraMoviendo)).calcularDiferencias(pA); //El punto A siempre es el mismo
+                         ((Rectangulo)vShape.get(figuraMoviendo)).aplicarDiferencias(pB); //El punto B cambia
+                     }
                  }
                  
                  //Si se trata de un RectánguloRedondeado:

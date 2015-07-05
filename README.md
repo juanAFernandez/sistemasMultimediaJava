@@ -1,4 +1,4 @@
-# sistemasMultimediaJava
-Repositorio para el desarrollo de programas con Java para Sistemas Multimedia
-La mayoría del código está hecho con NetBeans e incluye toda la información 
-de NetBeans para abrilo directamente.
+# OpenMOJ
+Programa de dibujo y manejo de ficheros multimedia estilo "Paint" un poco más avanzado
+creado en JAVA.
+Creación del programa principal y de librerías de apoyo.
