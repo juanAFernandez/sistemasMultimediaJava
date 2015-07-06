@@ -26,6 +26,8 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.RenderingHints;
 import java.awt.Shape;
+import java.awt.geom.GeneralPath;
+import java.awt.geom.Path2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import sm.jaf.graficos.CurvaCuadratica;
@@ -34,6 +36,7 @@ import sm.jaf.graficos.Elipse;
 import sm.jaf.graficos.Figura;
 import sm.jaf.graficos.Linea;
 import sm.jaf.graficos.ManoAlzada;
+import sm.jaf.graficos.Polilinea;
 import sm.jaf.graficos.Rectangulo;
 import sm.jaf.graficos.RectanguloRedondeado;
 import sm.jaf.graficos.Relleno;
@@ -75,7 +78,7 @@ public class Lienzo2D extends javax.swing.JPanel {
      */
     private Relleno rellenoPadre;
     
-    
+    private boolean bloqueadaCreacionPolilinea=false;
     
     
     //Vector de objetos de tipo Shape (Java2D) que es del que heredan todos los tipos que vamos a usar:
@@ -325,6 +328,26 @@ public class Lienzo2D extends javax.swing.JPanel {
                 //g2d.draw(clipArea2);
                 clip.dibujateEn(g2d);
         }
+        
+        
+        /*
+            ArrayList<Point2D>puntos=new ArrayList();
+            puntos.add(new Point2D.Double(50,50));
+            puntos.add(new Point2D.Double(100,100));
+          //  puntos.add(new Point2D.Double(100,150));
+          //  puntos.add(new Point2D.Double(100,250));
+            
+            GeneralPath polyline = new GeneralPath(GeneralPath.WIND_EVEN_ODD, puntos.size());
+        
+            polyline.moveTo(puntos.get(0).getX(),puntos.get(0).getY());
+            
+            for(int i=1; i<puntos.size(); i++)
+                polyline.lineTo(puntos.get(i).getX(),puntos.get(i).getY());
+        
+            g2d.draw(polyline);
+        */
+        
+            //Si el vector de figuras no está vacío se recorre y se imprime.
             if(!vShape.isEmpty())
 
                 for(Figura figura:vShape){
@@ -479,7 +502,13 @@ public class Lienzo2D extends javax.swing.JPanel {
         // ## ACCIÓN DE DIBUJADO ## //
             
         }else{
-        
+                // ### POLILINEA (aclaración) ###
+                /*Si pulsamos una vez y estamos trabajando con la figura polilinea se queda bloqueado el dibujo en
+                ella de forma que cualquier click que podamos hacer siguiente añade un punto a esta figura. 
+                En el caso de que no queramos seguir dibujando esta figura hacemos doble click y el cerrojo será 
+                abierto.
+                */
+            
                 //Objeto temporal al que aplicaremos características antes de introducirlo en el vector.
                 Figura figuraTemporal;
                 
@@ -514,6 +543,45 @@ public class Lienzo2D extends javax.swing.JPanel {
 
                     vShape.add(figuraTemporal);
 
+                }else 
+                //Si ha sido seleccionada la herramienta LINEA del buttonGroup
+                if(this.tipoHerramienta==Herramienta.POLILINEA){                                        
+                    
+                    //Si no está bloqueada la creación de una polilinea
+                    if(!bloqueadaCreacionPolilinea){
+                        
+                        
+                        Imprimir("CREACION DE FIGURA POLILINEA");
+                        
+                        //Construimos la figura como una Polilinea:
+                        figuraTemporal = new Polilinea();
+
+                        //Añadimos el primer punto que es donde hemos pulsado:
+                        ((Polilinea)figuraTemporal).addPunto(pA);
+
+                       //Aplicamos el trazo en uso
+                        figuraTemporal.setTrazo(trazo);
+
+                        //Añadimos la figura al vector de figuras.
+                        vShape.add(figuraTemporal);
+                        
+                        //Bloqueamos la creación, para que la proxima acción mousePressed añada puntos y no una figura nueva:
+                        bloqueadaCreacionPolilinea=true;
+                    }
+                    /*Pero si está bloqueada la creación lo que se está haciendo es añadir puntos a una figura previamente
+                    creada. Entonces añadimos a la ultima figura del vector y le añadimos puntos.*/
+                    else{
+                        
+                        Imprimir("Añadiendo punto a polilinea");
+                        
+                        //Accedemos a la ultima figura del vector que será una polilinea y añadimos un nuevo punto.
+                        ((Polilinea)vShape.get(vShape.size()-1)).addPunto(pA);
+                        //Repintamos para que se vea el proceso de creación.
+                        this.repaint();
+                    }
+
+                        
+                        
                 }else 
                      //Si ha sido seleccionada la herramienta Curva Cuadratica del buttonGroup
                 if(this.tipoHerramienta==Herramienta.CURVA_CUADRATICA){
@@ -664,7 +732,7 @@ public class Lienzo2D extends javax.swing.JPanel {
                          /**
                           * Esta forma de proceder nos dará un problema y es que nos moverá 
                           */
-                         ((Linea)vShape.get(figuraMoviendo)).cambiarPosicion2(pB);
+                         ((Linea)vShape.get(figuraMoviendo)).cambiarPosicion2(pA, pB);
  
                  //Si se trata de una curva cuadrática:
                  if(vShape.get(figuraMoviendo).getClass().getName().contains("CurvaCuadratica")){
@@ -831,6 +899,21 @@ public class Lienzo2D extends javax.swing.JPanel {
         Texto texto = new Texto();
         
         if (evt.getClickCount() == 2) {
+            
+            
+            /*Si al hacer doble click estamos trabajando con una polilinea cerramos el objeto, es decir, 
+            estamos desbloqueando la creacion de polilineas. Es decir, ahora un nuevo click tras este doble 
+            creara un nuevo objeto Polilinea (siempre que la herramienta este seleciconada).
+            */
+          
+            if(tipoHerramienta==Herramienta.POLILINEA){
+                this.bloqueadaCreacionPolilinea=false;                                                
+            }
+            
+            
+            
+            
+            
             
             //Extraemos el punto de click
             pB=evt.getPoint();

@@ -124,4 +124,13 @@ public class Linea extends Figura {
     }
     
     
+    public void cambiarPosicion2(Point2D P, Point2D nP) {
+                     
+       //1º Calculamos las diferencias usando el punto de marcado P en el segmento origen.
+    //    double dXA=
+     //   double dXB
+       
+        
+    }
+    
 }

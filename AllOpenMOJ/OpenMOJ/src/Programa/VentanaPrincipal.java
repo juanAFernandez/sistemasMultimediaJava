@@ -270,6 +270,7 @@ public class VentanaPrincipal extends JFrame {
         buttonLinea = new javax.swing.JToggleButton();
         buttonQuadCurve = new javax.swing.JToggleButton();
         buttonCubicCurve = new javax.swing.JToggleButton();
+        buttonPolilinea = new javax.swing.JToggleButton();
         buttonRectangulo = new javax.swing.JToggleButton();
         buttonElipse = new javax.swing.JToggleButton();
         buttonRoundRectangulo = new javax.swing.JToggleButton();
@@ -436,6 +437,15 @@ public class VentanaPrincipal extends JFrame {
             }
         });
         jPanel5.add(buttonCubicCurve);
+
+        GrupoBotonesDibujo.add(buttonPolilinea);
+        buttonPolilinea.setText("PP");
+        buttonPolilinea.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonPolilineaActionPerformed(evt);
+            }
+        });
+        jPanel5.add(buttonPolilinea);
 
         GrupoBotonesDibujo.add(buttonRectangulo);
         buttonRectangulo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/Rectangulo.gif"))); // NOI18N
@@ -1715,6 +1725,19 @@ public class VentanaPrincipal extends JFrame {
             ((VentanaInterna)panelEscritorio.getSelectedFrame()).getLienzo().setTipoHerramienta(Herramienta.TEXTO);    
     }//GEN-LAST:event_buttonTextoActionPerformed
 
+    private void buttonPolilineaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonPolilineaActionPerformed
+        this.nfoHerramienta.setText("Polilinea");
+        //Tenemos que enviar un mensaje a la ventana seleccionada:       
+        if(panelEscritorio.getSelectedFrame()!=null)
+            ((VentanaInterna)panelEscritorio.getSelectedFrame()).getLienzo().setTipoHerramienta(Herramienta.POLILINEA);  
+        
+        //Mostramos un mensaje con información de como se trabaja con esta herramienta.
+        
+        JOptionPane.showMessageDialog(this, "Cada click añadira un punto a la polilinea. Para finalizar haga doble click al añadir su ultimo"
+                                            + " punto.", "Info polilinea", JOptionPane.INFORMATION_MESSAGE);
+        
+    }//GEN-LAST:event_buttonPolilineaActionPerformed
+
     
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -1764,6 +1787,7 @@ public class VentanaPrincipal extends JFrame {
     private javax.swing.JToggleButton buttonElipse;
     private javax.swing.JToggleButton buttonLapiz;
     private javax.swing.JToggleButton buttonLinea;
+    private javax.swing.JToggleButton buttonPolilinea;
     private javax.swing.JToggleButton buttonQuadCurve;
     private javax.swing.JToggleButton buttonRectangulo;
     private javax.swing.JToggleButton buttonRoundRectangulo;

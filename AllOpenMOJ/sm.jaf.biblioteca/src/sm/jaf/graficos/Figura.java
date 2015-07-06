@@ -68,10 +68,10 @@ public abstract class Figura {
      * @param nuevoTrazo El nuevo trazo por el que se va a sustituir el anterior.
      */
     public void setTrazo(Trazo nuevoTrazo){
-        Imprimir("APlicando nuevo trazo"+nuevoTrazo.getGrosor());
+     //   Imprimir("APlicando nuevo trazo"+nuevoTrazo.getGrosor());
         trazo = new Trazo();
         trazo.setCopiaTrazo(nuevoTrazo);
-        Imprimir("Aplicado trazo "+trazo.getGrosor());
+      //  Imprimir("Aplicado trazo "+trazo.getGrosor());
     }
     
 

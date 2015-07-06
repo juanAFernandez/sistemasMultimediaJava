@@ -26,5 +26,6 @@ public enum Herramienta {
     RECTANGULO,
     RECTANGULO_REDONDEADO,
     OVALO,
+    POLILINEA,
     TEXTO
 }
