@@ -274,6 +274,7 @@ public class VentanaPrincipal extends JFrame {
         buttonRectangulo = new javax.swing.JToggleButton();
         buttonElipse = new javax.swing.JToggleButton();
         buttonRoundRectangulo = new javax.swing.JToggleButton();
+        buttonArco = new javax.swing.JToggleButton();
         buttonTexto = new javax.swing.JToggleButton();
         jPanel3 = new javax.swing.JPanel();
         jPanel6 = new javax.swing.JPanel();
@@ -473,6 +474,15 @@ public class VentanaPrincipal extends JFrame {
             }
         });
         jPanel5.add(buttonRoundRectangulo);
+
+        GrupoBotonesDibujo.add(buttonArco);
+        buttonArco.setText("arco");
+        buttonArco.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonArcoActionPerformed(evt);
+            }
+        });
+        jPanel5.add(buttonArco);
 
         GrupoBotonesDibujo.add(buttonTexto);
         buttonTexto.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/Texto.gif"))); // NOI18N
@@ -1738,6 +1748,14 @@ public class VentanaPrincipal extends JFrame {
         
     }//GEN-LAST:event_buttonPolilineaActionPerformed
 
+    private void buttonArcoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonArcoActionPerformed
+        //Mensaje en la barra de estado inferior:
+        this.nfoHerramienta.setText("Arco");
+        //Tenemos que enviar un mensaje a la ventana seleccionada:       
+        if(panelEscritorio.getSelectedFrame()!=null)
+            ((VentanaInterna)panelEscritorio.getSelectedFrame()).getLienzo().setTipoHerramienta(Herramienta.ARCO); 
+    }//GEN-LAST:event_buttonArcoActionPerformed
+
     
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -1783,6 +1801,7 @@ public class VentanaPrincipal extends JFrame {
     private javax.swing.JMenuItem botonRotar;
     private javax.swing.JCheckBox botonTransparencia;
     private javax.swing.JToggleButton botonVerde;
+    private javax.swing.JToggleButton buttonArco;
     private javax.swing.JToggleButton buttonCubicCurve;
     private javax.swing.JToggleButton buttonElipse;
     private javax.swing.JToggleButton buttonLapiz;

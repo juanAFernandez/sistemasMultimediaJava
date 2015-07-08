@@ -15,8 +15,9 @@
 package extras;
 
 /**
- *
- * @author juan
+ * Enumerado para el control de las herramientas en uso.
+ * Usado en varias secciones del código, sobre todo en la gestión de los eventos del mouse.
+ * @author Juan A. Fernández Sánchez
  */
 public enum Herramienta {
     PUNTO,
@@ -26,6 +27,7 @@ public enum Herramienta {
     RECTANGULO,
     RECTANGULO_REDONDEADO,
     OVALO,
+    ARCO,
     POLILINEA,
     TEXTO
 }

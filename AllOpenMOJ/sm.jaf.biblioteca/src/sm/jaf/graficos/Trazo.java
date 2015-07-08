@@ -14,7 +14,6 @@
 */
 package sm.jaf.graficos;
 
-
 import static extras.Imprimir.Imprimir;
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -22,13 +21,14 @@ import java.awt.Stroke;
 
 
 /**
- * Clase que implementa el "trazo" para poder cambiar cosas particulares del stroke
- * que le falta a la interfaz de esta clase de Java2D.
+ * Clase que implementa el "trazo" para poder cambiar cosas particulares del stroke que le falta a la interfaz de esta clase de Java2D.
+ * Para esto se hace uso de BasicStroke de Java2D.
+ * @see <a href="http://docs.oracle.com/javase/7/docs/api/java/awt/BasicStroke.html">BasicStroke</a>
  * @author Juan A. Fernández Sánchez
  */
 public class Trazo {
     
-     /**
+    /**
      * La decoración de los finales de linea.
      */
     private int cap;
@@ -88,38 +88,74 @@ public class Trazo {
      
     };
     
+    /**
+     * Cambia el grosor del trazo.
+     * @param nuevoGrosor Nuevo valor para el grosor.
+     */
     public void setGrosor(int nuevoGrosor){
-        Imprimir("Cambiando el grosor a "+nuevoGrosor);
+        //Imprimir("Cambiando el grosor a "+nuevoGrosor);
         grosorLinea=nuevoGrosor;
         trazo = new BasicStroke(grosorLinea, cap, join, 1.0f, patronDiscontinuidad, 0.0f);  
     }
+    
+    /**
+     * Para conocer el grosor del trazo.
+     * @return El tamaño del grosor del trazado actual
+     */
     public int getGrosor(){
         return grosorLinea;
     }
+    /**
+     * Para cambiar el color del trazado.     
+     * @param nuevoColor Objeto de tipo Color para ajustar color en el trazo.
+     */
     public void setColor(Color nuevoColor){
-        Imprimir("Cambiando el color a "+nuevoColor.toString());
+        //Imprimir("Cambiando el color a "+nuevoColor.toString());
         color=nuevoColor;
         trazo = new BasicStroke(grosorLinea, cap, join, 1.0f, patronDiscontinuidad, 0.0f);  
     }
+    /**
+     * Devuelve el color usado en el trazo.
+     * @return El color usado en el trazo.
+     */    
     public Color getColor(){
         return color;
     }
+    /**
+     * Ajusta el tipo de decoración del trazo.
+     * @param decoracion Tipo de decoración
+     */
     public void setDecoracionFinalLinea(int decoracion){
         cap=decoracion;
         trazo = new BasicStroke(grosorLinea, cap, join, 1.0f, patronDiscontinuidad, 0.0f);  
-    }
+    }                
+    /**
+     * Devuelve el tipo de decoración usado al final de la linea. 
+     * @return Entero con el tipo de decoración.
+     */
     public int getDecoracionFinalLinea(){
         return cap;
     }
+    /**
+     * Ajusta el tipo de decoración en la unión de las lineas. 
+     * @param decoracion Entero que especifica el tipo de decoración.
+     */
     public void setDecoracionUnionLineas(int decoracion){
         join=decoracion;
         trazo = new BasicStroke(grosorLinea, cap, join, 1.0f, patronDiscontinuidad, 0.0f);  
     }
+    /**
+     * Devuelve el tipo de decoración en la unión de las lineas.
+     * @return Devuelve el entero que especifica el tipo de decoración para la unión de lineas.
+     */
     public int getDecoracionUnionLineas(){
         return join;
     }
     
-    
+    /**
+     * Ajusta el partron de discontinuidad del trazado.
+     * @param patron Vector de float que especifica el tipo de patrón.
+     */
     public void setPatronDiscontinuidad(float[] patron){
     
         //Si el patrón no tiene 8 elementos no debería dejar que lo intentase copiar.
@@ -128,12 +164,18 @@ public class Trazo {
             patronDiscontinuidad[i]=patron[i];
         // TB: System.arraycopy(patron, 0, patronDiscontinuidad, 0, patron.length);
         
-        Imprimir("\n\nAQUI patron aplicado: ");
-        for(int i=0; i<8; i++)
-            System.out.print(patronDiscontinuidad[i]+" ");        
+        //Imprimir("\n\nAQUI patron aplicado: ");
+        //for(int i=0; i<8; i++)
+          //  System.out.print(patronDiscontinuidad[i]+" "); 
+        
         trazo = new BasicStroke(grosorLinea, cap, join, 1.0f, patronDiscontinuidad, 0.0f); 
         
     }
+    
+    /**
+     * Devuelve el tipo de patron de discontinuidad del trazado.
+     * @return Vector de float con el patrón de discontinuidad.
+     */
     public float[] getPatronDiscontinuidad(){
         return patronDiscontinuidad;
     }
@@ -150,10 +192,18 @@ public class Trazo {
         this.setPatronDiscontinuidad(nuevoTrazoCompleto.getPatronDiscontinuidad());
     }
     
+    /**
+     * Devuelve el tipo de trazo.
+     * @return Objeto de tipo Stroke.
+     */
     public Stroke getStroke(){
         return trazo;
     }
     
+    /**
+     * Devuelve una cadena de texto con información sobre el objeto Trazo.
+     * @return Cadena de texto.
+     */
     @Override
     public String toString(){
         return "Info de trazo: "

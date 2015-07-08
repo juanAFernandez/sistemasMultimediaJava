@@ -26,10 +26,12 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.RenderingHints;
 import java.awt.Shape;
+import java.awt.geom.Arc2D;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Path2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
+import sm.jaf.graficos.Arco;
 import sm.jaf.graficos.CurvaCuadratica;
 import sm.jaf.graficos.CurvaCubica;
 import sm.jaf.graficos.Elipse;
@@ -194,7 +196,7 @@ public class Lienzo2D extends javax.swing.JPanel {
     public void delFigura(int pos){
         vShape.remove(pos);
     }
-    public int getTextoSeleccionado(){
+    public int getTextoSeleccionado(){//Sólo es esto lo que se hacía antes, 
         return textoMoviendo;
     }
     public Texto getText(int pos){
@@ -211,12 +213,23 @@ public class Lienzo2D extends javax.swing.JPanel {
     
     public void setModoSeleccion(boolean modo){
         
-        //Antes;
+        //Cambiamos el modoSeleccion a true o false según lo que nos digan
         this.modoSeleccion=modo;
+        
+        
+        
         System.out.println("Asignado modo seleccion: "+modoSeleccion);
         //>>>>>
         
 
+        /**
+         * No afecta a todas las figuras igual.
+         * Hasta ahora sólo teníamos figuras que su edición era moverlas por el plano, pero al incuir las curvas cuadraticas y cúbicas
+         * y el arco las posibilidades de edición aumentan y en concreto para esas figuras el modo edición
+         * implica mandarles un mensaje para que activen ciertos elementos, además de por supuesto poner siempre la variable
+         * modoSeleccion a como nos digan para que al pinchar se realicen ciertas acciones sobre esos nuevos puntos de control.
+         */
+        
         if(modo==true){
             //Podemos decirle a todas las figuras del vector que se entra en modo editar para que dibujen sus puntos de control.        
             //Para eso recorremos el vector:
@@ -227,6 +240,8 @@ public class Lienzo2D extends javax.swing.JPanel {
                     ((CurvaCuadratica)figura).setModoEdicion(true);
                 if(figura.getClass().getName().contains("Cubica"))
                     ((CurvaCubica)figura).setModoEdicion(true);
+                if(figura.getClass().getName().contains("Arco"))
+                    ((Arco)figura).setModoEdicion(true);
             }
 
             //Se repinta el vector para que se pinten los puntos de control que se han activado en las figuras de tipo Curva.
@@ -238,6 +253,8 @@ public class Lienzo2D extends javax.swing.JPanel {
                     ((CurvaCuadratica)figura).setModoEdicion(false);
                 if(figura.getClass().getName().contains("Cubica"))
                     ((CurvaCubica)figura).setModoEdicion(false);
+                if(figura.getClass().getName().contains("Arco"))
+                    ((Arco)figura).setModoEdicion(false);
             }
             
             this.repaint();
@@ -328,24 +345,7 @@ public class Lienzo2D extends javax.swing.JPanel {
                 //g2d.draw(clipArea2);
                 clip.dibujateEn(g2d);
         }
-        
-        
-        /*
-            ArrayList<Point2D>puntos=new ArrayList();
-            puntos.add(new Point2D.Double(50,50));
-            puntos.add(new Point2D.Double(100,100));
-          //  puntos.add(new Point2D.Double(100,150));
-          //  puntos.add(new Point2D.Double(100,250));
-            
-            GeneralPath polyline = new GeneralPath(GeneralPath.WIND_EVEN_ODD, puntos.size());
-        
-            polyline.moveTo(puntos.get(0).getX(),puntos.get(0).getY());
-            
-            for(int i=1; i<puntos.size(); i++)
-                polyline.lineTo(puntos.get(i).getX(),puntos.get(i).getY());
-        
-            g2d.draw(polyline);
-        */
+
         
             //Si el vector de figuras no está vacío se recorre y se imprime.
             if(!vShape.isEmpty())
@@ -454,7 +454,9 @@ public class Lienzo2D extends javax.swing.JPanel {
             
             //Con el punto obtenido buscamos en el vector de figuras amacenadas aquella que hayamos podido seleccionar.
             Figura figura = getFiguraSeleccionada(pA);
+            
             Texto texto = getTextoSeleccionado(pA);
+            
             
                     //Si ha ocurrido una selección de una figura
                   
@@ -677,7 +679,26 @@ public class Lienzo2D extends javax.swing.JPanel {
 
                     vShape.add(figuraTemporal);
 
-                } else if(this.tipoHerramienta==Herramienta.TEXTO){
+                } else
+                    
+                    if(this.tipoHerramienta==Herramienta.ARCO){
+                    
+                    System.out.println("Añadiendo figura ARCO");
+                    
+                    //Construimos la figura como un rectángulo
+                    figuraTemporal = new Arco();
+
+                   
+                    //Aplicamos el estilo de trazado.
+                    figuraTemporal.setTrazo(trazo);
+
+                    //Esta figura no tiene relleno porque no puede
+
+                    vShape.add(figuraTemporal);
+
+                } else
+                    
+                    if(this.tipoHerramienta==Herramienta.TEXTO){
                     
                   
                     
@@ -714,6 +735,10 @@ public class Lienzo2D extends javax.swing.JPanel {
         Imprimir("Draggeando en modo seleccion: "+modoSeleccion + "con figura: "+figuraMoviendo);
         Imprimir("Draggeando en modo seleccion: "+modoSeleccion + "con texto: "+textoMoviendo);
         
+        
+        /**
+         * Si el modo de selcción está activado se va a editar algo en alguna figura.
+         */
          if(modoSeleccion==true){
              
              
@@ -739,6 +764,11 @@ public class Lienzo2D extends javax.swing.JPanel {
                      Imprimir("#####Moviendo una curva cuadratica en DRAGGED###");
                      if(vShape.get(figuraMoviendo)!=null)
                          //((CurvaCuadratica)vShape.get(figuraMoviendo)).cambiarPosicion2(pB);
+                         
+                         /**
+                          * Por ahora no se mueve la figura como el resto.
+                          * Sólo se ha programado la gestión de los puntos de control.
+                          */
                          ((CurvaCuadratica)vShape.get(figuraMoviendo)).cambiarPuntoControl(pB);
                  }
                  
@@ -747,7 +777,23 @@ public class Lienzo2D extends javax.swing.JPanel {
                      Imprimir("#####Moviendo una curva cubica en DRAGGED###");
                      if(vShape.get(figuraMoviendo)!=null)
                          //((CurvaCuadratica)vShape.get(figuraMoviendo)).cambiarPosicion2(pB);
+                         /**
+                          * Por ahora no se mueve la figura como el resto.
+                          * Sólo se ha programado la gestión de los puntos de control.
+                          */
                          ((CurvaCubica)vShape.get(figuraMoviendo)).cambiarPuntosControl(pB);
+                 }
+                 
+                  //Si se trata de una curva cubica:
+                 if(vShape.get(figuraMoviendo).getClass().getName().contains("Arco")){
+                     Imprimir("#####ARCO CAMBIANDO PUNTOS DE CONTROL###");
+                     if(vShape.get(figuraMoviendo)!=null)
+                         //((CurvaCuadratica)vShape.get(figuraMoviendo)).cambiarPosicion2(pB);
+                         /**
+                          * Por ahora no se mueve la figura como el resto.
+                          * Sólo se ha programado la gestión de los puntos de control.
+                          */
+                         ((Arco)vShape.get(figuraMoviendo)).cambiarPuntosControl(pB);
                  }
 
                  //Si se trata de un Rectángulo:
@@ -780,7 +826,8 @@ public class Lienzo2D extends javax.swing.JPanel {
                     vTextos.get(textoMoviendo).cambiarPosicion(pB);
               }
          
-         //Si NO SE ENCUENTRA EN MODO SELECCIÓN entonces se está creando una figura (modificando la ultima creada) añadiendole coordenadas nuevas.
+         //Si NO SE ENCUENTRA EN MODO SELECCIÓN entonces se está creando una figura (modificando la ultima creada) añadiendole coordenadas nuevas,
+              //normalmente porque se está haciendo grande...
          }else  if(!vShape.isEmpty()){ //Por si el vector está vacío.
        
         /* 
@@ -862,13 +909,15 @@ public class Lienzo2D extends javax.swing.JPanel {
             ((Rectangulo)vShape.get(vShape.size()-1)).cambiarPosicion(pA, pB);
             
             
-        }
-        
+        }        
         else if(this.tipoHerramienta==Herramienta.OVALO){
             ((Elipse)vShape.get(vShape.size()-1)).cambiarPosicion(pA,pB);
             //((Ellipse2D)vShape.get(vShape.size()-1)).setFrame(pA.x, pA.y, ancho, alto);
         }
-         
+        else if(this.tipoHerramienta==Herramienta.ARCO){
+            ((Arco)vShape.get(vShape.size()-1)).cambiarPosicion(pA,pB);
+            //((Ellipse2D)vShape.get(vShape.size()-1)).setFrame(pA.x, pA.y, ancho, alto);
+        } 
         
          }
         //Modificamos el objeto extraido seteandolo de nuevo con el punto A y el nuevo punto B a falta de un 

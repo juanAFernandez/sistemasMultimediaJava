@@ -138,6 +138,13 @@ public class Elipse extends Figura{
           
     }
 
+    /**
+     * Para cambiar las coordenadas de los datos geométricos de la figura.
+     * Usandos dos puntos cambia el objeto a partir de la diagonal principal del mismo, que se modifica,
+     * por eso sirve tanto para cambiarla de tamaño como para moverla por completo en el plano.
+     * @param nuevoPuntoA Extremo de la diagonal
+     * @param nuevoPuntoB Otro extremo de la diagonal
+     */
     @Override
     public void cambiarPosicion(Point2D nuevoPuntoA, Point2D nuevoPuntoB) {
          ((Ellipse2D)datosGeometricos).setFrameFromDiagonal(nuevoPuntoA, nuevoPuntoB);
@@ -146,6 +153,7 @@ public class Elipse extends Figura{
     @Override
     public void cambiarPosicion2(Point2D pos) {
        ((Ellipse2D)datosGeometricos).setFrame(pos.getX(), pos.getY(), datosGeometricos.getBounds2D().getWidth(), datosGeometricos.getBounds2D().getHeight());
+        
     }
 
     @Override

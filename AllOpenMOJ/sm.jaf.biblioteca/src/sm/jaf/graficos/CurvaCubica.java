@@ -232,7 +232,13 @@ public class CurvaCubica extends Figura {
 
         
     }
-    
+    /**
+     * Funcion que indica si se ha seleccionado un punto de la figura.
+     * En este caso lo que se hace NO ES ver si se ha seleccionado un punto CUALQUIERA de la figura SINO si se ha seleccionado
+     * uno de los PUNTOS DE CONTROL para la edición ya que ahora mismo no se puede mover la figura, sólo se puede editar.
+     * @param punto
+     * @return 
+     */
     @Override
     public boolean contiene(Point2D punto){
         

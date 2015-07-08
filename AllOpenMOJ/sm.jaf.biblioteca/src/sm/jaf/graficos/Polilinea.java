@@ -90,7 +90,16 @@ public class Polilinea extends Figura {
 
     @Override
     public boolean contiene(Point2D punto) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
+        boolean contiene=((GeneralPath)datosGeometricos).contains(punto);
+        
+        
+         if( contiene ){
+             Imprimir("Contiene");
+             return true;
+         }else{
+             return false;
+         }        
     }
 
     @Override
