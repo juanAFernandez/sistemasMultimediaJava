@@ -732,8 +732,8 @@ public class Lienzo2D extends javax.swing.JPanel {
         //Line2D tmp =(Line2D) vShape.get((vShape.size()-1));
         
         
-        Imprimir("Draggeando en modo seleccion: "+modoSeleccion + "con figura: "+figuraMoviendo);
-        Imprimir("Draggeando en modo seleccion: "+modoSeleccion + "con texto: "+textoMoviendo);
+    //    Imprimir("Draggeando en modo seleccion: "+modoSeleccion + "con figura: "+figuraMoviendo);
+     //   Imprimir("Draggeando en modo seleccion: "+modoSeleccion + "con texto: "+textoMoviendo);
         
         
         /**
@@ -747,7 +747,7 @@ public class Lienzo2D extends javax.swing.JPanel {
              //Si ha seleccionado alguna figura en el pressed tendremos alguna figura que mover
              if(figuraMoviendo!=-1){
 
-                 Imprimir("Moviendo figura: " + vShape.get(figuraMoviendo).getClass().getName());
+                // Imprimir("Moviendo figura: " + vShape.get(figuraMoviendo).getClass().getName());
                  
                  
                  
@@ -786,7 +786,7 @@ public class Lienzo2D extends javax.swing.JPanel {
                  
                   //Si se trata de una curva cubica:
                  if(vShape.get(figuraMoviendo).getClass().getName().contains("Arco")){
-                     Imprimir("#####ARCO CAMBIANDO PUNTOS DE CONTROL###");
+                     //Imprimir("#####ARCO CAMBIANDO PUNTOS DE CONTROL###");
                      if(vShape.get(figuraMoviendo)!=null)
                          //((CurvaCuadratica)vShape.get(figuraMoviendo)).cambiarPosicion2(pB);
                          /**
@@ -933,8 +933,8 @@ public class Lienzo2D extends javax.swing.JPanel {
 
     private void formMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseReleased
         //Número de objetos en ambos vectores:
-        Imprimir("Elementos en vShape: "+vShape.size());
-        Imprimir("Elementos de texto en vTextos: "+vTextos.size());
+     //   Imprimir("Elementos en vShape: "+vShape.size());
+     //   Imprimir("Elementos de texto en vTextos: "+vTextos.size());
     }//GEN-LAST:event_formMouseReleased
 
     

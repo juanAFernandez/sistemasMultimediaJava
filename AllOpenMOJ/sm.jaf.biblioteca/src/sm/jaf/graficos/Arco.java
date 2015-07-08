@@ -74,55 +74,80 @@ public class Arco extends Figura {
          * esta función dijo.         
          */
         
-        //Modificación del punto de control A: grados del fin del arco
-        if(seleccionadoPuntoControlA){
+        /**
+         * Almacenamos los grados en un vector para hacer el código más compacto.
+         */
+        double grados[] = {gradosInicio, gradosFin};
+        int mod=0;
+        
+        //Modificación del punto de control A: grados del fin del arco.
+        if(seleccionadoPuntoControlA) mod=1;        
+        //Modificación de los grados de inicio del arco.
+        if(seleccionadoPuntoControlB) mod=0;            
+        
+        
             
-        }
-        //Modificación de los grados de inicio del arco:
-        if(seleccionadoPuntoControlB){
-            
-            Imprimir("Cambiando punto de control B");
-            
-            /*Si modificamos el punto de control B estamos modificando el ángulo de inicio de la figura, por lo tanto
+            /**Proceso.
+             * Si modificamos el punto de control A o B estamos modificando el ángulo de fin o inicio de la figura, por lo tanto
             tenemos que convertir esa posición 2D en un angulo respecto al eje X para modificar los datos geom de la fig.
             */
          
             //1º Calculamos la distancia entre el centro de la circunferencia y la nueva posición para tener una hipotenusa
             //con la que usar trigonometría.
-            double h=Math.sqrt(   Math.pow(centro.getX()-npc.getX(),2)  +  Math.pow(centro.getY()-npc.getY(),2)    );
+                double h=Math.sqrt(   Math.pow(centro.getX()-npc.getX(),2)  +  Math.pow(centro.getY()-npc.getY(),2)    );
+                Imprimir("Hipotenusa: "+h);
             
-            Imprimir("Hipotenusa: "+h);
-            
-            //Calculamos el catetoY
-           // double catetoY=Math.abs(Math.cos(90)*h);
-            double catetoY;
-            
-            
-            //Para que la operación pueda ser universal en cualquier cuadrante del círculo hay que hacer algunas modificaciones.
-              
-                //Si estamos trabando en la parte superior del eje x del círculo
+            //2º Calculamos el catetoY
+          
+                double catetoY;
                 if(centro.getY()>npc.getY()){
                     catetoY=centro.getY()-npc.getY();
-                     gradosInicio=Math.toDegrees(Math.asin(catetoY/h));
-                     
-                     //Si se va hacia el segundo cuadrante:
-                     if(npc.getX()<centro.getX())
-                         //Le sumamos 90
-                         gradosInicio=90+(90-gradosInicio);
-                     
-                //Si estamos trabajando en la parte inferior del eje X del círculo
                 }else{
                     catetoY=npc.getY()-centro.getY();
-                    gradosInicio=Math.toDegrees(Math.asin(catetoY/h));
-                    gradosInicio=gradosInicio*(-1);
                 }
+                
+                Imprimir("Cateto: "+catetoY);
+                
+            //3º Calculamos los grados del angulo correspondiente
+                grados[mod]=Math.toDegrees(Math.asin(catetoY/h));
+                
             
-            Imprimir("Grados Inicio tras operacion: "+gradosInicio+"grados");
-            
-            
-            ((Arc2D)datosGeometricos).setArcByCenter(centro.getX(), centro.getY(), radio, gradosInicio, gradosFin-gradosInicio, Arc2D.OPEN);
+            //4º Detección del cuadrante del círculo
+                int cuadrante=0;
+                if(npc.getX()>=centro.getX() && npc.getY()<=centro.getY())
+                    cuadrante=1;
+                if(npc.getX()>=centro.getX() && npc.getY()>=centro.getY())
+                    cuadrante=4;
+                if(npc.getX()<=centro.getX() && npc.getY()<=centro.getY())
+                    cuadrante=2;
+                if(npc.getX()<=centro.getX() && npc.getY()>=centro.getY())
+                    cuadrante=3;                                
+                
+                Imprimir("Cuadrante: "+cuadrante);
+                                                               
+            //5º Según el cuadrante realizaremos el cálculo del ángulo de una u otra forma.
+                //Para el cuadrante 1 no es necesaria ninguna modificación.
+                if(cuadrante==2){
+                    //Le sumamos a 90 la diferencia de 90 - el angulo calculado.
+                    grados[mod]=90+(90-grados[mod]);
+                }
+                if(cuadrante==3){    
+                    //Sumamos 180 grados
+                    grados[mod]+=180;
+                }
+                if(cuadrante==4){                  
+                    //Sumamos a 260 (inicio del cuarto cuadrante) 90 - el ángulo calulado)
+                    grados[mod]=260+(90-grados[mod]);                    
+                }
+
+                Imprimir("Grados inicio: "+grados[mod]);
+                
+            //6º Realizamos finalmente la modificación de la figura.
+                ((Arc2D)datosGeometricos).setArcByCenter(centro.getX(), centro.getY(), radio, grados[0], grados[1]-grados[0], Arc2D.OPEN);
        
-        }
+            //7º Almacenamos los calculos en los valores de la figura.
+                gradosInicio=grados[0];
+                gradosFin=grados[1];
         
         
         
@@ -165,14 +190,14 @@ public class Arco extends Figura {
            //Para que el cálculo funcione cogemos los grados como si siempre empezaran desde el origen, por eso los sumamos.
            double angulo=(((Arc2D)datosGeometricos).getAngleExtent()+((Arc2D)datosGeometricos).getAngleStart());
            
-           Imprimir("Radio: "+radio+"\n Ángulo respecto a X: "+angulo+"grados");
-           Imprimir("centro: "+((Arc2D)datosGeometricos).getCenterX()+" "+((Arc2D)datosGeometricos).getCenterY());
-           Imprimir("Coseno del angulo: "+Math.cos(angulo));
-           Imprimir("Seno del angulo: "+Math.sin(angulo));
+        //   Imprimir("Radio: "+radio+"\n Ángulo respecto a X: "+angulo+"grados");
+        //   Imprimir("centro: "+((Arc2D)datosGeometricos).getCenterX()+" "+((Arc2D)datosGeometricos).getCenterY());
+        //   Imprimir("Coseno del angulo: "+Math.cos(angulo));
+        //   Imprimir("Seno del angulo: "+Math.sin(angulo));
            //radio=hipotenusa
            Point2D A = new Point2D.Double(((Arc2D)datosGeometricos).getCenterX()+(radio*Math.cos(Math.toRadians(angulo))), ((Arc2D)datosGeometricos).getCenterY()-(radio*Math.sin(Math.toRadians(angulo))));
            
-           Imprimir("PuntoA("+A.getX()+","+A.getY()+")");
+        //   Imprimir("PuntoA("+A.getX()+","+A.getY()+")");
            
            //Con toda la información creamos la Ellipse2D que forma el punto del angulo inicial:
            this.elipsePuntoControlA = new Ellipse2D.Double(A.getX()-5,A.getY()-5,10,10);
