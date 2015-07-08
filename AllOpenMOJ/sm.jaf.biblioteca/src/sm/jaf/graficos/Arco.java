@@ -38,10 +38,17 @@ public class Arco extends Figura {
     boolean seleccionadoPuntoControlB=false;
     
     
+    private Point2D puntoControlC = new Point2D.Double();  
+    private Ellipse2D elipsePuntoControlC;    
+    boolean seleccionadoPuntoControlC=false;
+    
+    
+    
     private double radio;
     private double gradosInicio;
     private double gradosFin;
     private Point2D centro;
+    
     
        private boolean modoEdicion=false;
     
@@ -77,15 +84,32 @@ public class Arco extends Figura {
         /**
          * Almacenamos los grados en un vector para hacer el código más compacto.
          */
-        double grados[] = {gradosInicio, gradosFin};
-        int mod=0;
+        double grados[] = {gradosInicio, gradosFin};        
+        int mod=0; // Para que grados[mod] sea los grados que cualquiera de los dos puntos modificado, para ambos es el mismo cálculo
+        //aunque su pos en la función final cambie.
         
-        //Modificación del punto de control A: grados del fin del arco.
-        if(seleccionadoPuntoControlA) mod=1;        
-        //Modificación de los grados de inicio del arco.
-        if(seleccionadoPuntoControlB) mod=0;            
+        //Para los dos tipos de operaciones que podemos hacer:
+        boolean cambiarAngulos =false, cambiarTamaño = false;
         
         
+        //Elegimos el tipo de modificación a realizar dependiendo del punto de control seleccionado.
+        
+            //Modificación del punto de control A: grados del fin del arco.
+            if(seleccionadoPuntoControlA){ mod=1; cambiarAngulos=true; }
+            //Modificación de los grados de inicio del arco.
+            if(seleccionadoPuntoControlB){ mod=0; cambiarAngulos=true; }           
+            //Modificación del tamaño del círculo a través de su radio.
+            if(seleccionadoPuntoControlC){cambiarTamaño=true;}
+        
+            /**
+             * Importante.
+             * Si no ha seleccionado ningún punto de control pero si un punto de la figura lo que se está indicando
+             * es que se quiere mover por lo que mandamos un mensaje a otra función específica para eso.
+             */
+            if(!seleccionadoPuntoControlA && !seleccionadoPuntoControlB && !seleccionadoPuntoControlC )
+                cambiarPosicion2(npc);
+        
+        if(cambiarAngulos){
             
             /**Proceso.
              * Si modificamos el punto de control A o B estamos modificando el ángulo de fin o inicio de la figura, por lo tanto
@@ -137,19 +161,37 @@ public class Arco extends Figura {
                 }
                 if(cuadrante==4){                  
                     //Sumamos a 260 (inicio del cuarto cuadrante) 90 - el ángulo calulado)
-                    grados[mod]=260+(90-grados[mod]);                    
+                    grados[mod]=270+(90-grados[mod]);                    
                 }
 
-                Imprimir("Grados inicio: "+grados[mod]);
+                
+                
+                
+                
+                
                 
             //6º Realizamos finalmente la modificación de la figura.
+                     
                 ((Arc2D)datosGeometricos).setArcByCenter(centro.getX(), centro.getY(), radio, grados[0], grados[1]-grados[0], Arc2D.OPEN);
        
             //7º Almacenamos los calculos en los valores de la figura.
+                
                 gradosInicio=grados[0];
                 gradosFin=grados[1];
+                
+                Imprimir("Grados inicio: "+grados[0]+" Grados fin: "+grados[1]);
+        } 
         
-        
+        if(cambiarTamaño){
+            
+            //Calculamos el nuevo radio con el centro y el punto que modificamos.
+            double newRadio=Math.sqrt(   Math.pow(centro.getX()-npc.getX(),2)  +  Math.pow(centro.getY()-npc.getY(),2)    );
+            this.radio=newRadio;
+            //Aplicamos los cambios.
+            ((Arc2D)datosGeometricos).setArcByCenter(centro.getX(), centro.getY(), radio, grados[0], grados[1]-grados[0], Arc2D.OPEN);
+            
+        }
+
         
     }
     
@@ -213,6 +255,15 @@ public class Arco extends Figura {
            elipsePuntoControlB= new Ellipse2D.Double(B.getX()-5,B.getY()-5,10,10);
            
            entorno.draw(elipsePuntoControlB);
+           
+           
+           //Dibujamos también el punto de control para el tamaño.
+           angulo=(gradosFin+gradosInicio)/2;
+           Point2D C = new Point2D.Double(((Arc2D)datosGeometricos).getCenterX()+(radio*Math.cos(Math.toRadians(angulo))), ((Arc2D)datosGeometricos).getCenterY()-(radio*Math.sin(Math.toRadians(angulo))));
+           elipsePuntoControlC= new Ellipse2D.Double(C.getX()-5,C.getY()-5,10,10);
+           
+           entorno.draw(elipsePuntoControlC);
+           
         }
         
     }
@@ -262,8 +313,9 @@ public class Arco extends Figura {
      */
     @Override
     public void cambiarPosicion2(Point2D nuevaLocalizacion) {
-        ((Arc2D)datosGeometricos).setFrame(nuevaLocalizacion.getX(), nuevaLocalizacion.getY(), datosGeometricos.getBounds2D().getWidth(), datosGeometricos.getBounds2D().getHeight());
-        
+        //((Arc2D)datosGeometricos).setFrame(nuevaLocalizacion.getX(), nuevaLocalizacion.getY(), datosGeometricos.getBounds2D().getWidth(), datosGeometricos.getBounds2D().getHeight());
+        centro=nuevaLocalizacion;
+        ((Arc2D)datosGeometricos).setArcByCenter(centro.getX(), centro.getY(), radio, gradosInicio, gradosFin-gradosInicio, Arc2D.OPEN);
     }
 
     @Override
@@ -272,26 +324,39 @@ public class Arco extends Figura {
         
         seleccionadoPuntoControlA=false;
         seleccionadoPuntoControlB=false;
-        
-
-        
+        seleccionadoPuntoControlC=false;
+                
          //¿Se ha seleccionado uno de los  puntos de control?//
          if(elipsePuntoControlA.contains(punto)){
              Imprimir("## Punto A del ARCO ##!");
              this.seleccionadoPuntoControlA=true;                
              return true;
-             
-         }else 
-             
-             if(elipsePuntoControlB.contains(punto)){
-                Imprimir("## Punto B del ARCO ##!");
-                this.seleccionadoPuntoControlB=true;                
-                return true;
-             }else{               
+         }                         
+         else if(elipsePuntoControlB.contains(punto)){
+             Imprimir("## Punto B del ARCO ##!");
+             this.seleccionadoPuntoControlB=true;                
+             return true;
+         }
+         else if(elipsePuntoControlC.contains(punto)){
+             Imprimir("## Punto C del ARCO ##!");
+             this.seleccionadoPuntoControlC=true;
+             return true;
+         }         
+         else{               
                  seleccionadoPuntoControlA=false;
-                 seleccionadoPuntoControlB=false;   
-                 return false;
-             }
+                 seleccionadoPuntoControlB=false;  
+                 seleccionadoPuntoControlC=false;
+                 //Pero si se ha seleccionado otro punto de la figura que no sea un punto de control decimos true
+                 if(((Arc2D)datosGeometricos).contains(punto))
+                     return true;
+                 // pero si tampoco, false
+                 else
+                    return false;
+         }
+         
+         
+         
+         
     }
 
     @Override
