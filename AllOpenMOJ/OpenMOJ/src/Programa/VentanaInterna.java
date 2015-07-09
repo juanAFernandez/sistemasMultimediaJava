@@ -5,6 +5,7 @@
  */
 package Programa;
 
+import com.sun.glass.ui.Cursor;
 import static extras.Imprimir.Imprimir;
 import extras.Herramienta;
 import java.awt.event.ComponentEvent;
@@ -39,6 +40,9 @@ public class VentanaInterna extends javax.swing.JInternalFrame {
         //dibujando en un lienzo fintio. Para eso le decimos que este es el centra y con una variable booelana
         //al redibujar se mostrará la zona de cliping.
         this.miLienzo2D.setCentral(true);
+        
+                 
+        
     }
     
    

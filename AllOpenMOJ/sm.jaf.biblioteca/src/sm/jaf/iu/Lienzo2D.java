@@ -23,7 +23,9 @@ import java.util.ArrayList;
 import extras.Herramienta;
 import extras.herramientaTexto;
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Font;
+import java.awt.Image;
 import java.awt.RenderingHints;
 import java.awt.Shape;
 import java.awt.geom.Arc2D;
@@ -92,6 +94,17 @@ public class Lienzo2D extends javax.swing.JPanel {
     
     private boolean rellenoBoolean, modoSeleccion, mejoraRenderizacion, transparencia;
 
+    
+    // ##Cursores## //
+    java.awt.Toolkit toolkit = java.awt.Toolkit.getDefaultToolkit();
+    Image iconoManoAbierta = toolkit.getImage("/home/juan/Documentos/SegundoCuatrimestre1415/SMM/sistemasMultimediaJava/AllOpenMOJ/sm.jaf.biblioteca/src/extras/openHand.png");
+    Image iconoManoCerrada = toolkit.getImage("/home/juan/Documentos/SegundoCuatrimestre1415/SMM/sistemasMultimediaJava/AllOpenMOJ/sm.jaf.biblioteca/src/extras/closeHand.png");    
+    Cursor cursorManoAbierta = toolkit.createCustomCursor(iconoManoAbierta , new Point(this.getX(),this.getY()), "");
+    Cursor cursorManoCerrada = toolkit.createCustomCursor(iconoManoCerrada , new Point(this.getX(),this.getY()), "");
+    
+    
+    
+    
     
     private BufferedImage img;
    
@@ -400,6 +413,9 @@ public class Lienzo2D extends javax.swing.JPanel {
             }
         });
         addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseMoved(java.awt.event.MouseEvent evt) {
+                formMouseMoved(evt);
+            }
             public void mouseDragged(java.awt.event.MouseEvent evt) {
                 formMouseDragged(evt);
             }
@@ -453,6 +469,7 @@ public class Lienzo2D extends javax.swing.JPanel {
      */
     private void formMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMousePressed
     
+        
         //Obtenemos el primer punto necesario al presionar (sin soltar) el ratón en cualquier parte del frame.        
         pA=evt.getPoint();
         
@@ -470,6 +487,9 @@ public class Lienzo2D extends javax.swing.JPanel {
                   
                     if(figura!=null){                
 
+                        //Cambiamos el icono
+                        this.setCursor(cursorManoCerrada);
+                        
                         //Extraemos la posición dentro del vector de figuras de esta para tenerla localizada.
                         figuraMoviendo = vShape.indexOf(figura);
 
@@ -478,6 +498,8 @@ public class Lienzo2D extends javax.swing.JPanel {
                     //Si no ha ocurrido una selección:
                     }else{
 
+                       // this.setCursor(cursorManoAbierta);
+                        
                         System.out.println("No se ha seleccionado ninguna figura.");
 
                         //Para controlar que no se ha seleccionado ninguna figura del vector se usa el valor de control -1
@@ -1031,6 +1053,29 @@ public class Lienzo2D extends javax.swing.JPanel {
         }
         
     }//GEN-LAST:event_formMouseClicked
+
+    /**
+     * Implementacion del comportamiento del ratón al moverse por el lienzo.
+     * @param evt 
+     */
+    private void formMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseMoved
+        
+        if(modoSeleccion){
+            Imprimir("Soy un ratón y me estoy moviendo por el plano");
+            //Comprueba si en el punto el que estoy hay una figura
+            Figura figura = getFiguraSeleccionada(evt.getPoint());
+            
+            //Si estoy encima de una figura cambio el icono
+            if(figura!=null)
+                this.setCursor(cursorManoAbierta);
+            //Si no estoy encima de una figura, dejo el cursor como estaba
+            else
+                this.setCursor(Cursor.getDefaultCursor());
+            
+        }
+        
+        
+    }//GEN-LAST:event_formMouseMoved
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

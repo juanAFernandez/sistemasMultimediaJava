@@ -13,6 +13,7 @@ import extras.herramientaTexto;
 import Herramientas.herramientaUmbralizacion;
 import accesorios.Ajustes;
 import accesorios.nuevoLienzo;
+import com.sun.glass.ui.Cursor;
 import static extras.Imprimir.Imprimir;
 import java.awt.Color;
 import java.awt.geom.Point2D;
@@ -186,7 +187,10 @@ public class VentanaPrincipal extends JFrame {
         //this.panelEscritorio.setBackground(Color.red);
         
        
-     
+      
+        
+        
+        
         
         
         //Abrimos una ventana al iniciar el programa:
