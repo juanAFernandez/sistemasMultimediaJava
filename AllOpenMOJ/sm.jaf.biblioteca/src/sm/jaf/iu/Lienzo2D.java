@@ -241,7 +241,11 @@ public class Lienzo2D extends javax.swing.JPanel {
                 if(figura.getClass().getName().contains("Cubica"))
                     ((CurvaCubica)figura).setModoEdicion(true);
                 if(figura.getClass().getName().contains("Arco"))
-                    ((Arco)figura).setModoEdicion(true);
+                    ((Arco)figura).setModoEdicion(true);                                
+                if(figura.getClass().getName().contentEquals("sm.jaf.graficos.Rectangulo"))
+                    ((Rectangulo)figura).setModoEdicion(true);
+                if(figura.getClass().getName().contains("Polilinea"))
+                    ((Polilinea)figura).setModoEdicion(true);
             }
 
             //Se repinta el vector para que se pinten los puntos de control que se han activado en las figuras de tipo Curva.
@@ -255,6 +259,10 @@ public class Lienzo2D extends javax.swing.JPanel {
                     ((CurvaCubica)figura).setModoEdicion(false);
                 if(figura.getClass().getName().contains("Arco"))
                     ((Arco)figura).setModoEdicion(false);
+                if(figura.getClass().getName().contentEquals("sm.jaf.graficos.Rectangulo"))
+                    ((Rectangulo)figura).setModoEdicion(false);
+                if(figura.getClass().getName().contains("Polilinea"))
+                    ((Polilinea)figura).setModoEdicion(false);
             }
             
             this.repaint();
@@ -346,7 +354,7 @@ public class Lienzo2D extends javax.swing.JPanel {
                 clip.dibujateEn(g2d);
         }
 
-        
+            Imprimir("Dibujando "+vShape.size()+"figuras en el plano");
             //Si el vector de figuras no está vacío se recorre y se imprime.
             if(!vShape.isEmpty())
 
@@ -758,7 +766,17 @@ public class Lienzo2D extends javax.swing.JPanel {
                           * Esta forma de proceder nos dará un problema y es que nos moverá 
                           */
                          ((Linea)vShape.get(figuraMoviendo)).cambiarPosicion2(pA, pB);
- 
+                
+                //Si se trata de una Linea:
+                 if(vShape.get(figuraMoviendo).getClass().getName().contains("Polilinea"))
+                     if(vShape.get(figuraMoviendo)!=null)
+                         /**
+                          * Esta forma de proceder nos dará un problema y es que nos moverá 
+                          */
+                         ((Polilinea)vShape.get(figuraMoviendo)).cambiarPuntosControl(pA,pB);
+                 
+                 
+                 
                  //Si se trata de una curva cuadrática:
                  if(vShape.get(figuraMoviendo).getClass().getName().contains("CurvaCuadratica")){
                      Imprimir("#####Moviendo una curva cuadratica en DRAGGED###");
@@ -800,8 +818,9 @@ public class Lienzo2D extends javax.swing.JPanel {
                  if(vShape.get(figuraMoviendo).getClass().getName().contentEquals("sm.jaf.graficos.Rectangulo")){
                      Imprimir("Moviendo un rectantulo");
                      if(vShape.get(figuraMoviendo)!=null){
-                         ((Rectangulo)vShape.get(figuraMoviendo)).calcularDiferencias(pA); //El punto A siempre es el mismo
-                         ((Rectangulo)vShape.get(figuraMoviendo)).aplicarDiferencias(pB); //El punto B cambia
+                        // ((Rectangulo)vShape.get(figuraMoviendo)).calcularDiferencias(pA); //El punto A siempre es el mismo
+                        // ((Rectangulo)vShape.get(figuraMoviendo)).aplicarDiferencias(pB); //El punto B cambia
+                         ((Rectangulo)vShape.get(figuraMoviendo)).cambiarPuntosControl(pA, pB);
                      }
                  }
                  
@@ -935,6 +954,18 @@ public class Lienzo2D extends javax.swing.JPanel {
         //Número de objetos en ambos vectores:
      //   Imprimir("Elementos en vShape: "+vShape.size());
      //   Imprimir("Elementos de texto en vTextos: "+vTextos.size());
+        
+        if(modoSeleccion==true){
+        //Si se trata de una Linea:
+                 if(vShape.get(figuraMoviendo).getClass().getName().contains("Polilinea"))
+                     if(vShape.get(figuraMoviendo)!=null)
+                         /**
+                          * Esta forma de proceder nos dará un problema y es que nos moverá 
+                          */
+
+                         ((Polilinea)vShape.get(figuraMoviendo)).soltarRaton(pA,pB);
+        }
+        this.repaint();
     }//GEN-LAST:event_formMouseReleased
 
     
@@ -956,7 +987,12 @@ public class Lienzo2D extends javax.swing.JPanel {
             */
           
             if(tipoHerramienta==Herramienta.POLILINEA){
-                this.bloqueadaCreacionPolilinea=false;                                                
+                this.bloqueadaCreacionPolilinea=false; 
+                
+                //Además como se habrá interpretado que se quieren añadir dos puntos por lo que quitamos uno.
+                ((Polilinea)vShape.get(vShape.size()-1)).cierraPolilinea();
+                
+                
             }
             
             

@@ -16,6 +16,7 @@ package sm.jaf.graficos;
 
 import static extras.Imprimir.Imprimir;
 import java.awt.Graphics2D;
+import java.awt.geom.AffineTransform;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Point2D;
@@ -32,20 +33,105 @@ import java.util.ArrayList;
 public class Polilinea extends Figura {
 
     
-    ArrayList<Point2D>puntos;
+    /**
+     * Los puntos que definen la polilinea.
+     */
+    private ArrayList<puntoPolilinea>puntos;
+    private int puntoControlSeleccionado;
+    
+    boolean moviendo=false;
+    double distanciaX=0;
+    double distanciaY=0;
     
     
+    
+    
+    
+    private boolean modoEdicion=false;
     
     
     public Polilinea(){
         super();
         puntos = new ArrayList();
+        
+        //Creamos el objeto polilinea, con el tamaño de puntos que tengamos.
+        datosGeometricos = new GeneralPath(GeneralPath.WIND_EVEN_ODD, puntos.size());
+        
+        //Inicializamos los datos geométricos:
+        
     }
     
-    
+    /**
+     * Añade un punto nuevo a la polilinea.
+     * @param nuevoPunto 
+     */
     public void addPunto(Point2D nuevoPunto){
+      
         Imprimir("AÑADIENDO NUEVO PUNTO, total:"+puntos.size());
-        puntos.add(nuevoPunto);
+               
+        /*Camos a comprobar si el punto que añadimos cierra la figura. */
+        puntos.add(new puntoPolilinea(nuevoPunto, false ));
+        
+    }
+    
+     /**
+     * Cambia el modo de edición.
+     * @param modo True para activarlo y false para desactivalrlo.
+     */
+    public void setModoEdicion(boolean modo){
+        modoEdicion=modo;
+    }
+    
+    public void cambiarPuntosControl(Point2D puntoRef, Point2D npc){
+        if(moviendo){
+            Imprimir("Intentando mover figura");
+            /* En el caso de querer mover la figura se usa el punto de referencia en el que se pinchó y 
+            se calcula cual sería la translación que habría que hacer para llevar la figura al completo
+            al punto ncp (nuevo punto control).
+            */
+            
+            //EL nuevo punto puede realizar cuantro movimientos básicos respecto al anterior.
+            
+            //Hacia la derecha
+            if(npc.getX()>puntoRef.getX())
+                distanciaX=npc.getX()-puntoRef.getX();
+            //Hacia la izquierda
+            if(npc.getX()<puntoRef.getX())
+                distanciaX=npc.getX()-puntoRef.getX();
+            
+            //Hacia abajo
+            if(npc.getY()>puntoRef.getY())
+                distanciaY=npc.getY()-puntoRef.getY();
+            //Hacia arriba
+            if(npc.getY()<puntoRef.getY())
+                distanciaY=npc.getY()-puntoRef.getY();
+            
+                                   
+            
+            
+        }else{                    
+            puntos.get(puntoControlSeleccionado).cambiar(npc);
+        }
+    }
+    
+    public void soltarRaton(Point2D ref, Point2D nuevo){
+            
+            
+            if(moviendo){
+                //Pruebas: una vez calculadas las distancias se las aplicamos a todos los puntos de la polilinea, incluidos los puntos de control
+                for(puntoPolilinea p: puntos){
+                    p.punto.setLocation(p.punto.getX()+distanciaX, p.punto.getY()+distanciaY);
+                    p.puntoControl=new Ellipse2D.Double(p.punto.getX()-5, p.punto.getY()-5, 10, 10);
+                }
+            }
+            moviendo=false;
+            
+    }
+    public void cierraPolilinea(){
+        
+        puntos.remove(puntos.size()-1);
+        ((GeneralPath)datosGeometricos).closePath();
+        
     }
     
     @Override
@@ -53,26 +139,40 @@ public class Polilinea extends Figura {
         
         Imprimir(" ############################ Llamando a dibujar POLILINEA");
         
-      
-        GeneralPath polyline = new GeneralPath(GeneralPath.WIND_EVEN_ODD, puntos.size());
+        
         
         Imprimir("Construyendo polilinea de "+puntos.size()+" puntos");
        
-            polyline.moveTo(puntos.get(0).getX(),puntos.get(0).getY());
-            
-            for(int i=1; i<puntos.size(); i++)
-                polyline.lineTo(puntos.get(i).getX(),puntos.get(i).getY());
+        datosGeometricos = new GeneralPath(GeneralPath.WIND_EVEN_ODD, puntos.size());
         
-            entorno.draw(polyline);
+        //Iniciamos la polilinea con el primer punto
+        ((GeneralPath)datosGeometricos).moveTo(puntos.get(0).punto.getX(), puntos.get(0).punto.getY());
+            
+        
+        for(int i=1; i<puntos.size(); i++)
+            ((GeneralPath)datosGeometricos).lineTo(puntos.get(i).punto.getX(),puntos.get(i).punto.getY());            
+            
+
+        if(moviendo){
+          
+           AffineTransform move = new AffineTransform();
+           move.translate(distanciaX,distanciaY);                   
+           entorno.setTransform(move);
+          
+        }
+           
+        //Dibujamos la polilinea    
+        entorno.draw(datosGeometricos);
    
-        
-            
-        //Además de dibujar la linea dibujamos puntos en las esquinas de la polilinea.
-        for(Point2D p: puntos)
-            entorno.draw(new Ellipse2D.Double(p.getX()-5, p.getY()-5, 10,10));
+        //Si el modo de edición está activo
+         if(modoEdicion){
+                
+            //Además de dibujar la linea dibujamos puntos en las esquinas de la polilinea.
+            for(puntoPolilinea p: puntos)
+                entorno.draw(p.puntoControl);
 
           
-            
+         }  
             
             
             
@@ -88,23 +188,99 @@ public class Polilinea extends Figura {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+
     @Override
     public boolean contiene(Point2D punto) {
         
-        boolean contiene=((GeneralPath)datosGeometricos).contains(punto);
         
+        moviendo=false;
         
-         if( contiene ){
-             Imprimir("Contiene");
-             return true;
-         }else{
-             return false;
-         }        
+        //1º Comprobamos si ha sido seleccionado 
+            boolean haSidoSeleccionadoAlguno=false;
+            //Recorremos el vector de puntos a ver si alguno ha sido seleccionado:
+            for(puntoPolilinea p: puntos)
+                if(p.puntoControl.contains(punto)){
+                    Imprimir("Seleccionado punto "+puntos.indexOf(p)+" ");
+                    haSidoSeleccionadoAlguno=true;
+                    moviendo=false;
+                    puntoControlSeleccionado=puntos.indexOf(p);
+                }
+        
+        //2º Si ha sido seleccionado alguno devolvemos true:
+            if(haSidoSeleccionadoAlguno)
+                return true;
+            
+        //3º Si no, comprobamos si ha sido seleccionado algún otro punto de la polilinea
+            else{
+                
+                //Vemos si ha sido o no seleccionado
+                
+                
+                boolean seleccionadoOtroPunto=((GeneralPath)datosGeometricos).contains(punto);
+                
+                
+                
+                    /**
+                     * 
+                     * IMPORTANTE:.
+                     * Hay que solucional la selección de la polilinea. Si no se ha cerrado el path , cosa que
+                     * podremos hacer si el utlimo punto contiene ela rimera ellipse. Tendremos que ir formardo lineas
+                     * entre entre los puntos y usar el contanis de linea que hicimos nosotros para comprobar si se ha seleecionado
+                     * y poder moverla.
+                     * No supone demasiada complicación sólo un poco de trabajo.
+   
+                     * 
+                     */
+                
+                
+                
+                
+                if(seleccionadoOtroPunto){
+                    Imprimir("Seleccionado otro punto");
+                    moviendo=true;
+                }
+                
+                //Devolvemos la respuesta.
+                return seleccionadoOtroPunto;
+                
+            }
+
     }
 
     @Override
     public String toString() {
         return "Polilinea de";// "+puntos.size()+" puntos.";
+    }
+    
+    
+    /**
+     * Clase que abstrae los puntos que forman la polilinea.
+     */
+    private class puntoPolilinea{
+              
+        //Publicos para que puedan se accedidos desde fuera con facilidad.
+        
+        public Point2D punto;
+        public Ellipse2D puntoControl;
+        public boolean seleccion;
+        
+        
+        public puntoPolilinea(Point2D nuevoPunto, boolean seleccionada){
+            punto=nuevoPunto;
+            //Construimos el punto de control con el punto pasado, creando un elipse.
+            puntoControl=new Ellipse2D.Double(nuevoPunto.getX()-5, nuevoPunto.getY()-5,10,10);
+            seleccion=seleccionada;
+        }
+  
+        public void cambiar(Point2D nuevaPosicion){
+            //Cambiamos el punto
+            punto= new Point2D.Double(nuevaPosicion.getX(), nuevaPosicion.getY());
+            //Construimos un nuevo punto de control
+            puntoControl=new Ellipse2D.Double(nuevaPosicion.getX()-5, nuevaPosicion.getY()-5, 10, 10);
+            //Especificamos que no está seleccionado
+            seleccion=false;
+        }
+        
     }
     
 }

@@ -58,6 +58,7 @@ public class Arco extends Figura {
      * Sólo inicializa los datos geométricos con una Line2D de la Java2D.
      */
     public Arco(){
+        //Inicializamos los datos geométricos
         datosGeometricos=new Arc2D.Double(50, 50,
                          50,
                          50,
@@ -303,6 +304,11 @@ public class Arco extends Figura {
         ((Arc2D)datosGeometricos).setArcByCenter(A.getX(), A.getY(), distancia, gradosInicio, gradosFin-gradosInicio, Arc2D.OPEN);
         
     }
+    
+    /**
+     * Cambia el modo de edición.
+     * @param modo True para activarlo y false para desactivalrlo.
+     */
     public void setModoEdicion(boolean modo){
         modoEdicion=modo;
     }

@@ -19,8 +19,11 @@ import java.awt.Color;
 import java.awt.GradientPaint;
 import java.awt.Graphics2D;
 import java.awt.Paint;
+import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
+import java.util.HashSet;
+import java.util.Set;
 import sm.jaf.graficos.Relleno.Horientacion;
 
 /**
@@ -31,6 +34,20 @@ import sm.jaf.graficos.Relleno.Horientacion;
  * @author Juan A. Fernández Sánchez
  */
 public class Rectangulo extends Figura{
+    
+    
+    private boolean modoEdicion;
+    
+    private Point2D puntoControlA;  
+    private Ellipse2D elipsePuntoControlA;    
+    boolean seleccionadoPuntoControlA;
+    
+    private Point2D puntoControlB;
+    private Ellipse2D elipsePuntoControlB;    
+    boolean seleccionadoPuntoControlB;
+    
+    
+    
     
     /**
      * Define si el rectángulo en cuestión tiene relleno o no.
@@ -49,6 +66,7 @@ public class Rectangulo extends Figura{
         double Dys; //Diferencia entre el punto y la parte superior del rect en el eje Y
         double Dyi; //Diferencia entre el punto y la parte inferior del rect en el eje Y
     
+        
              //1º: Sacamos los extremos A y B del rectangulo
         
         Point2D A = new Point2D.Double(); 
@@ -59,6 +77,9 @@ public class Rectangulo extends Figura{
        // B.setLocation(((Rectangle2D)datosGeometricos).getMaxX(),((Rectangle2D)datosGeometricos).getMaxY());        
        // Imprimir("Extremos del rectangulo: A("+A.getX()+","+A.getY()+")"+" B("+B.getX()+","+B.getY()+")");
     
+        
+        
+        
      /**
      * Primer constructor sin parámetros.
      * Inicializa los datos geométricos con el tipo necesario pero sin información y especificando
@@ -67,6 +88,11 @@ public class Rectangulo extends Figura{
     public Rectangulo(){
         datosGeometricos=new Rectangle2D.Double();
         relleno = false;
+        modoEdicion=false;
+        puntoControlA = new Point2D.Double();
+        puntoControlB = new Point2D.Double();
+        seleccionadoPuntoControlA=false;
+        seleccionadoPuntoControlB=false;
     }
     /**
      * Segundo constructor con parámetros.
@@ -75,7 +101,8 @@ public class Rectangulo extends Figura{
      * @param puntoA Extremo A del rectángulo.
      * @param puntoB Extremo B del rectángulo.
      */
-    public Rectangulo(Point2D puntoA, Point2D puntoB){        
+    public Rectangulo(Point2D puntoA, Point2D puntoB){  
+        //Inicializamos los datos geométricos.
         datosGeometricos=new Rectangle2D.Double(puntoA.getX(), puntoA.getY(), puntoB.getX(), puntoB.getY());  
         relleno = false;
     }
@@ -204,6 +231,14 @@ public class Rectangulo extends Figura{
     }
     
     /**
+     * Cambia el modo de edición.
+     * @param modo True para activarlo y false para desactivalrlo.
+     */
+    public void setModoEdicion(boolean modo){
+        modoEdicion=modo;
+    }
+    
+    /**
      * Para dibujar la figura en el entorno pasado.
      * Para dibujarla accedemos a sus distintos elementos y los aplicamos al entorno Graphics2D para dibujar
      * todas las características de la figura.
@@ -228,7 +263,57 @@ public class Rectangulo extends Figura{
         }else        
             //Usamos draw cuando la figura no tiene relleno.
             g2d.draw(datosGeometricos);
+        
+        //Si el modo edición está activado dibujamos también los puntos de control.
+        if(modoEdicion){
+           
+           //Dibujamos uno de los extremos de la diagonal.
+           Point2D extremoDiagonalA= new Point2D.Double(  ((Rectangle2D)datosGeometricos).getMinX(), ((Rectangle2D)datosGeometricos).getMinY());
+           elipsePuntoControlA= new Ellipse2D.Double(extremoDiagonalA.getX()-5, extremoDiagonalA.getY()-5,10,10);
+           g2d.draw(elipsePuntoControlA);
+           
+           //Dibujamos el otro extremo de la diagonal.
+           Point2D extremoDiagonalB= new Point2D.Double(  ((Rectangle2D)datosGeometricos).getMaxX(), ((Rectangle2D)datosGeometricos).getMaxY());
+           elipsePuntoControlB= new Ellipse2D.Double(extremoDiagonalB.getX()-5, extremoDiagonalB.getY()-5,10,10);
+           g2d.draw(elipsePuntoControlB);
+            
+           
+        }
+        
     }
+     
+     public void cambiarPuntosControl(Point2D puntoRef, Point2D npc){
+         
+         if(seleccionadoPuntoControlA){
+             //Queremos modificar el extremo izquierdo de la figura.  
+             A=npc;
+             ((Rectangle2D)datosGeometricos).setFrameFromDiagonal(A.getX(), A.getY(), B.getX(), B.getY());
+             
+         }
+         if(seleccionadoPuntoControlB){
+             //Queremos modificar el extremo derecho de la figura.
+             B=npc;
+             ((Rectangle2D)datosGeometricos).setFrameFromDiagonal(A.getX(), A.getY(), B.getX(), B.getY());
+         }
+         if(!seleccionadoPuntoControlA && !seleccionadoPuntoControlB){
+             mueveNueva(puntoRef, npc);
+         }
+     
+         
+     
+     }
+     
+     /**
+      * Función con la que movemos la figura de una nueva forma.
+      * Intetamos que se meuva según donde se pinchó en la figura.
+      * @param puntoRef
+      * @param nuevaPos 
+      */
+     public void mueveNueva(Point2D puntoRef, Point2D nuevaPos){
+         calcularDiferencias(puntoRef); //El punto A siempre es el mismo
+         aplicarDiferencias(nuevaPos); //El punto B cambia
+     }
+     
      
      /**
       * Para conocer si un punto está dentro del rectángulo.
@@ -237,8 +322,33 @@ public class Rectangulo extends Figura{
       */
      @Override
     public boolean contiene(Point2D punto){
-        //Sólo una abstracción de nombre                   
-        return datosGeometricos.contains(punto);        
+        
+        
+        seleccionadoPuntoControlA=false;
+        seleccionadoPuntoControlB=false;
+        
+        //¿Se ha seleccionado uno de los  puntos de control?//
+         if(elipsePuntoControlA.contains(punto)){
+             Imprimir("## Punto A del rectangulo ##!");
+             this.seleccionadoPuntoControlA=true;                
+             return true;
+         }                         
+         else if(elipsePuntoControlB.contains(punto)){
+             Imprimir("## Punto B del rectangulo ##!");
+             this.seleccionadoPuntoControlB=true;                
+             return true;
+         }else{               
+                 seleccionadoPuntoControlA=false;
+                 seleccionadoPuntoControlB=false;  
+                 
+                 //Pero si se ha seleccionado otro punto de la figura que no sea un punto de control decimos true
+                 if(((Rectangle2D)datosGeometricos).contains(punto))
+                     return true;
+                 // pero si tampoco, false
+                 else
+                    return false;
+         }
+      
     }
     
     
