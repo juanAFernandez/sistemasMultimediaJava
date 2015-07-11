@@ -14,7 +14,10 @@
 */
 package sm.jaf.graficos;
 
+import static extras.Imprimir.Imprimir;
 import java.awt.Graphics2D;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 
@@ -26,12 +29,37 @@ import java.awt.geom.Point2D;
  */
 public class Linea extends Figura {
               
+    
+    private Point2D puntoControlA;  
+    private Ellipse2D elipsePuntoControlA;    
+    boolean seleccionadoPuntoControlA;
+    
+    private Point2D puntoControlB;
+    private Ellipse2D elipsePuntoControlB;    
+    boolean seleccionadoPuntoControlB;
+    
+    private boolean modoEdicion;
+    
+    boolean moviendo=false;
+    
+    //Valores para controlar el movimiento de la figura.
+    double distanciaX=0;
+    double distanciaY=0;
+    
+      Point2D A = new Point2D.Double(); 
+      Point2D B = new Point2D.Double();
+    
     /**
      * Primer constructor sin parámetros.
      * Sólo inicializa los datos geométricos con una Line2D de la Java2D.
      */
     public Linea(){
         datosGeometricos=new Line2D.Double();
+        modoEdicion=false;
+        puntoControlA = new Point2D.Double();
+        puntoControlB = new Point2D.Double();
+        seleccionadoPuntoControlA=false;
+        seleccionadoPuntoControlB=false;
     }
     
     /**
@@ -44,6 +72,60 @@ public class Linea extends Figura {
         datosGeometricos=new Line2D.Double(puntoA, puntoB);        
     }
     
+    public void cambiarPuntosControl(Point2D puntoRef, Point2D npc){
+        
+        
+        Imprimir("ENtrando en CAMBIAR PUNTOS DE CONTROL");
+        
+        
+        if(moviendo){
+            Imprimir("Intentando mover figura");
+            /* En el caso de querer mover la figura se usa el punto de referencia en el que se pinchó y 
+            se calcula cual sería la translación que habría que hacer para llevar la figura al completo
+            al punto ncp (nuevo punto control).
+            */
+            
+            //EL nuevo punto puede realizar cuantro movimientos básicos respecto al anterior.
+            
+            //Hacia la derecha
+            if(npc.getX()>puntoRef.getX())
+                distanciaX=npc.getX()-puntoRef.getX();
+            //Hacia la izquierda
+            if(npc.getX()<puntoRef.getX())
+                distanciaX=npc.getX()-puntoRef.getX();
+            
+            //Hacia abajo
+            if(npc.getY()>puntoRef.getY())
+                distanciaY=npc.getY()-puntoRef.getY();
+            //Hacia arriba
+            if(npc.getY()<puntoRef.getY())
+                distanciaY=npc.getY()-puntoRef.getY();
+            
+                                  
+            Imprimir("DistanciaX: "+distanciaX+"distanciaY"+distanciaY);
+            
+            
+            
+        }else{  
+         if(seleccionadoPuntoControlA){
+             //Queremos modificar el extremo izquierdo de la figura.  
+             A=npc;
+             ((Line2D)datosGeometricos).setLine(A, B);                          
+         }
+         if(seleccionadoPuntoControlB){
+             //Queremos modificar el extremo derecho de la figura.
+             B=npc;
+             Imprimir("Cambiando punto de control B");
+             ((Line2D)datosGeometricos).setLine(A, B);
+         }
+         if(!seleccionadoPuntoControlA && !seleccionadoPuntoControlB){
+             //mueveNueva(puntoRef, npc);
+             Imprimir("Moviendo linea");
+         }
+        }
+         
+     
+    }
     
     /**
      * Especificación del cambio de posición para esta figura.   
@@ -52,9 +134,42 @@ public class Linea extends Figura {
      */
     @Override
     public void cambiarPosicion(Point2D nuevoPuntoA, Point2D nuevoPuntoB){
-        ((Line2D)datosGeometricos).setLine(nuevoPuntoA, nuevoPuntoB);        
+        
+        A=nuevoPuntoA;
+        B=nuevoPuntoB;
+        
+        ((Line2D)datosGeometricos).setLine(A, B);        
     }
         
+     /**
+     * Cambia el modo de edición.
+     * @param modo True para activarlo y false para desactivalrlo.
+     */
+    public void setModoEdicion(boolean modo){
+        modoEdicion=modo;
+    }
+    public void soltarRaton(Point2D ref, Point2D nuevo){
+            Imprimir("Soltando el raton");
+            
+            if(moviendo){
+                
+                //Cambiamos los puntos: 
+                A.setLocation(A.getX()+distanciaX, A.getY()+distanciaY);
+                B.setLocation(B.getX()+distanciaX, B.getY()+distanciaY);
+                
+                //Modificamos la figura:
+                 ((Line2D)datosGeometricos).setLine(A, B);     
+                
+             //   elipsePuntoControlA = new Ellipse2D.Double(A.getX()-5, A.getY()-5, 10, 10);
+             //   elipsePuntoControlB = new Ellipse2D.Double(B.getX()-5, B.getY()-5, 10, 10);
+
+            }
+            moviendo=false;
+            
+            //Después de soltar el ratón el moviviento de la figura ha cesado y se resetean los valores de las distancias:
+            distanciaX=distanciaY=0;
+    }
+    
     /**
      * Para que la figura se pinte (renderice) en el objeto Graphics2D.
      * @param g2d Entorno donde renderizar la linea.
@@ -68,8 +183,42 @@ public class Linea extends Figura {
         //Establecemos el estilo de trazo usando el objeto trazo.
         g2d.setStroke(trazo.getStroke());
         
+        
+        AffineTransform move = new AffineTransform();
+           move.translate(distanciaX,distanciaY); 
+           
+           AffineTransform cancelMove = new AffineTransform();
+           cancelMove.translate(0,0); 
+
+           if(moviendo){
+            g2d.setTransform(move);     
+           }
+        
+        
         //Hacemos que se dibujen los datos geométricos.
         g2d.draw(datosGeometricos);
+        
+       
+       
+        
+        //Si el modo edición está activo 
+        if(modoEdicion){
+            
+            //Imprimir("DIbujando puntos de control de linea)");
+            
+            //Dibujamos también los puntos de control:
+            elipsePuntoControlA= new Ellipse2D.Double(A.getX()-5, A.getY()-5,10,10);
+            g2d.draw(elipsePuntoControlA);
+            
+            elipsePuntoControlB= new Ellipse2D.Double(B.getX()-5, B.getY()-5,10,10);
+            g2d.draw(elipsePuntoControlB);
+        }
+        
+         if(moviendo){
+            g2d.setTransform(cancelMove);
+        }
+        
+        
     }
     
     /**
@@ -79,10 +228,44 @@ public class Linea extends Figura {
      * @return Si está cerca o no.
      */
     @Override
-    public boolean contiene(Point2D punto){        
+    public boolean contiene(Point2D punto){       
+        
+        seleccionadoPuntoControlA=false;
+        seleccionadoPuntoControlB=false;
+        
+        moviendo=false;
+        
+        
+        //¿Se ha seleccionado uno de los  puntos de control?//
+         if(elipsePuntoControlA.contains(punto)){
+             Imprimir("## Punto A del rectangulo ##!");
+             this.seleccionadoPuntoControlA=true;                
+             return true;
+         }                         
+         else if(elipsePuntoControlB.contains(punto)){
+             Imprimir("## Punto B del rectangulo ##!");
+             this.seleccionadoPuntoControlB=true;                
+             return true;
+         }else{               
+                 seleccionadoPuntoControlA=false;
+                 seleccionadoPuntoControlB=false;  
+                 
+                 //Pero si se ha seleccionado otro punto de la figura que no sea un punto de control decimos true
+                 if(((Line2D)datosGeometricos).ptLineDistSq(punto)<=5.0){
+                     moviendo=true;
+                     return true;
+                 }
+                 // pero si tampoco, false
+                 else
+                    return false;
+         }
+        
+        
+        
+        
         /*Para el caso de la linea tenemos que hacer modificaciones ya que la función contains no funciona
         por la delgadez de la linea. */        
-        return ((Line2D)datosGeometricos).ptLineDistSq(punto)<=5.0;
+      //  return ((Line2D)datosGeometricos).ptLineDistSq(punto)<=5.0;
     }
 
     /**
@@ -107,7 +290,9 @@ public class Linea extends Figura {
      */     
     @Override
     public void cambiarPosicion2(Point2D pos) {
-                     
+                    
+        Imprimir("Cambiando posicion plano");
+        
         /*
         Calculamos los puntos extremos que definen la linea que resultarían de moverla y dejarla en el punto 
         que definimos con el ratón y que es el que se le pasa.

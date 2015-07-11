@@ -254,7 +254,9 @@ public class Lienzo2D extends javax.swing.JPanel {
                 if(figura.getClass().getName().contains("Cubica"))
                     ((CurvaCubica)figura).setModoEdicion(true);
                 if(figura.getClass().getName().contains("Arco"))
-                    ((Arco)figura).setModoEdicion(true);                                
+                    ((Arco)figura).setModoEdicion(true);
+                if(figura.getClass().getName().contains("Linea"))
+                    ((Linea)figura).setModoEdicion(true);
                 if(figura.getClass().getName().contentEquals("sm.jaf.graficos.Rectangulo"))
                     ((Rectangulo)figura).setModoEdicion(true);
                 if(figura.getClass().getName().contains("Polilinea"))
@@ -274,6 +276,8 @@ public class Lienzo2D extends javax.swing.JPanel {
                     ((Arco)figura).setModoEdicion(false);
                 if(figura.getClass().getName().contentEquals("sm.jaf.graficos.Rectangulo"))
                     ((Rectangulo)figura).setModoEdicion(false);
+                if(figura.getClass().getName().contains("Linea"))
+                    ((Linea)figura).setModoEdicion(false);
                 if(figura.getClass().getName().contains("Polilinea"))
                     ((Polilinea)figura).setModoEdicion(false);
             }
@@ -779,7 +783,13 @@ public class Lienzo2D extends javax.swing.JPanel {
 
                 // Imprimir("Moviendo figura: " + vShape.get(figuraMoviendo).getClass().getName());
                  
-                 
+                 //Si se trata de una Linea:
+                 if(vShape.get(figuraMoviendo).getClass().getName().contains("ManoAlzada"))
+                     if(vShape.get(figuraMoviendo)!=null)
+                         /**
+                          * Esta forma de proceder nos dará un problema y es que nos moverá 
+                          */
+                         ((ManoAlzada)vShape.get(figuraMoviendo)).cambiarPuntosControl(pA, pB);
                  
                  //Si se trata de una Linea:
                  if(vShape.get(figuraMoviendo).getClass().getName().contains("Linea"))
@@ -787,7 +797,7 @@ public class Lienzo2D extends javax.swing.JPanel {
                          /**
                           * Esta forma de proceder nos dará un problema y es que nos moverá 
                           */
-                         ((Linea)vShape.get(figuraMoviendo)).cambiarPosicion2(pA, pB);
+                         ((Linea)vShape.get(figuraMoviendo)).cambiarPuntosControl(pA, pB);
                 
                 //Si se trata de una Linea:
                  if(vShape.get(figuraMoviendo).getClass().getName().contains("Polilinea"))
@@ -972,21 +982,29 @@ public class Lienzo2D extends javax.swing.JPanel {
         this.repaint();     
     }//GEN-LAST:event_formMouseDragged
 
+    /**
+     * Implementa las acciones a realizar al hacer released (levantar click) del ratón.
+     * Llama a soltar ratón en todas las figuras.
+     * @param evt 
+     */
     private void formMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseReleased
-        //Número de objetos en ambos vectores:
-     //   Imprimir("Elementos en vShape: "+vShape.size());
-     //   Imprimir("Elementos de texto en vTextos: "+vTextos.size());
+
         
-        if(modoSeleccion==true){
-        //Si se trata de una Linea:
+        if(modoSeleccion==true){        
+            
                  if(vShape.get(figuraMoviendo).getClass().getName().contains("Polilinea"))
                      if(vShape.get(figuraMoviendo)!=null)
-                         /**
-                          * Esta forma de proceder nos dará un problema y es que nos moverá 
-                          */
-
                          ((Polilinea)vShape.get(figuraMoviendo)).soltarRaton(pA,pB);
+                 
+                 if(vShape.get(figuraMoviendo).getClass().getName().contains("Linea"))
+                     if(vShape.get(figuraMoviendo)!=null)
+                         ((Linea)vShape.get(figuraMoviendo)).soltarRaton(pA,pB);
+                 
+                 if(vShape.get(figuraMoviendo).getClass().getName().contains("ManoAlzada"))
+                     if(vShape.get(figuraMoviendo)!=null)
+                         ((ManoAlzada)vShape.get(figuraMoviendo)).soltarRaton(pA,pB);
         }
+              
         this.repaint();
     }//GEN-LAST:event_formMouseReleased
 
@@ -1061,7 +1079,7 @@ public class Lienzo2D extends javax.swing.JPanel {
     private void formMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseMoved
         
         if(modoSeleccion){
-            Imprimir("Soy un ratón y me estoy moviendo por el plano");
+           // Imprimir("Soy un ratón y me estoy moviendo por el plano");
             //Comprueba si en el punto el que estoy hay una figura
             Figura figura = getFiguraSeleccionada(evt.getPoint());
             

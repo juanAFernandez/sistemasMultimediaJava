@@ -69,8 +69,8 @@ public class Rectangulo extends Figura{
         
              //1º: Sacamos los extremos A y B del rectangulo
         
-        Point2D A = new Point2D.Double(); 
-        Point2D B = new Point2D.Double();
+        Point2D A; 
+        Point2D B;
         
         //El A es muy facil de obtener:
        // A.setLocation( ((Rectangle2D)datosGeometricos).getX(), ((Rectangle2D)datosGeometricos).getY() );        
@@ -93,6 +93,8 @@ public class Rectangulo extends Figura{
         puntoControlB = new Point2D.Double();
         seleccionadoPuntoControlA=false;
         seleccionadoPuntoControlB=false;
+        A = new Point2D.Double(); 
+        B = new Point2D.Double();
     }
     /**
      * Segundo constructor con parámetros.
