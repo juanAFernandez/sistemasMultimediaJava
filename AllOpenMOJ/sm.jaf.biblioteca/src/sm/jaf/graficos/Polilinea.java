@@ -116,7 +116,10 @@ public class Polilinea extends Figura {
     
     public void soltarRaton(Point2D ref, Point2D nuevo){
             
-            
+            /**
+             * Si la figura se está moviendo se realiza el cambio de su posición, en caso contrario se estará
+             * modificando un punto de control y esta función no hace nada.
+             */
             if(moviendo){
                 //Pruebas: una vez calculadas las distancias se las aplicamos a todos los puntos de la polilinea, incluidos los puntos de control
                 for(puntoPolilinea p: puntos){

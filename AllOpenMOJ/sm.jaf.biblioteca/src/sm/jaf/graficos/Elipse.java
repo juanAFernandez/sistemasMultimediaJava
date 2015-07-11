@@ -19,6 +19,7 @@ import java.awt.Color;
 import java.awt.GradientPaint;
 import java.awt.Graphics2D;
 import java.awt.Paint;
+import java.awt.geom.AffineTransform;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
 import sm.jaf.graficos.Relleno.Horientacion;
@@ -33,9 +34,34 @@ public class Elipse extends Figura{
     
     public Relleno miRelleno;
     
+    
+    
+    private boolean modoEdicion;
+                 //1º: Sacamos los extremos A y B del rectangulo
+        
+    private Point2D A;          
+    private Ellipse2D elipsePuntoControlA;    
+    boolean seleccionadoPuntoControlA;
+    
+    private Point2D B;    
+    private Ellipse2D elipsePuntoControlB;    
+    boolean seleccionadoPuntoControlB;
+    
+    boolean moviendo=false;
+    double distanciaX=0;
+    double distanciaY=0;
+    
+    
+    
+    
     public Elipse(){
         datosGeometricos = new Ellipse2D.Double();
         relleno = false;
+        modoEdicion=false;
+        seleccionadoPuntoControlA=false;
+        seleccionadoPuntoControlB=false;
+        A = new Point2D.Double(); 
+        B = new Point2D.Double();
     }
     public Elipse(Point2D puntoA, Point2D puntoB){
        datosGeometricos=new Ellipse2D.Double(puntoA.getX(), puntoA.getY(), puntoB.getX(), puntoB.getY()); 
@@ -127,6 +153,20 @@ public class Elipse extends Figura{
         //Aplicamos el stilo que acabos de definir
         g2d.setStroke(trazo.getStroke());
         
+        
+        
+               
+          AffineTransform move = new AffineTransform();
+           move.translate(distanciaX,distanciaY); 
+           
+           AffineTransform cancelMove = new AffineTransform();
+           cancelMove.translate(0,0); 
+
+           if(moviendo){
+            g2d.setTransform(move);     
+           }
+        
+        
          if(relleno){
             g2d.setPaint(getDatosRelleno());
             g2d.fill(datosGeometricos);
@@ -135,8 +175,97 @@ public class Elipse extends Figura{
             g2d.draw(datosGeometricos);
             System.out.println("Dibujando SIN relleno");
          }   
-          
+       
+         
+           //Si el modo edición está activado dibujamos también los puntos de control.
+        if(modoEdicion){
+           
+           //Dibujamos uno de los extremos de la diagonal.
+           Point2D extremoDiagonalA= new Point2D.Double(  ((Ellipse2D)datosGeometricos).getMinX(), ((Ellipse2D)datosGeometricos).getMinY());
+           elipsePuntoControlA= new Ellipse2D.Double(extremoDiagonalA.getX()-5, extremoDiagonalA.getY()-5,10,10);
+           g2d.draw(elipsePuntoControlA);
+           
+           //Dibujamos el otro extremo de la diagonal.
+           Point2D extremoDiagonalB= new Point2D.Double(  ((Ellipse2D)datosGeometricos).getMaxX(), ((Ellipse2D)datosGeometricos).getMaxY());
+           elipsePuntoControlB= new Ellipse2D.Double(extremoDiagonalB.getX()-5, extremoDiagonalB.getY()-5,10,10);
+           g2d.draw(elipsePuntoControlB);
+            
+           
+        }
+         
+         
+           if(moviendo){
+            g2d.setTransform(cancelMove);
+        }
+         
     }
+    
+    
+     public void cambiarPuntosControl(Point2D puntoRef, Point2D npc){
+         
+         
+         if(moviendo){
+              //EL nuevo punto puede realizar cuantro movimientos básicos respecto al anterior.
+            
+            //Hacia la derecha
+            if(npc.getX()>puntoRef.getX())
+                distanciaX=npc.getX()-puntoRef.getX();
+            //Hacia la izquierda
+            if(npc.getX()<puntoRef.getX())
+                distanciaX=npc.getX()-puntoRef.getX();
+            
+            //Hacia abajo
+            if(npc.getY()>puntoRef.getY())
+                distanciaY=npc.getY()-puntoRef.getY();
+            //Hacia arriba
+            if(npc.getY()<puntoRef.getY())
+                distanciaY=npc.getY()-puntoRef.getY();
+            
+                                  
+            Imprimir("DistanciaX: "+distanciaX+"distanciaY"+distanciaY);
+         }else{
+         
+ 
+               if(seleccionadoPuntoControlA){
+                    //Queremos modificar el extremo izquierdo de la figura.  
+                    A=npc;
+                    ((Ellipse2D)datosGeometricos).setFrameFromDiagonal(A.getX(), A.getY(), B.getX(), B.getY());
+
+                }
+                if(seleccionadoPuntoControlB){
+                    //Queremos modificar el extremo derecho de la figura.
+                    B=npc;
+                    ((Ellipse2D)datosGeometricos).setFrameFromDiagonal(A.getX(), A.getY(), B.getX(), B.getY());
+                }
+         }
+     
+         
+     
+     }
+ 
+       public void soltarRaton(Point2D ref, Point2D nuevo){
+            Imprimir("Soltando el raton");
+            
+            if(moviendo){
+                
+                //Cambiamos los puntos: 
+                A.setLocation(A.getX()+distanciaX, A.getY()+distanciaY);
+                B.setLocation(B.getX()+distanciaX, B.getY()+distanciaY);
+                
+                //Modificamos la figura:
+                 ((Ellipse2D)datosGeometricos).setFrameFromDiagonal(A, B);                  
+                
+              //  elipsePuntoControlA = new Ellipse2D.Double(A.getX()-5, A.getY()-5, 10, 10);
+             //   elipsePuntoControlB = new Ellipse2D.Double(B.getX()-5, B.getY()-5, 10, 10);
+
+            }
+            moviendo=false;
+            
+            //Después de soltar el ratón el moviviento de la figura ha cesado y se resetean los valores de las distancias:
+            distanciaX=distanciaY=0;
+    }
+    
+    
 
     /**
      * Para cambiar las coordenadas de los datos geométricos de la figura.
@@ -147,6 +276,8 @@ public class Elipse extends Figura{
      */
     @Override
     public void cambiarPosicion(Point2D nuevoPuntoA, Point2D nuevoPuntoB) {
+        A=nuevoPuntoA;
+        B=nuevoPuntoB;
          ((Ellipse2D)datosGeometricos).setFrameFromDiagonal(nuevoPuntoA, nuevoPuntoB);
     }
 
@@ -155,11 +286,53 @@ public class Elipse extends Figura{
        ((Ellipse2D)datosGeometricos).setFrame(pos.getX(), pos.getY(), datosGeometricos.getBounds2D().getWidth(), datosGeometricos.getBounds2D().getHeight());
         
     }
-
-    @Override
-    public boolean contiene(Point2D punto) {
-        return datosGeometricos.contains(punto);
+    /**
+     * Cambia el modo de edición.
+     * @param modo True para activarlo y false para desactivalrlo.
+     */
+    public void setModoEdicion(boolean modo){
+        modoEdicion=modo;
     }
+     /**
+      * Para conocer si un punto está dentro del rectángulo.
+      * @param punto Punto a comprobar.
+      * @return Si está o no dentro del rectángulo.
+      */
+     @Override
+    public boolean contiene(Point2D punto){
+        
+        
+        seleccionadoPuntoControlA=false;
+        seleccionadoPuntoControlB=false;
+        
+        moviendo=false;
+        
+        //¿Se ha seleccionado uno de los  puntos de control?//
+         if(elipsePuntoControlA.contains(punto)){
+             Imprimir("## Punto A del rectangulo ##!");
+             this.seleccionadoPuntoControlA=true;                
+             return true;
+         }                         
+         else if(elipsePuntoControlB.contains(punto)){
+             Imprimir("## Punto B del rectangulo ##!");
+             this.seleccionadoPuntoControlB=true;                
+             return true;
+         }else{               
+                 seleccionadoPuntoControlA=false;
+                 seleccionadoPuntoControlB=false;  
+                 
+                 //Pero si se ha seleccionado otro punto de la figura que no sea un punto de control decimos true
+                 if(((Ellipse2D)datosGeometricos).contains(punto)){
+                     moviendo=true;
+                     return true;
+                 }
+                 // pero si tampoco, false
+                 else
+                    return false;
+         }
+      
+    }
+    
 
     @Override
     public String toString() {

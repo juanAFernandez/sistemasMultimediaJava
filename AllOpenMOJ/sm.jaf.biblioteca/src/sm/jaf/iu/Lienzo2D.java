@@ -257,8 +257,12 @@ public class Lienzo2D extends javax.swing.JPanel {
                     ((Arco)figura).setModoEdicion(true);
                 if(figura.getClass().getName().contains("Linea"))
                     ((Linea)figura).setModoEdicion(true);
+                if(figura.getClass().getName().contains("Elipse"))
+                    ((Elipse)figura).setModoEdicion(true);
                 if(figura.getClass().getName().contentEquals("sm.jaf.graficos.Rectangulo"))
                     ((Rectangulo)figura).setModoEdicion(true);
+                if(figura.getClass().getName().contentEquals("sm.jaf.graficos.RectanguloRedondeado"))
+                    ((RectanguloRedondeado)figura).setModoEdicion(true);
                 if(figura.getClass().getName().contains("Polilinea"))
                     ((Polilinea)figura).setModoEdicion(true);
             }
@@ -276,8 +280,12 @@ public class Lienzo2D extends javax.swing.JPanel {
                     ((Arco)figura).setModoEdicion(false);
                 if(figura.getClass().getName().contentEquals("sm.jaf.graficos.Rectangulo"))
                     ((Rectangulo)figura).setModoEdicion(false);
+                if(figura.getClass().getName().contentEquals("sm.jaf.graficos.RectanguloRedondeado"))
+                    ((RectanguloRedondeado)figura).setModoEdicion(false);
                 if(figura.getClass().getName().contains("Linea"))
                     ((Linea)figura).setModoEdicion(false);
+                if(figura.getClass().getName().contains("Elipse"))
+                    ((Elipse)figura).setModoEdicion(false);
                 if(figura.getClass().getName().contains("Polilinea"))
                     ((Polilinea)figura).setModoEdicion(false);
             }
@@ -819,7 +827,7 @@ public class Lienzo2D extends javax.swing.JPanel {
                           * Por ahora no se mueve la figura como el resto.
                           * Sólo se ha programado la gestión de los puntos de control.
                           */
-                         ((CurvaCuadratica)vShape.get(figuraMoviendo)).cambiarPuntoControl(pB);
+                         ((CurvaCuadratica)vShape.get(figuraMoviendo)).cambiarPuntoControl(pA, pB);
                  }
                  
                  //Si se trata de una curva cubica:
@@ -831,7 +839,7 @@ public class Lienzo2D extends javax.swing.JPanel {
                           * Por ahora no se mueve la figura como el resto.
                           * Sólo se ha programado la gestión de los puntos de control.
                           */
-                         ((CurvaCubica)vShape.get(figuraMoviendo)).cambiarPuntosControl(pB);
+                         ((CurvaCubica)vShape.get(figuraMoviendo)).cambiarPuntosControl(pA, pB);
                  }
                  
                   //Si se trata de una curva cubica:
@@ -860,13 +868,13 @@ public class Lienzo2D extends javax.swing.JPanel {
                  if(vShape.get(figuraMoviendo).getClass().getName().contentEquals("sm.jaf.graficos.RectanguloRedondeado")){
                      Imprimir("Moviendo un rectangulo redondeado");
                      if(vShape.get(figuraMoviendo)!=null)
-                         ((RectanguloRedondeado)vShape.get(figuraMoviendo)).cambiarPosicion2(pB);
+                         ((RectanguloRedondeado)vShape.get(figuraMoviendo)).cambiarPuntosControl(pA, pB);
                  }
                  
                  //Si se trata de una Ellipse:
                  if(vShape.get(figuraMoviendo).getClass().getName().contains("Elipse"))
                      if(vShape.get(figuraMoviendo)!=null)
-                         ((Elipse)vShape.get(figuraMoviendo)).cambiarPosicion2(pB);
+                         ((Elipse)vShape.get(figuraMoviendo)).cambiarPuntosControl(pA, pB);
                   
              } 
              
@@ -990,7 +998,7 @@ public class Lienzo2D extends javax.swing.JPanel {
     private void formMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseReleased
 
         
-        if(modoSeleccion==true){        
+        if(modoSeleccion==true && figuraMoviendo!=-1){        
             
                  if(vShape.get(figuraMoviendo).getClass().getName().contains("Polilinea"))
                      if(vShape.get(figuraMoviendo)!=null)
@@ -1003,6 +1011,26 @@ public class Lienzo2D extends javax.swing.JPanel {
                  if(vShape.get(figuraMoviendo).getClass().getName().contains("ManoAlzada"))
                      if(vShape.get(figuraMoviendo)!=null)
                          ((ManoAlzada)vShape.get(figuraMoviendo)).soltarRaton(pA,pB);
+                                                   
+                 if(vShape.get(figuraMoviendo).getClass().getName().contentEquals("sm.jaf.graficos.Rectangulo"))
+                     if(vShape.get(figuraMoviendo)!=null)
+                         ((Rectangulo)vShape.get(figuraMoviendo)).soltarRaton(pA,pB);
+                 
+                 if(vShape.get(figuraMoviendo).getClass().getName().contentEquals("sm.jaf.graficos.RectanguloRedondeado"))
+                     if(vShape.get(figuraMoviendo)!=null)
+                         ((RectanguloRedondeado)vShape.get(figuraMoviendo)).soltarRaton(pA,pB);
+                 
+                 if(vShape.get(figuraMoviendo).getClass().getName().contains("Cuadratica"))
+                     if(vShape.get(figuraMoviendo)!=null)
+                         ((CurvaCuadratica)vShape.get(figuraMoviendo)).soltarRaton(pA,pB);
+                 
+                 if(vShape.get(figuraMoviendo).getClass().getName().contains("Cubica"))
+                     if(vShape.get(figuraMoviendo)!=null)
+                         ((CurvaCubica)vShape.get(figuraMoviendo)).soltarRaton(pA,pB);
+                 
+                 if(vShape.get(figuraMoviendo).getClass().getName().contains("Elipse"))
+                     if(vShape.get(figuraMoviendo)!=null)
+                         ((Elipse)vShape.get(figuraMoviendo)).soltarRaton(pA,pB);
         }
               
         this.repaint();

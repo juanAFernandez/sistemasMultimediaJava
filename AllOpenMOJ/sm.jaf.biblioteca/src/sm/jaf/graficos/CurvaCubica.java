@@ -16,9 +16,11 @@ package sm.jaf.graficos;
 
 import static extras.Imprimir.Imprimir;
 import java.awt.Graphics2D;
+import java.awt.geom.AffineTransform;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.CubicCurve2D;
+import java.awt.geom.Line2D;
 
 /**
  * Segmento de linea con dos puntos de control para hacerlo curvo con mayor precisión que la QuadCurve 
@@ -36,14 +38,17 @@ public class CurvaCubica extends Figura {
     private Ellipse2D elipsePuntoControlB;    
     boolean seleccionadoPuntoControlB=false;
     
-    
+    private Point2D A = new Point2D.Double(); 
     Ellipse2D elipsePuntoA;
     boolean seleccionadoPuntoA=false;
     
+    private Point2D B = new Point2D.Double();
     Ellipse2D elipsePuntoB;
     boolean seleccionadoPuntoB=false;
     
-    
+    boolean moviendo=false;
+    double distanciaX=0;
+    double distanciaY=0;
 
     
     private boolean modoEdicion=false;
@@ -102,67 +107,91 @@ public class CurvaCubica extends Figura {
     }
     
     /**
-     * Cambia un punto de control del segemento, 
-     * @param nvc Primer punto de control     
+     * 
+     * @param puntoRef
+     * @param npc 
      */
-    public void cambiarPuntosControl(Point2D nvc){
+    public void cambiarPuntosControl(Point2D puntoRef, Point2D npc){
+         if(moviendo){
+            Imprimir("Intentando mover figura");
+            /* En el caso de querer mover la figura se usa el punto de referencia en el que se pinchó y 
+            se calcula cual sería la translación que habría que hacer para llevar la figura al completo
+            al punto ncp (nuevo punto control).
+            */
             
-        if(seleccionadoPuntoControlA){
-            //Se modifica el punto de control
-            puntoControlA= nvc;
-            //Se modifica la linea usando sus mismos datos anteriores y modifcando SOLO EL PUNTO DE CONTROL A            
-            ((CubicCurve2D)datosGeometricos).setCurve( 
-                                                      ((CubicCurve2D)datosGeometricos).getX1(),
-                                                      ((CubicCurve2D)datosGeometricos).getY1(),
-                                                      puntoControlA.getX(),
-                                                      puntoControlA.getY(),
-                                                      ((CubicCurve2D)datosGeometricos).getCtrlX2(),
-                                                      ((CubicCurve2D)datosGeometricos).getCtrlY2(),
-                                                      ((CubicCurve2D)datosGeometricos).getX2(),
-                                                      ((CubicCurve2D)datosGeometricos).getY2()          
-                                                     );
-        }
-        if(seleccionadoPuntoControlB){
-            //Se modifica el punto de control
-            puntoControlB= nvc;
-            //Se modifica la linea usando sus mismos datos anteriores y modifcando SOLO EL PUNTO DE CONTROL B            
-            ((CubicCurve2D)datosGeometricos).setCurve( 
-                                                      ((CubicCurve2D)datosGeometricos).getX1(),
-                                                      ((CubicCurve2D)datosGeometricos).getY1(),
-                                                      ((CubicCurve2D)datosGeometricos).getCtrlX1(),
-                                                      ((CubicCurve2D)datosGeometricos).getCtrlY1(),
-                                                      puntoControlB.getX(),
-                                                      puntoControlB.getY(),
-                                                      ((CubicCurve2D)datosGeometricos).getX2(),
-                                                      ((CubicCurve2D)datosGeometricos).getY2()          
-                                                     );
-        }
-        if(seleccionadoPuntoA){
-            //Se modifica la linea usando sus mismos datos anteriores y modifcando SOLO EL PUNTO A del segemento.            
-            ((CubicCurve2D)datosGeometricos).setCurve( 
-                                                      nvc.getX(),
-                                                      nvc.getY(),
-                                                      ((CubicCurve2D)datosGeometricos).getCtrlX1(),
-                                                      ((CubicCurve2D)datosGeometricos).getCtrlY1(),
-                                                      ((CubicCurve2D)datosGeometricos).getCtrlX2(),
-                                                      ((CubicCurve2D)datosGeometricos).getCtrlY2(),
-                                                      ((CubicCurve2D)datosGeometricos).getX2(),
-                                                      ((CubicCurve2D)datosGeometricos).getY2()          
-                                                     );
-        }
-        if(seleccionadoPuntoB){
-            ((CubicCurve2D)datosGeometricos).setCurve( 
-                                                      ((CubicCurve2D)datosGeometricos).getX1(),
-                                                      ((CubicCurve2D)datosGeometricos).getY1(),
-                                                      ((CubicCurve2D)datosGeometricos).getCtrlX1(),
-                                                      ((CubicCurve2D)datosGeometricos).getCtrlY1(),
-                                                      ((CubicCurve2D)datosGeometricos).getCtrlX2(),
-                                                      ((CubicCurve2D)datosGeometricos).getCtrlY2(),
-                                                      nvc.getX(),
-                                                      nvc.getY()         
-                                                     );
-        }
+            //EL nuevo punto puede realizar cuantro movimientos básicos respecto al anterior.
+            
+            //Hacia la derecha
+            if(npc.getX()>puntoRef.getX())
+                distanciaX=npc.getX()-puntoRef.getX();
+            //Hacia la izquierda
+            if(npc.getX()<puntoRef.getX())
+                distanciaX=npc.getX()-puntoRef.getX();
+            
+            //Hacia abajo
+            if(npc.getY()>puntoRef.getY())
+                distanciaY=npc.getY()-puntoRef.getY();
+            //Hacia arriba
+            if(npc.getY()<puntoRef.getY())
+                distanciaY=npc.getY()-puntoRef.getY();
+            
+                                   
+            
+            
+        }else{
+            
+            /*
+             Si no se se está moviendo se está modificando un punto de control que habrá sido previamente
+             seleccionado en el contains, por lo que ahora se guarda el punto donde corresponde.
+             */
+             
+            if(seleccionadoPuntoControlA)
+                //Se modifica el punto de control
+                puntoControlA= npc;
+
+            if(seleccionadoPuntoControlB)
+                //Se modifica el punto de control
+                puntoControlB= npc;
+            
+            if(seleccionadoPuntoA)
+                //Se modifica uno de los extremos de la linea principal.           
+                A=npc;
+            
+            if(seleccionadoPuntoB)
+                //Se modifica el otro de los extremos de la linea principal.
+               B=npc;
+            
+            ((CubicCurve2D)datosGeometricos).setCurve(A, puntoControlA, puntoControlB, B);
+            
+         }
     }
+    
+    
+          public void soltarRaton(Point2D ref, Point2D nuevo){
+            
+            /**
+             * Si la figura se está moviendo se realiza el cambio de su posición, en caso contrario se estará
+             * modificando un punto de control y esta función no hace nada.
+             */
+            if(moviendo){
+                
+                //Modificamos los tres puntos que definen la figura aplicando las distancas obtenidas por el movimiento.
+                
+                //Cambiamos los puntos: 
+                A.setLocation(A.getX()+distanciaX, A.getY()+distanciaY);
+                B.setLocation(B.getX()+distanciaX, B.getY()+distanciaY);
+                
+                puntoControlA.setLocation(puntoControlA.getX()+distanciaX, puntoControlA.getY()+distanciaY);
+                puntoControlB.setLocation(puntoControlB.getX()+distanciaX, puntoControlB.getY()+distanciaY);
+                
+                ((CubicCurve2D)datosGeometricos).setCurve(A, puntoControlA, puntoControlB, B);
+                
+            }
+            moviendo=false;
+            distanciaX=distanciaY=0;
+    }
+    
+    
     /**
      * Usada para cambiar la posición del segmento.
      * Durante la creación del segemento cuando vamos arrastrando el ratón por la pantalla se va cambiarndo
@@ -175,16 +204,12 @@ public class CurvaCubica extends Figura {
  
         //Cuando cambiamos los puntos de la linea también estamos cambiando el punto de control
         this.puntosControlDefecto(nuevoPuntoA, nuevoPuntoB);
-        ((CubicCurve2D)datosGeometricos).setCurve(
-                                                    nuevoPuntoA.getX(),
-                                                    nuevoPuntoA.getY(),
-                                                    puntoControlA.getX(),
-                                                    puntoControlA.getY(),
-                                                    puntoControlB.getX(),
-                                                    puntoControlB.getY(),
-                                                    nuevoPuntoB.getX(),
-                                                    nuevoPuntoB.getY()        
-        );
+        //Grabamos los puntos en nuestras variables
+        A=nuevoPuntoA;
+        B=nuevoPuntoB;
+        //Seteamos los datos geométricos de nuestra figura.
+        ((CubicCurve2D)datosGeometricos).setCurve(A, puntoControlA, puntoControlB, B);
+
         
     }
         
@@ -200,6 +225,18 @@ public class CurvaCubica extends Figura {
         
         //Establecemos el estilo de trazo usando el objeto trazo.
         g2d.setStroke(trazo.getStroke());
+        
+        
+        
+            AffineTransform move = new AffineTransform();
+           move.translate(distanciaX,distanciaY); 
+           
+           AffineTransform cancelMove = new AffineTransform();
+           cancelMove.translate(0,0); 
+
+           if(moviendo){
+            g2d.setTransform(move);     
+           }
         
         //Hacemos que se dibujen los datos geométricos.
         g2d.draw(datosGeometricos);
@@ -229,6 +266,9 @@ public class CurvaCubica extends Figura {
             g2d.draw(elipsePuntoB);
             
         }
+          if(moviendo){
+            g2d.setTransform(cancelMove);
+        }
 
         
     }
@@ -247,6 +287,8 @@ public class CurvaCubica extends Figura {
         
         seleccionadoPuntoA=false;
         seleccionadoPuntoB=false;
+        
+        moviendo=false;
         
          //¿Se ha seleccionado uno de los  puntos de control?//
          if(elipsePuntoControlA.contains(punto)){
@@ -277,7 +319,18 @@ public class CurvaCubica extends Figura {
                  seleccionadoPuntoA=false;
                  seleccionadoPuntoB=false;
                  
+                 //Construcción de una linea a partir de los puntos de control 
+                 Line2D l = new Line2D.Double(A,B);
+                 
+                if( l.ptLineDistSq(punto)<=5.0 ){
+                    Imprimir("Seleccionado otro punto de de la cubic curve");
+                    moviendo=true;
+                    return true;
+                }
+                else{    
+
                  return false;
+                }
              } 
                 
 

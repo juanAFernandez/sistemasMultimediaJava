@@ -19,11 +19,10 @@ import java.awt.Color;
 import java.awt.GradientPaint;
 import java.awt.Graphics2D;
 import java.awt.Paint;
+import java.awt.geom.AffineTransform;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
-import java.util.HashSet;
-import java.util.Set;
 import sm.jaf.graficos.Relleno.Horientacion;
 
 /**
@@ -37,16 +36,19 @@ public class Rectangulo extends Figura{
     
     
     private boolean modoEdicion;
-    
-    private Point2D puntoControlA;  
+                 //1º: Sacamos los extremos A y B del rectangulo
+        
+    private Point2D A;          
     private Ellipse2D elipsePuntoControlA;    
     boolean seleccionadoPuntoControlA;
     
-    private Point2D puntoControlB;
+    private Point2D B;    
     private Ellipse2D elipsePuntoControlB;    
     boolean seleccionadoPuntoControlB;
     
-    
+    boolean moviendo=false;
+    double distanciaX=0;
+    double distanciaY=0;
     
     
     /**
@@ -59,18 +61,9 @@ public class Rectangulo extends Figura{
      */
     public Relleno miRelleno;
        
-    
-        double Dxi; //Diferencia en el eje X a la derecha del punto
-        double Dxd; //Diferencia en el eje X a la izquierda de punto
-    
-        double Dys; //Diferencia entre el punto y la parte superior del rect en el eje Y
-        double Dyi; //Diferencia entre el punto y la parte inferior del rect en el eje Y
-    
+
         
-             //1º: Sacamos los extremos A y B del rectangulo
-        
-        Point2D A; 
-        Point2D B;
+
         
         //El A es muy facil de obtener:
        // A.setLocation( ((Rectangle2D)datosGeometricos).getX(), ((Rectangle2D)datosGeometricos).getY() );        
@@ -89,8 +82,6 @@ public class Rectangulo extends Figura{
         datosGeometricos=new Rectangle2D.Double();
         relleno = false;
         modoEdicion=false;
-        puntoControlA = new Point2D.Double();
-        puntoControlB = new Point2D.Double();
         seleccionadoPuntoControlA=false;
         seleccionadoPuntoControlB=false;
         A = new Point2D.Double(); 
@@ -257,6 +248,19 @@ public class Rectangulo extends Figura{
                            
         //Hacemos que se dibujen los datos geométricos.
         
+        
+        
+          AffineTransform move = new AffineTransform();
+           move.translate(distanciaX,distanciaY); 
+           
+           AffineTransform cancelMove = new AffineTransform();
+           cancelMove.translate(0,0); 
+
+           if(moviendo){
+            g2d.setTransform(move);     
+           }
+        
+        
         if(relleno){
             //Aplicamos el paint construido a partir de los datos del relleno, almacenados en la variable miRelleno.
             g2d.setPaint(getDatosRelleno());
@@ -282,40 +286,75 @@ public class Rectangulo extends Figura{
            
         }
         
+         if(moviendo){
+            g2d.setTransform(cancelMove);
+        }
+        
     }
      
      public void cambiarPuntosControl(Point2D puntoRef, Point2D npc){
          
-         if(seleccionadoPuntoControlA){
-             //Queremos modificar el extremo izquierdo de la figura.  
-             A=npc;
-             ((Rectangle2D)datosGeometricos).setFrameFromDiagonal(A.getX(), A.getY(), B.getX(), B.getY());
-             
-         }
-         if(seleccionadoPuntoControlB){
-             //Queremos modificar el extremo derecho de la figura.
-             B=npc;
-             ((Rectangle2D)datosGeometricos).setFrameFromDiagonal(A.getX(), A.getY(), B.getX(), B.getY());
-         }
-         if(!seleccionadoPuntoControlA && !seleccionadoPuntoControlB){
-             mueveNueva(puntoRef, npc);
+         
+         if(moviendo){
+              //EL nuevo punto puede realizar cuantro movimientos básicos respecto al anterior.
+            
+            //Hacia la derecha
+            if(npc.getX()>puntoRef.getX())
+                distanciaX=npc.getX()-puntoRef.getX();
+            //Hacia la izquierda
+            if(npc.getX()<puntoRef.getX())
+                distanciaX=npc.getX()-puntoRef.getX();
+            
+            //Hacia abajo
+            if(npc.getY()>puntoRef.getY())
+                distanciaY=npc.getY()-puntoRef.getY();
+            //Hacia arriba
+            if(npc.getY()<puntoRef.getY())
+                distanciaY=npc.getY()-puntoRef.getY();
+            
+                                  
+            Imprimir("DistanciaX: "+distanciaX+"distanciaY"+distanciaY);
+         }else{
+         
+ 
+               if(seleccionadoPuntoControlA){
+                    //Queremos modificar el extremo izquierdo de la figura.  
+                    A=npc;
+                    ((Rectangle2D)datosGeometricos).setFrameFromDiagonal(A.getX(), A.getY(), B.getX(), B.getY());
+
+                }
+                if(seleccionadoPuntoControlB){
+                    //Queremos modificar el extremo derecho de la figura.
+                    B=npc;
+                    ((Rectangle2D)datosGeometricos).setFrameFromDiagonal(A.getX(), A.getY(), B.getX(), B.getY());
+                }
          }
      
          
      
      }
-     
-     /**
-      * Función con la que movemos la figura de una nueva forma.
-      * Intetamos que se meuva según donde se pinchó en la figura.
-      * @param puntoRef
-      * @param nuevaPos 
-      */
-     public void mueveNueva(Point2D puntoRef, Point2D nuevaPos){
-         calcularDiferencias(puntoRef); //El punto A siempre es el mismo
-         aplicarDiferencias(nuevaPos); //El punto B cambia
-     }
-     
+ 
+       public void soltarRaton(Point2D ref, Point2D nuevo){
+            Imprimir("Soltando el raton");
+            
+            if(moviendo){
+                
+                //Cambiamos los puntos: 
+                A.setLocation(A.getX()+distanciaX, A.getY()+distanciaY);
+                B.setLocation(B.getX()+distanciaX, B.getY()+distanciaY);
+                
+                //Modificamos la figura:
+                 ((Rectangle2D)datosGeometricos).setFrameFromDiagonal(A, B);     
+                
+              //  elipsePuntoControlA = new Ellipse2D.Double(A.getX()-5, A.getY()-5, 10, 10);
+             //   elipsePuntoControlB = new Ellipse2D.Double(B.getX()-5, B.getY()-5, 10, 10);
+
+            }
+            moviendo=false;
+            
+            //Después de soltar el ratón el moviviento de la figura ha cesado y se resetean los valores de las distancias:
+            distanciaX=distanciaY=0;
+    }
      
      /**
       * Para conocer si un punto está dentro del rectángulo.
@@ -328,6 +367,8 @@ public class Rectangulo extends Figura{
         
         seleccionadoPuntoControlA=false;
         seleccionadoPuntoControlB=false;
+        
+        moviendo=false;
         
         //¿Se ha seleccionado uno de los  puntos de control?//
          if(elipsePuntoControlA.contains(punto)){
@@ -344,8 +385,10 @@ public class Rectangulo extends Figura{
                  seleccionadoPuntoControlB=false;  
                  
                  //Pero si se ha seleccionado otro punto de la figura que no sea un punto de control decimos true
-                 if(((Rectangle2D)datosGeometricos).contains(punto))
+                 if(((Rectangle2D)datosGeometricos).contains(punto)){
+                     moviendo=true;
                      return true;
+                 }
                  // pero si tampoco, false
                  else
                     return false;
@@ -375,78 +418,7 @@ public class Rectangulo extends Figura{
     @Override
     public void cambiarPosicion2(Point2D P) {
                      
-        /*En este caso cambiamos los datos geometricos de neustro rectángulo diciéndole que empiece en ese punto y que tenga
-        el mismo alto y ancho que antes. Es una primera solución pero no es optima ya que siempre nos pondrá el recangulo
-        en el punto donde pinchemos como si fuera una de sus esquinas y podremos moverlo de forma natural por su parte central.*/
-        //((Rectangle2D)datosGeometricos).setFrame(pos.getX(), pos.getY(), datosGeometricos.getBounds2D().getWidth(), datosGeometricos.getBounds2D().getHeight());
-        
-        Imprimir("Punto pasado-> P("+P.getX()+","+P.getY()+")");
-        
-        //1º: Sacamos los extremos A y B del rectangulo
-        
-        Point2D A = new Point2D.Double(); Point2D B = new Point2D.Double();
-        
-        //El A es muy facil de obtener:
-        A.setLocation( ((Rectangle2D)datosGeometricos).getX(), ((Rectangle2D)datosGeometricos).getY() );        
-        B.setLocation(((Rectangle2D)datosGeometricos).getMaxX(),((Rectangle2D)datosGeometricos).getMaxY());        
-        Imprimir("Extremos del rectangulo: A("+A.getX()+","+A.getY()+")"+" B("+B.getX()+","+B.getY()+")");
-        
-        //2º: Sacamos las diferencias en el eje X
-
-        Dxd=B.getX()-P.getX();
-        Dxi=P.getX()-A.getX();
-        
-        Imprimir("Diferencias en X Dxd:"+Dxd+" Dxi:"+Dxi);
-        
-        //3º: Sacamos las diferencias en el eje Y
-
-        Dys=P.getY()-A.getY();
-        Dyi=B.getY()-P.getY();
-        
-        Imprimir("Diferencias en Y Dys:"+Dys+" Dyi:"+Dyi);
-        
-        
-        //4ºCalculamos los nuevos puntos del rectángulo
-        Point2D An = new Point2D.Double(P.getX()-Dxi, P.getY()-Dys);
-        Point2D Bn = new Point2D.Double(P.getX()+Dxd, P.getY()+Dyi);
-        
-        //5ºSeteamos el rectángulo:
-        ((Rectangle2D)datosGeometricos).setFrameFromDiagonal(An, Bn);
-        
-      //  ((Rectangle2D)datosGeometricos).get
-    }
-    
-    
-    public void calcularDiferencias(Point2D P){
-
-        Imprimir("Punto para diferencias-> P("+P.getX()+","+P.getY()+")");
-        //2º: Sacamos las diferencias en el eje X
-
-        Dxd=B.getX()-P.getX();
-        Dxi=P.getX()-A.getX();
-        
-        Imprimir("Diferencias en X Dxd:"+Dxd+" Dxi:"+Dxi);
-        
-        //3º: Sacamos las diferencias en el eje Y
-
-        Dys=P.getY()-A.getY();
-        Dyi=B.getY()-P.getY();
-        
-        Imprimir("Diferencias en Y Dys:"+Dys+" Dyi:"+Dyi);
-        
-        
-    }
-    
-    public void aplicarDiferencias(Point2D P){
-        
-         Imprimir("Punto nuevo-> P("+P.getX()+","+P.getY()+")");
-        
-        //4ºCalculamos los nuevos puntos del rectángulo
-        Point2D An = new Point2D.Double(P.getX()-Dxi, P.getY()-Dys);
-        Point2D Bn = new Point2D.Double(P.getX()+Dxd, P.getY()+Dyi);
-        
-        //5ºSeteamos el rectángulo:
-        ((Rectangle2D)datosGeometricos).setFrameFromDiagonal(An, Bn);        
-    }
+      
+    }    
     
 }

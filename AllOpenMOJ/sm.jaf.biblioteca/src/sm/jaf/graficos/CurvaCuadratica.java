@@ -16,7 +16,9 @@ package sm.jaf.graficos;
 
 import static extras.Imprimir.Imprimir;
 import java.awt.Graphics2D;
+import java.awt.geom.AffineTransform;
 import java.awt.geom.Ellipse2D;
+import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.QuadCurve2D;
 
@@ -34,7 +36,7 @@ public class CurvaCuadratica extends Figura {
     private Ellipse2D elipsePuntoControl;    
     private boolean seleccionadoPuntoControl=false;
     
-    
+    private Point2D A = new Point2D.Double(); 
     //Variable para la reprensentación espacial del primer punto de la linea.    
     private Ellipse2D elipsePuntoA;
     private boolean seleccionadoPuntoA=false;
@@ -42,12 +44,15 @@ public class CurvaCuadratica extends Figura {
     //Variable para la reprensentación espacial del segundo punto de la linea.
     
     private Ellipse2D elipsePuntoB;
-    private boolean seleccionadoPuntoB=false;
-    
-    
-
+    private boolean seleccionadoPuntoB=false;       
+    private Point2D B = new Point2D.Double();
     
     private boolean modoEdicion=false;
+    
+    boolean moviendo=false;
+    double distanciaX=0;
+    double distanciaY=0;
+    
     
     
     /**
@@ -79,32 +84,50 @@ public class CurvaCuadratica extends Figura {
      * @param B Extremo B del segmento que definen los puntos
      * @see <a href="https://es.wikipedia.org/wiki/Punto_medio">Calculo del punto medio</a>
      */        
-    public void puntoControlDefecto(Point2D A, Point2D B){
+    public Point2D puntoControlDefecto(Point2D A, Point2D B){
         
         //Las coordenadas del punto medio de un segmento coinciden con la semisuma de las coordenadas de los puntos extremos.
         //Usando: https://es.wikipedia.org/wiki/Punto_medio
-        puntoControl = new Point2D.Double((A.getX()+B.getX())/2, (A.getY()+B.getY())/2);
+        return new Point2D.Double((A.getX()+B.getX())/2, (A.getY()+B.getY())/2);
     }
    
-    /**
-     * Cambia el punto de control de la curva cuadrática.   
-     * @param nvc El nuevo punto de control
-     */
-    public void cambiarPuntoControl(Point2D nvc){
+   
+    public void cambiarPuntoControl(Point2D puntoRef, Point2D npc){
             
-        if(seleccionadoPuntoControl){
-            //Se modifica el punto de control
-            puntoControl= nvc;
-            //Se modifica la linea usando sus mismos datos anteriores y modifcando el punto de control
-           ((QuadCurve2D)datosGeometricos).setCurve( ((QuadCurve2D)datosGeometricos).getX1(),((QuadCurve2D)datosGeometricos).getY1(), puntoControl.getX(), puntoControl.getY(), ((QuadCurve2D)datosGeometricos).getX2(),((QuadCurve2D)datosGeometricos).getY2());
-        }
-        if(seleccionadoPuntoA){
-            //Solo cambiamos el punto A con el nuevo punto pasado.
-            ((QuadCurve2D)datosGeometricos).setCurve( nvc.getX(),nvc.getY(), puntoControl.getX(), puntoControl.getY(), ((QuadCurve2D)datosGeometricos).getX2(),((QuadCurve2D)datosGeometricos).getY2());
-        }
-        if(seleccionadoPuntoB){
-            //Solo cambiamos el punto A con el nuevo punto pasado.
-           ((QuadCurve2D)datosGeometricos).setCurve( ((QuadCurve2D)datosGeometricos).getX1(),((QuadCurve2D)datosGeometricos).getY1(), puntoControl.getX(), puntoControl.getY(), nvc.getX(),nvc.getY());
+        if(moviendo){
+            Imprimir("Intentando mover figura");
+            /* En el caso de querer mover la figura se usa el punto de referencia en el que se pinchó y 
+            se calcula cual sería la translación que habría que hacer para llevar la figura al completo
+            al punto ncp (nuevo punto control).
+            */
+            
+            //EL nuevo punto puede realizar cuantro movimientos básicos respecto al anterior.
+            
+            //Hacia la derecha
+            if(npc.getX()>puntoRef.getX())
+                distanciaX=npc.getX()-puntoRef.getX();
+            //Hacia la izquierda
+            if(npc.getX()<puntoRef.getX())
+                distanciaX=npc.getX()-puntoRef.getX();
+            
+            //Hacia abajo
+            if(npc.getY()>puntoRef.getY())
+                distanciaY=npc.getY()-puntoRef.getY();
+            //Hacia arriba
+            if(npc.getY()<puntoRef.getY())
+                distanciaY=npc.getY()-puntoRef.getY();
+            
+                                   
+            
+            
+        }else{
+                //Si se ha seleccionado el punto de control se modifica ese con el nuevo punto pasado
+                if(seleccionadoPuntoControl) puntoControl= npc;
+                if(seleccionadoPuntoA) A=npc;
+                if(seleccionadoPuntoB) B=npc;                   
+                //Se modifican los datos geometricos de la figura.
+                ((QuadCurve2D)datosGeometricos).setCurve(A, puntoControl, B);
+        
         }
     }
     /**
@@ -117,8 +140,10 @@ public class CurvaCuadratica extends Figura {
     public void cambiarPosicion(Point2D nuevoPuntoA, Point2D nuevoPuntoB){
  
         //Cuando cambiamos los puntos de la linea también estamos cambiando el punto de control
-        this.puntoControlDefecto(nuevoPuntoA, nuevoPuntoB);
-        ((QuadCurve2D)datosGeometricos).setCurve(nuevoPuntoA.getX(), nuevoPuntoA.getY(), puntoControl.getX(), puntoControl.getY(), nuevoPuntoB.getX(), nuevoPuntoB.getY());
+        puntoControl = puntoControlDefecto(nuevoPuntoA, nuevoPuntoB);
+        A=nuevoPuntoA;
+        B=nuevoPuntoB;
+        ((QuadCurve2D)datosGeometricos).setCurve(A, puntoControl, B);
         
     }
     
@@ -143,6 +168,17 @@ public class CurvaCuadratica extends Figura {
         //Establecemos el estilo de trazo usando el objeto trazo.
         g2d.setStroke(trazo.getStroke());
         
+          AffineTransform move = new AffineTransform();
+           move.translate(distanciaX,distanciaY); 
+           
+           AffineTransform cancelMove = new AffineTransform();
+           cancelMove.translate(0,0); 
+
+           if(moviendo){
+            g2d.setTransform(move);     
+           }
+        
+        
         //Hacemos que se dibujen los datos geométricos.
         g2d.draw(datosGeometricos);
         
@@ -155,14 +191,17 @@ public class CurvaCuadratica extends Figura {
             //La dibujamos
             g2d.draw(elipsePuntoControl);
                                    
-            elipsePuntoA = new Ellipse2D.Double(((QuadCurve2D)datosGeometricos).getX1()-5, ((QuadCurve2D)datosGeometricos).getY1()-5,10,10 );
+            elipsePuntoA = new Ellipse2D.Double(A.getX()-5, A.getY()-5,10,10 );
             g2d.draw(elipsePuntoA);
             
-            elipsePuntoB = new Ellipse2D.Double(((QuadCurve2D)datosGeometricos).getX2()-5, ((QuadCurve2D)datosGeometricos).getY2()-5,10,10 );
+            elipsePuntoB = new Ellipse2D.Double(B.getX()-5, B.getY()-5,10,10 );
             g2d.draw(elipsePuntoB);
             
         }
-
+  if(moviendo){
+            g2d.setTransform(cancelMove);
+        }
+        
         
     }
     
@@ -177,6 +216,8 @@ public class CurvaCuadratica extends Figura {
         seleccionadoPuntoControl=false;
         seleccionadoPuntoA=false;
         seleccionadoPuntoB=false;
+        moviendo=false;
+        
         
          //¿Se ha seleccionado el punto de control?//
          if(elipsePuntoControl.contains(punto)){
@@ -185,44 +226,67 @@ public class CurvaCuadratica extends Figura {
              seleccionadoPuntoA=false;             
              return true;
          }else
-             if(elipsePuntoA.contains(punto)){
+        if(elipsePuntoA.contains(punto)){
                  Imprimir("Has dado en el punto A!");
                  this.seleccionadoPuntoA=true;
                  return true;
-             }
-             else if(elipsePuntoB.contains(punto)){
+        }
+        else if(elipsePuntoB.contains(punto)){
                  Imprimir("Has dado en el punto B!");
                  this.seleccionadoPuntoB=true;
                  return true;
-             }else{
+        }else{
                  
+            //Como no ha sido seleccionado ninguno de los extremos ni el punto de control ponemos las variables a false.
                  seleccionadoPuntoControl=false;
                  seleccionadoPuntoA=false;
                  seleccionadoPuntoB=false;
+                 moviendo=false;
+            
                  
+                 
+                //Construcción de una linea a partir de los puntos de control 
+                 Line2D l = new Line2D.Double(A,B);
+                                  
+                 
+                //Nos queda comprobar si se ha seleccionado otro punto de la figura
+                 //Cuando ocurre esto es que queremos mover la figura, no editar un punto de control
+                if( l.ptLineDistSq(punto)<=5.0 ){
+                    Imprimir("Seleccionado otro punto de de la cuad curve");
+                    moviendo=true;
+                    return true;
+                }
+                else{    
+
                  return false;
+                }
              } 
-                
 
-
-
-
-
-
-        //Posiblemente falle como en el caso de la linea:
-        
-        
-        
-        /*
-        
-        if( ((QuadCurve2D)datosGeometricos).contains(punto) )
-            return true;
-        else
-            return false;
-        */
-                
     }
 
+        public void soltarRaton(Point2D ref, Point2D nuevo){
+            
+            /**
+             * Si la figura se está moviendo se realiza el cambio de su posición, en caso contrario se estará
+             * modificando un punto de control y esta función no hace nada.
+             */
+            if(moviendo){
+                
+                //Modificamos los tres puntos que definen la figura aplicando las distancas obtenidas por el movimiento.
+                
+                //Cambiamos los puntos: 
+                A.setLocation(A.getX()+distanciaX, A.getY()+distanciaY);
+                B.setLocation(B.getX()+distanciaX, B.getY()+distanciaY);
+                
+                puntoControl.setLocation(puntoControl.getX()+distanciaX,puntoControl.getY()+distanciaY);
+                
+                ((QuadCurve2D)datosGeometricos).setCurve(A, puntoControl, B);
+                
+            }
+            moviendo=false;
+            distanciaX=distanciaY=0;
+    }
+    
     /**
      * Devuelve información básica de la figura.
      * @return Una cadena de texto con la información que se disponga.
