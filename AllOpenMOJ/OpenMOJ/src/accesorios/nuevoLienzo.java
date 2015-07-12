@@ -18,15 +18,13 @@ package accesorios;
 
 import Programa.VentanaInterna;
 import Programa.VentanaPrincipal;
-import extras.Herramienta;
-import java.awt.Color;
+import static extras.Imprimir.Imprimir;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.ItemSelectable;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
+import javax.swing.ImageIcon;
 
 /**
  *
@@ -41,6 +39,7 @@ public class nuevoLienzo extends javax.swing.JFrame {
     private int anchoLienzo;
     private int altoLienzo;
     
+    private Orientacion orientacion;
  
     
     /**
@@ -49,10 +48,13 @@ public class nuevoLienzo extends javax.swing.JFrame {
      */
     public nuevoLienzo(VentanaPrincipal padre) {                         
 
+        
+        orientacion = Orientacion.HORIZONTAL;
+       
         this.padre=padre;
         
         //Valores por defecto de ancho y alto del lienzo:
-            anchoLienzo=300;
+            anchoLienzo=500;
             altoLienzo=300;
             
         initComponents();    
@@ -64,21 +66,21 @@ public class nuevoLienzo extends javax.swing.JFrame {
         
         //Ajustamos el comboBox
         comboPlantilla.removeAllItems();
-        comboPlantilla.addItem("Basic");
-        comboPlantilla.addItem("A5");
-        comboPlantilla.addItem("A4");
+        comboPlantilla.addItem("Basico");
+        comboPlantilla.addItem("Medio");
+        comboPlantilla.addItem("Grande");
 
         
         ItemListener itemListener = new ItemListener() {
             public void itemStateChanged(ItemEvent itemEvent) {
                      
                 Object item=itemEvent.getItem();
-                if(item=="A4"){
-                    altoLienzo=3508; anchoLienzo=2480; actualizaSpinner();                    
-                }else if(item=="A5"){
-                    altoLienzo=2480; anchoLienzo=1748; actualizaSpinner(); 
-                }else if(item=="Basic"){
-                    altoLienzo=400; anchoLienzo=400; actualizaSpinner(); 
+                if(item=="Basico"){
+                    altoLienzo=300; anchoLienzo=500; actualizaSpinner();                    
+                }else if(item=="Medio"){
+                    altoLienzo=400; anchoLienzo=600; actualizaSpinner(); 
+                }else if(item=="Grande"){
+                    altoLienzo=500; anchoLienzo=700; actualizaSpinner(); 
                 }             
             }
         };
@@ -88,7 +90,34 @@ public class nuevoLienzo extends javax.swing.JFrame {
         
         //Nos colocamos en el centro de la pantalla
         this.setLocationRelativeTo(null);
+        this.labelOrientacion.setIcon(new ImageIcon(getClass().getResource("/Img/landscape.png")));
+ 
+    }
+    
+    public void cambiarOrientacion(Orientacion ori){
+
+        //Ajustamos la orientación vertical
+        if(ori==Orientacion.VERTICAL){
+                if(ori!=orientacion){
+                    int tmp=altoLienzo;
+                    altoLienzo=anchoLienzo;
+                    anchoLienzo=tmp;
+                }
+
+        }
         
+        //Ajustas la orientación horizontal
+        if(ori==Orientacion.HORIZONTAL){
+                if(ori!=orientacion){
+                    int tmp=altoLienzo;
+                    altoLienzo=anchoLienzo;
+                    anchoLienzo=tmp;
+                }
+
+        }
+        
+        //Cambiamos la orientación:
+        orientacion=ori;
     }
     
     public void actualizaSpinner(){
@@ -104,6 +133,7 @@ public class nuevoLienzo extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        grupoOrientacion = new javax.swing.ButtonGroup();
         jPanel3 = new javax.swing.JPanel();
         jLabel9 = new javax.swing.JLabel();
         comboPlantilla = new javax.swing.JComboBox();
@@ -113,6 +143,10 @@ public class nuevoLienzo extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
+        labelOrientacion = new javax.swing.JLabel();
+        botonVertical = new javax.swing.JToggleButton();
+        botonHorizontal = new javax.swing.JToggleButton();
         panelBotones = new javax.swing.JPanel();
         botonAceptar = new javax.swing.JButton();
         botonCancelar = new javax.swing.JButton();
@@ -139,7 +173,7 @@ public class nuevoLienzo extends javax.swing.JFrame {
                 .addComponent(jLabel9)
                 .addGap(33, 33, 33)
                 .addComponent(comboPlantilla, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(94, Short.MAX_VALUE))
+                .addContainerGap(103, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -172,11 +206,35 @@ public class nuevoLienzo extends javax.swing.JFrame {
         jLabel8.setFont(new java.awt.Font("DejaVu Sans", 1, 12)); // NOI18N
         jLabel8.setText("Tamaño de la imagen:");
 
+        jLabel10.setFont(new java.awt.Font("DejaVu Sans", 1, 12)); // NOI18N
+        jLabel10.setText("Orientación:");
+
+        labelOrientacion.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/portrait.png"))); // NOI18N
+
+        grupoOrientacion.add(botonVertical);
+        botonVertical.setText("Vertical");
+        botonVertical.setPreferredSize(new java.awt.Dimension(90, 22));
+        botonVertical.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonVerticalActionPerformed(evt);
+            }
+        });
+
+        grupoOrientacion.add(botonHorizontal);
+        botonHorizontal.setSelected(true);
+        botonHorizontal.setText("Horizontal");
+        botonHorizontal.setPreferredSize(new java.awt.Dimension(90, 22));
+        botonHorizontal.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonHorizontalActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout panelTamañoImagenLayout = new javax.swing.GroupLayout(panelTamañoImagen);
         panelTamañoImagen.setLayout(panelTamañoImagenLayout);
         panelTamañoImagenLayout.setHorizontalGroup(
             panelTamañoImagenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelTamañoImagenLayout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelTamañoImagenLayout.createSequentialGroup()
                 .addGroup(panelTamañoImagenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(panelTamañoImagenLayout.createSequentialGroup()
                         .addGap(46, 46, 46)
@@ -190,22 +248,38 @@ public class nuevoLienzo extends javax.swing.JFrame {
                     .addGroup(panelTamañoImagenLayout.createSequentialGroup()
                         .addGap(14, 14, 14)
                         .addComponent(jLabel8)))
-                .addContainerGap(208, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
+                .addGroup(panelTamañoImagenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel10)
+                    .addGroup(panelTamañoImagenLayout.createSequentialGroup()
+                        .addGroup(panelTamañoImagenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(botonHorizontal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(botonVertical, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addComponent(labelOrientacion)))
+                .addGap(33, 33, 33))
         );
         panelTamañoImagenLayout.setVerticalGroup(
             panelTamañoImagenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelTamañoImagenLayout.createSequentialGroup()
-                .addContainerGap(15, Short.MAX_VALUE)
-                .addComponent(jLabel8)
-                .addGap(18, 18, 18)
-                .addGroup(panelTamañoImagenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(spinnerAncho, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel4))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(panelTamañoImagenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(spinnerAlto, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel5))
-                .addGap(20, 20, 20))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelTamañoImagenLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(panelTamañoImagenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(labelOrientacion)
+                    .addGroup(panelTamañoImagenLayout.createSequentialGroup()
+                        .addGroup(panelTamañoImagenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel8)
+                            .addComponent(jLabel10))
+                        .addGap(18, 18, 18)
+                        .addGroup(panelTamañoImagenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(spinnerAncho, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel4)
+                            .addComponent(botonVertical, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(panelTamañoImagenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(spinnerAlto, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel5)
+                            .addComponent(botonHorizontal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addGap(51, 51, 51))
         );
 
         getContentPane().add(panelTamañoImagen, java.awt.BorderLayout.CENTER);
@@ -233,7 +307,7 @@ public class nuevoLienzo extends javax.swing.JFrame {
                 .addComponent(botonAceptar)
                 .addGap(42, 42, 42)
                 .addComponent(botonCancelar)
-                .addContainerGap(95, Short.MAX_VALUE))
+                .addContainerGap(104, Short.MAX_VALUE))
         );
         panelBotonesLayout.setVerticalGroup(
             panelBotonesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -294,6 +368,10 @@ public class nuevoLienzo extends javax.swing.JFrame {
                 padre.getPanelEscritorio().add(ventanaInterna);            
                 //La hacemos visible:
                 ventanaInterna.setVisible(true);
+                
+                
+            //5º Se ajusta la zona de cliping de la ventana interna al tamaño del linezo:
+                ventanaInterna.getLienzo().setDimensionesLienzo(anchoLienzo, altoLienzo);
             
             this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
                 
@@ -331,6 +409,24 @@ public class nuevoLienzo extends javax.swing.JFrame {
         this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
     }//GEN-LAST:event_botonCancelarActionPerformed
 
+    private void botonVerticalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonVerticalActionPerformed
+        
+        //Cambiamos el icono:
+        this.labelOrientacion.setIcon(new ImageIcon(getClass().getResource("/Img/portrait.png")));
+        Imprimir("Ancho: "+anchoLienzo+" Alto: "+altoLienzo);
+        cambiarOrientacion(Orientacion.VERTICAL);
+        Imprimir("Ancho: "+anchoLienzo+" Alto: "+altoLienzo);
+        
+    }//GEN-LAST:event_botonVerticalActionPerformed
+
+    private void botonHorizontalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonHorizontalActionPerformed
+        //Cambiamos el icono:
+        this.labelOrientacion.setIcon(new ImageIcon(getClass().getResource("/Img/landscape.png")));
+        Imprimir("Ancho: "+anchoLienzo+" Alto: "+altoLienzo);
+        cambiarOrientacion(Orientacion.HORIZONTAL);
+        Imprimir("Ancho: "+anchoLienzo+" Alto: "+altoLienzo);
+    }//GEN-LAST:event_botonHorizontalActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -362,15 +458,26 @@ public class nuevoLienzo extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton botonAceptar;
     private javax.swing.JButton botonCancelar;
+    private javax.swing.JToggleButton botonHorizontal;
+    private javax.swing.JToggleButton botonVertical;
     private javax.swing.JComboBox comboPlantilla;
+    private javax.swing.ButtonGroup grupoOrientacion;
+    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JLabel labelOrientacion;
     private javax.swing.JPanel panelBotones;
     private javax.swing.JPanel panelTamañoImagen;
     private javax.swing.JSpinner spinnerAlto;
     private javax.swing.JSpinner spinnerAncho;
     // End of variables declaration//GEN-END:variables
+
+private enum Orientacion{
+    VERTICAL,
+    HORIZONTAL
+}
+    
 }

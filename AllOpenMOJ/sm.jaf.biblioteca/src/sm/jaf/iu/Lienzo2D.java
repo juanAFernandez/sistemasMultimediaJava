@@ -59,6 +59,10 @@ public class Lienzo2D extends javax.swing.JPanel {
 
     
     
+    int anchoLienzo;
+    int altoLienzo;
+    
+    
     /**
      * Variables trazo son solo variables auxiliares que sirve para la creación de las figuras.
      * Estas variables no configurar la forma de dibujara todas las figuras. Son solo usadas para coger
@@ -130,11 +134,15 @@ public class Lienzo2D extends javax.swing.JPanel {
         mejoraRenderizacion=false;
         trazo=new Trazo();
         rellenoPadre=null;
+        anchoLienzo=altoLienzo=300;
         
  
     }
    
-
+    public void setDimensionesLienzo(int anchoL, int altoL){
+        anchoLienzo=anchoL;
+        altoLienzo=altoL;
+    }
     
     
     
@@ -366,11 +374,11 @@ public class Lienzo2D extends javax.swing.JPanel {
             //Habría que conseguir que esto sólo se hiciera para la sección central
                 //Pruebas de recorte:
         if(central){
-                Shape clipArea = new Rectangle2D.Double(0,0,300,300);
+                Shape clipArea = new Rectangle2D.Double(0,0,anchoLienzo,altoLienzo);                
                 g2d.setClip(clipArea);
                 //fin de prueba de recorte                                
                 Figura clip = new Rectangulo();
-                clip.cambiarPosicion(new Point2D.Double(0, 0), new Point2D.Double(299,299));
+                clip.cambiarPosicion(new Point2D.Double(0, 0), new Point2D.Double(anchoLienzo-1,altoLienzo-1));
                 Trazo miTrazo = new Trazo();
                 float patron[] = {10,10,2,10,0,0,0,0};
                 miTrazo.setPatronDiscontinuidad(patron);
@@ -530,6 +538,9 @@ public class Lienzo2D extends javax.swing.JPanel {
                   
                     if(texto!=null){                
 
+                         //Cambiamos el icono
+                        this.setCursor(cursorManoCerrada);
+                        
                         //Extraemos la posición dentro del vector de textos de esta para tenerla localizada.
                         textoMoviendo = vTextos.indexOf(texto);
 
@@ -1144,9 +1155,12 @@ public class Lienzo2D extends javax.swing.JPanel {
            // Imprimir("Soy un ratón y me estoy moviendo por el plano");
             //Comprueba si en el punto el que estoy hay una figura
             Figura figura = getFiguraSeleccionada(evt.getPoint());
+            Texto texto = this.getTextoSeleccionado(evt.getPoint());
+            
+            //this.getTextoSeleccionado(pA)
             
             //Si estoy encima de una figura cambio el icono
-            if(figura!=null)
+            if(figura!=null || texto!=null)
                 this.setCursor(cursorManoAbierta);
             //Si no estoy encima de una figura, dejo el cursor como estaba
             else
