@@ -378,6 +378,9 @@
                 <Property name="text" type="java.lang.String" value="Sobre MOJ"/>
                 <Property name="toolTipText" type="java.lang.String" value=""/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="botonAboutInfoActionPerformed"/>
+              </Events>
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="botonAjustes">
               <Properties>
@@ -527,7 +530,7 @@
                       <ComponentRef name="GrupoBotonesDibujo"/>
                     </Property>
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                      <Image iconType="3" name="/Img/quadcurve.gif"/>
+                      <Image iconType="3" name="/Img/cuad.png"/>
                     </Property>
                   </Properties>
                   <Events>
@@ -539,7 +542,9 @@
                     <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
                       <ComponentRef name="GrupoBotonesDibujo"/>
                     </Property>
-                    <Property name="text" type="java.lang.String" value="CC"/>
+                    <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                      <Image iconType="3" name="/Img/cubic.png"/>
+                    </Property>
                   </Properties>
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="buttonCubicCurveActionPerformed"/>
@@ -550,7 +555,9 @@
                     <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
                       <ComponentRef name="GrupoBotonesDibujo"/>
                     </Property>
-                    <Property name="text" type="java.lang.String" value="PP"/>
+                    <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                      <Image iconType="3" name="/Img/polyline.png"/>
+                    </Property>
                   </Properties>
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="buttonPolilineaActionPerformed"/>
@@ -600,7 +607,9 @@
                     <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
                       <ComponentRef name="GrupoBotonesDibujo"/>
                     </Property>
-                    <Property name="text" type="java.lang.String" value="arco"/>
+                    <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                      <Image iconType="3" name="/Img/arc.png"/>
+                    </Property>
                   </Properties>
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="buttonArcoActionPerformed"/>
@@ -617,6 +626,16 @@
                   </Properties>
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="buttonTextoActionPerformed"/>
+                  </Events>
+                </Component>
+                <Component class="javax.swing.JButton" name="buttonErase">
+                  <Properties>
+                    <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                      <Image iconType="3" name="/Img/erase.png"/>
+                    </Property>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="buttonEraseActionPerformed"/>
                   </Events>
                 </Component>
               </SubComponents>
@@ -676,7 +695,7 @@
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Group type="102" attributes="0">
                                       <EmptySpace min="-2" pref="24" max="-2" attributes="0"/>
-                                      <Component id="botonRELLENO" min="-2" pref="45" max="-2" attributes="0"/>
+                                      <Component id="buttonEditarRelleno" min="-2" pref="45" max="-2" attributes="0"/>
                                       <EmptySpace min="-2" pref="54" max="-2" attributes="0"/>
                                   </Group>
                                   <Group type="102" alignment="1" attributes="0">
@@ -709,7 +728,7 @@
                                   </Group>
                                   <Group type="103" groupAlignment="0" attributes="0">
                                       <Group type="102" alignment="0" attributes="0">
-                                          <Component id="botonRELLENO" min="-2" max="-2" attributes="0"/>
+                                          <Component id="buttonEditarRelleno" min="-2" max="-2" attributes="0"/>
                                           <EmptySpace max="-2" attributes="0"/>
                                           <Component id="botonRelleno" min="-2" max="-2" attributes="0"/>
                                       </Group>
@@ -759,7 +778,7 @@
                         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="botonEditarActionPerformed"/>
                       </Events>
                     </Component>
-                    <Component class="javax.swing.JButton" name="botonRELLENO">
+                    <Component class="javax.swing.JButton" name="buttonEditarRelleno">
                       <Properties>
                         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                           <Image iconType="3" name="/Img/settings.png"/>
@@ -767,7 +786,7 @@
                         <Property name="contentAreaFilled" type="boolean" value="false"/>
                       </Properties>
                       <Events>
-                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="botonRELLENOActionPerformed"/>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="buttonEditarRellenoActionPerformed"/>
                       </Events>
                     </Component>
                     <Container class="sm.jaf.iu.Lienzo2D" name="miniLienzoRelleno">
@@ -807,7 +826,7 @@
                                       </Group>
                                       <Group type="102" alignment="0" attributes="0">
                                           <EmptySpace max="-2" attributes="0"/>
-                                          <Component id="botonEditarNombre" min="-2" pref="44" max="-2" attributes="0"/>
+                                          <Component id="buttonEditarTrazo" min="-2" pref="44" max="-2" attributes="0"/>
                                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
                                           <Component id="jLabel4" min="-2" max="-2" attributes="0"/>
                                           <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
@@ -837,7 +856,7 @@
                               <Group type="102" alignment="0" attributes="0">
                                   <EmptySpace min="-2" pref="6" max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="0" attributes="0">
-                                      <Component id="botonEditarNombre" alignment="0" min="-2" max="-2" attributes="0"/>
+                                      <Component id="buttonEditarTrazo" alignment="0" min="-2" max="-2" attributes="0"/>
                                       <Group type="102" alignment="0" attributes="0">
                                           <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
                                           <Group type="103" groupAlignment="1" attributes="0">
@@ -895,7 +914,7 @@
                             <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="spinnerGrosorStateChanged"/>
                           </Events>
                         </Component>
-                        <Component class="javax.swing.JButton" name="botonEditarNombre">
+                        <Component class="javax.swing.JButton" name="buttonEditarTrazo">
                           <Properties>
                             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                               <Image iconType="3" name="/Img/settings.png"/>
@@ -903,7 +922,7 @@
                             <Property name="contentAreaFilled" type="boolean" value="false"/>
                           </Properties>
                           <Events>
-                            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="botonEditarNombreActionPerformed"/>
+                            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="buttonEditarTrazoActionPerformed"/>
                           </Events>
                         </Component>
                         <Component class="javax.swing.JToggleButton" name="botonNegro">

@@ -93,11 +93,13 @@ public class VentanaPrincipal extends JFrame {
     
 
     
+    
+    
     public VentanaPrincipal() {
         
         initComponents();
         
-        
+        configuraMensajesInfo();
 
         
         colorLienzoDefecto = Color.WHITE;
@@ -229,6 +231,34 @@ public class VentanaPrincipal extends JFrame {
         
     }
     
+    
+    /**
+     * Configura los mensajes de ayuda que se muestran al posar el ratón 
+     * sobre un elemento unos segundos.
+     */
+    public void configuraMensajesInfo(){
+        
+        //Herramientas de dibujo:
+            buttonLapiz.setToolTipText("Dibujo a mano alzada.");
+            buttonLinea.setToolTipText("Segmento de linea simple.");
+            buttonQuadCurve.setToolTipText("Curva con un punto de control.");
+            buttonCubicCurve.setToolTipText("Curva con dos puntos de control.");
+            buttonPolilinea.setToolTipText("Polilinea a partir de segmentos de linea.");
+            buttonRectangulo.setToolTipText("Rectangulo simple.");
+            buttonRoundRectangulo.setToolTipText("Rectangulo con bordes redondeados.");
+            buttonElipse.setToolTipText("Elipse simple.");
+            buttonArco.setToolTipText("Arco, sección de un círculo.");
+            buttonTexto.setToolTipText("Texto con formato sencillo.");
+            buttonErase.setToolTipText("Borrado de elementos.");
+        
+        //Otras
+            buttonEditarRelleno.setToolTipText("Herramienta de edición de relleno.");
+            buttonEditarTrazo.setToolTipText("Herramienta de edición de trazo.");
+        
+        
+        
+    }
+    
     public void desactivaRelleno(){
         Imprimir("Desactiva Relleno");
         this.miniLienzoRelleno.delFigura(0);
@@ -280,6 +310,7 @@ public class VentanaPrincipal extends JFrame {
         buttonRoundRectangulo = new javax.swing.JToggleButton();
         buttonArco = new javax.swing.JToggleButton();
         buttonTexto = new javax.swing.JToggleButton();
+        buttonErase = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jPanel6 = new javax.swing.JPanel();
         jSeparator4 = new javax.swing.JSeparator();
@@ -289,13 +320,13 @@ public class VentanaPrincipal extends JFrame {
         botonAlisar = new javax.swing.JCheckBox();
         botonTransparencia = new javax.swing.JCheckBox();
         botonEditar = new javax.swing.JCheckBox();
-        botonRELLENO = new javax.swing.JButton();
+        buttonEditarRelleno = new javax.swing.JButton();
         miniLienzoRelleno = new sm.jaf.iu.Lienzo2D();
         jPanel8 = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
         miniLienzoMuestra = new sm.jaf.iu.Lienzo2D();
         spinnerGrosor = new javax.swing.JSpinner();
-        botonEditarNombre = new javax.swing.JButton();
+        buttonEditarTrazo = new javax.swing.JButton();
         botonNegro = new javax.swing.JToggleButton();
         botonRojo = new javax.swing.JToggleButton();
         botonAzul = new javax.swing.JToggleButton();
@@ -426,7 +457,7 @@ public class VentanaPrincipal extends JFrame {
         jPanel5.add(buttonLinea);
 
         GrupoBotonesDibujo.add(buttonQuadCurve);
-        buttonQuadCurve.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/quadcurve.gif"))); // NOI18N
+        buttonQuadCurve.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/cuad.png"))); // NOI18N
         buttonQuadCurve.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 buttonQuadCurveActionPerformed(evt);
@@ -435,7 +466,7 @@ public class VentanaPrincipal extends JFrame {
         jPanel5.add(buttonQuadCurve);
 
         GrupoBotonesDibujo.add(buttonCubicCurve);
-        buttonCubicCurve.setText("CC");
+        buttonCubicCurve.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/cubic.png"))); // NOI18N
         buttonCubicCurve.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 buttonCubicCurveActionPerformed(evt);
@@ -444,7 +475,7 @@ public class VentanaPrincipal extends JFrame {
         jPanel5.add(buttonCubicCurve);
 
         GrupoBotonesDibujo.add(buttonPolilinea);
-        buttonPolilinea.setText("PP");
+        buttonPolilinea.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/polyline.png"))); // NOI18N
         buttonPolilinea.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 buttonPolilineaActionPerformed(evt);
@@ -480,7 +511,7 @@ public class VentanaPrincipal extends JFrame {
         jPanel5.add(buttonRoundRectangulo);
 
         GrupoBotonesDibujo.add(buttonArco);
-        buttonArco.setText("arco");
+        buttonArco.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/arc.png"))); // NOI18N
         buttonArco.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 buttonArcoActionPerformed(evt);
@@ -496,6 +527,14 @@ public class VentanaPrincipal extends JFrame {
             }
         });
         jPanel5.add(buttonTexto);
+
+        buttonErase.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/erase.png"))); // NOI18N
+        buttonErase.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonEraseActionPerformed(evt);
+            }
+        });
+        jPanel5.add(buttonErase);
 
         panelComplementario.add(jPanel5, java.awt.BorderLayout.CENTER);
 
@@ -538,11 +577,11 @@ public class VentanaPrincipal extends JFrame {
             }
         });
 
-        botonRELLENO.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/settings.png"))); // NOI18N
-        botonRELLENO.setContentAreaFilled(false);
-        botonRELLENO.addActionListener(new java.awt.event.ActionListener() {
+        buttonEditarRelleno.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/settings.png"))); // NOI18N
+        buttonEditarRelleno.setContentAreaFilled(false);
+        buttonEditarRelleno.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                botonRELLENOActionPerformed(evt);
+                buttonEditarRellenoActionPerformed(evt);
             }
         });
 
@@ -580,11 +619,11 @@ public class VentanaPrincipal extends JFrame {
             }
         });
 
-        botonEditarNombre.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/settings.png"))); // NOI18N
-        botonEditarNombre.setContentAreaFilled(false);
-        botonEditarNombre.addActionListener(new java.awt.event.ActionListener() {
+        buttonEditarTrazo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/settings.png"))); // NOI18N
+        buttonEditarTrazo.setContentAreaFilled(false);
+        buttonEditarTrazo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                botonEditarNombreActionPerformed(evt);
+                buttonEditarTrazoActionPerformed(evt);
             }
         });
 
@@ -648,7 +687,7 @@ public class VentanaPrincipal extends JFrame {
                         .addComponent(botonAzul, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel8Layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(botonEditarNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(buttonEditarTrazo, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jLabel4)
                         .addGap(0, 0, Short.MAX_VALUE)))
@@ -672,7 +711,7 @@ public class VentanaPrincipal extends JFrame {
             .addGroup(jPanel8Layout.createSequentialGroup()
                 .addGap(6, 6, 6)
                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(botonEditarNombre)
+                    .addComponent(buttonEditarTrazo)
                     .addGroup(jPanel8Layout.createSequentialGroup()
                         .addGap(5, 5, 5)
                         .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -703,7 +742,7 @@ public class VentanaPrincipal extends JFrame {
                 .addGroup(jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel16Layout.createSequentialGroup()
                         .addGap(24, 24, 24)
-                        .addComponent(botonRELLENO, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(buttonEditarRelleno, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(54, 54, 54))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel16Layout.createSequentialGroup()
                         .addComponent(botonRelleno)
@@ -729,7 +768,7 @@ public class VentanaPrincipal extends JFrame {
                         .addComponent(botonEditar))
                     .addGroup(jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(jPanel16Layout.createSequentialGroup()
-                            .addComponent(botonRELLENO)
+                            .addComponent(buttonEditarRelleno)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                             .addComponent(botonRelleno))
                         .addComponent(miniLienzoRelleno, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -1003,6 +1042,11 @@ public class VentanaPrincipal extends JFrame {
         botonAboutInfo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/info.png"))); // NOI18N
         botonAboutInfo.setText("Sobre MOJ");
         botonAboutInfo.setToolTipText("");
+        botonAboutInfo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonAboutInfoActionPerformed(evt);
+            }
+        });
         botonMenuAbout.add(botonAboutInfo);
 
         botonAjustes.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/settings.png"))); // NOI18N
@@ -1529,18 +1573,18 @@ public class VentanaPrincipal extends JFrame {
         }
     }//GEN-LAST:event_spinnerGrosorStateChanged
 
-    private void botonEditarNombreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonEditarNombreActionPerformed
+    private void buttonEditarTrazoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonEditarTrazoActionPerformed
         
         ventanaHerramientaTrazado = new herramientaTrazado(this);
         ventanaHerramientaTrazado.setVisible(true);             
         
-    }//GEN-LAST:event_botonEditarNombreActionPerformed
+    }//GEN-LAST:event_buttonEditarTrazoActionPerformed
 
-    private void botonRELLENOActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonRELLENOActionPerformed
+    private void buttonEditarRellenoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonEditarRellenoActionPerformed
         ventanaHerramientaRelleno = new herramientaRelleno(this);
         ventanaHerramientaRelleno.setVisible(true);             
         
-    }//GEN-LAST:event_botonRELLENOActionPerformed
+    }//GEN-LAST:event_buttonEditarRellenoActionPerformed
 
     private void botonEscalarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonEscalarActionPerformed
         herramientaEscalar ventanaHerramientaEscalar = new herramientaEscalar(this);
@@ -1760,6 +1804,15 @@ public class VentanaPrincipal extends JFrame {
             ((VentanaInterna)panelEscritorio.getSelectedFrame()).getLienzo().setTipoHerramienta(Herramienta.ARCO); 
     }//GEN-LAST:event_buttonArcoActionPerformed
 
+    private void buttonEraseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonEraseActionPerformed
+        JOptionPane.showMessageDialog(this, "Para borrar elementos del lienzo active el modo editar y haga doble click con el botón derecho sobre la figura.", "Borrando elementos.", JOptionPane.INFORMATION_MESSAGE);
+    }//GEN-LAST:event_buttonEraseActionPerformed
+
+    private void botonAboutInfoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonAboutInfoActionPerformed
+        SobreMOJ ventanaInformacion = new SobreMOJ();
+        ventanaInformacion.setVisible(true);
+    }//GEN-LAST:event_botonAboutInfoActionPerformed
+
     
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -1782,7 +1835,6 @@ public class VentanaPrincipal extends JFrame {
     private javax.swing.JButton botonDirectoGuardar;
     private javax.swing.JButton botonDirectoNuevo;
     private javax.swing.JCheckBox botonEditar;
-    private javax.swing.JButton botonEditarNombre;
     private javax.swing.JMenuItem botonEscalar;
     private javax.swing.JMenuItem botonFronteras;
     private javax.swing.JMenuItem botonGrabarAudio;
@@ -1798,7 +1850,6 @@ public class VentanaPrincipal extends JFrame {
     private javax.swing.JToggleButton botonNegro;
     private javax.swing.JMenuItem botonNuevoMenuArchivo;
     private javax.swing.JMenuItem botonOperacionBinarias;
-    private javax.swing.JButton botonRELLENO;
     private javax.swing.JMenuItem botonRehacer;
     private javax.swing.JCheckBox botonRelleno;
     private javax.swing.JToggleButton botonRojo;
@@ -1807,7 +1858,10 @@ public class VentanaPrincipal extends JFrame {
     private javax.swing.JToggleButton botonVerde;
     private javax.swing.JToggleButton buttonArco;
     private javax.swing.JToggleButton buttonCubicCurve;
+    private javax.swing.JButton buttonEditarRelleno;
+    private javax.swing.JButton buttonEditarTrazo;
     private javax.swing.JToggleButton buttonElipse;
+    private javax.swing.JButton buttonErase;
     private javax.swing.JToggleButton buttonLapiz;
     private javax.swing.JToggleButton buttonLinea;
     private javax.swing.JToggleButton buttonPolilinea;

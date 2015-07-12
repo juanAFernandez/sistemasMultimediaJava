@@ -79,10 +79,12 @@ public class Rectangulo extends Figura{
      * que no tiene relleno.
      */
     public Rectangulo(){
-        datosGeometricos=new Rectangle2D.Double();
+        datosGeometricos=new Rectangle2D.Double();        
         relleno = false;
         modoEdicion=false;
         seleccionadoPuntoControlA=false;
+        elipsePuntoControlA = new Ellipse2D.Double();
+        elipsePuntoControlB = new Ellipse2D.Double();
         seleccionadoPuntoControlB=false;
         A = new Point2D.Double(); 
         B = new Point2D.Double();

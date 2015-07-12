@@ -14,6 +14,7 @@
 */
 package sm.jaf.iu;
 
+import com.sun.glass.events.MouseEvent;
 import static extras.Imprimir.Imprimir;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -33,6 +34,7 @@ import java.awt.geom.GeneralPath;
 import java.awt.geom.Path2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
+import javax.swing.SwingUtilities;
 import sm.jaf.graficos.Arco;
 import sm.jaf.graficos.CurvaCuadratica;
 import sm.jaf.graficos.CurvaCubica;
@@ -385,7 +387,7 @@ public class Lienzo2D extends javax.swing.JPanel {
 
                 for(Figura figura:vShape){
                     figura.dibujateEn(g2d);
-                    Imprimir(figura.toString());
+                    //Imprimir(figura.toString());
                    /*
                    //Imprimir(s.getClass().getName());
                     if( (s.getClass().getName().contains("Rectangle") || s.getClass().getName().contains("Ellipse")) && relleno==true)
@@ -481,6 +483,11 @@ public class Lienzo2D extends javax.swing.JPanel {
      */
     private void formMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMousePressed
     
+        
+        //Tendremos que identificar el botón izquierdo que será sólo con el que se podrá
+        //dibujar, con el derecho no se podrá hacer nada.
+        if(SwingUtilities.isLeftMouseButton(evt)){
+        
         
         //Obtenemos el primer punto necesario al presionar (sin soltar) el ratón en cualquier parte del frame.        
         pA=evt.getPoint();
@@ -756,7 +763,7 @@ public class Lienzo2D extends javax.swing.JPanel {
          
         }
          
-        
+        }//Fin del bloque de ejecución sólo para el botón izquierdo del ratón.
     }//GEN-LAST:event_formMousePressed
 
     private void formMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseDragged
@@ -765,6 +772,11 @@ public class Lienzo2D extends javax.swing.JPanel {
         arrastramos el ratón para al final dibujarla del todo al levantar el click (released).
         */
        
+        
+         if(SwingUtilities.isLeftMouseButton(evt)){
+             
+             
+         
         //Capturamos el segundo punto necesario para construir la linea:
         pB=evt.getPoint();
         
@@ -987,7 +999,8 @@ public class Lienzo2D extends javax.swing.JPanel {
         //vShape.add(temporal);
                 
         //Como ya está en el vector llamamos a paint para que vuelva a pintar todos los objetos y este en el estado que está.
-        this.repaint();     
+        this.repaint();  
+    }
     }//GEN-LAST:event_formMouseDragged
 
     /**
@@ -1048,6 +1061,27 @@ public class Lienzo2D extends javax.swing.JPanel {
         
         if (evt.getClickCount() == 2) {
             
+            Imprimir("### Doble click ###");
+            
+            
+            if(modoSeleccion){
+                //Detectamos el doble click del botón derecho del ratón
+                if(SwingUtilities.isRightMouseButton(evt)){
+
+                    Imprimir("BOTÓN RIGHT");
+                    //Sacamos si existe alguna figura donde hemos pulsado.
+                    Figura figura=getFiguraSeleccionada(evt.getPoint());
+                    //Eliminamos la figura del vector
+                    if(figura!=null){
+                        vShape.remove(figura);                   
+                    }
+                    //Después de eliminar la figura repintamos:
+                    this.repaint();
+                }
+            }
+            
+            
+    
             
             /*Si al hacer doble click estamos trabajando con una polilinea cerramos el objeto, es decir, 
             estamos desbloqueando la creacion de polilineas. Es decir, ahora un nuevo click tras este doble 
