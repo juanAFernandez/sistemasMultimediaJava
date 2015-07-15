@@ -1,6 +1,7 @@
 package Programa;
 
 import Herramientas.herramientaBrilloContraste;
+import Herramientas.herramientaDuplicar;
 import Herramientas.herramientaEmborronamiento;
 import Herramientas.herramientaEnfoque;
 import Herramientas.herramientaEscalar;
@@ -364,7 +365,8 @@ public class VentanaPrincipal extends JFrame {
         botonRotar = new javax.swing.JMenuItem();
         botonMenuherramientaEnfoque = new javax.swing.JMenuItem();
         botonEscalar = new javax.swing.JMenuItem();
-        jMenuItem2 = new javax.swing.JMenuItem();
+        botonUmbralizacion = new javax.swing.JMenuItem();
+        botonDuplicar = new javax.swing.JMenuItem();
         botonOperacionBinarias = new javax.swing.JMenuItem();
         jMenuItem1 = new javax.swing.JMenuItem();
         botonMenuAbout = new javax.swing.JMenu();
@@ -982,15 +984,24 @@ public class VentanaPrincipal extends JFrame {
         });
         menuHerramientas.add(botonEscalar);
 
-        jMenuItem2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/umbralizacion.png"))); // NOI18N
-        jMenuItem2.setText("Umbralizacion");
-        jMenuItem2.setToolTipText("");
-        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+        botonUmbralizacion.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/umbralizacion.png"))); // NOI18N
+        botonUmbralizacion.setText("Umbralizacion");
+        botonUmbralizacion.setToolTipText("");
+        botonUmbralizacion.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem2ActionPerformed(evt);
+                botonUmbralizacionActionPerformed(evt);
             }
         });
-        menuHerramientas.add(jMenuItem2);
+        menuHerramientas.add(botonUmbralizacion);
+
+        botonDuplicar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/duplicate.png"))); // NOI18N
+        botonDuplicar.setText("Duplicar");
+        botonDuplicar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonDuplicarActionPerformed(evt);
+            }
+        });
+        menuHerramientas.add(botonDuplicar);
 
         botonOperacionBinarias.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/plus_subtraction.png"))); // NOI18N
         botonOperacionBinarias.setText("Op. Binarias");
@@ -1308,10 +1319,10 @@ public class VentanaPrincipal extends JFrame {
         ventanaHerramientaSeno.setVisible(true);
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
-    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+    private void botonUmbralizacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonUmbralizacionActionPerformed
         ventanaHerramientaUmbral = new herramientaUmbralizacion(this);
         ventanaHerramientaUmbral.setVisible(true);
-    }//GEN-LAST:event_jMenuItem2ActionPerformed
+    }//GEN-LAST:event_botonUmbralizacionActionPerformed
 
     private void botonAbrirAudioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonAbrirAudioActionPerformed
 
@@ -1810,6 +1821,11 @@ public class VentanaPrincipal extends JFrame {
         ventanaInformacion.setVisible(true);
     }//GEN-LAST:event_botonAboutInfoActionPerformed
 
+    private void botonDuplicarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonDuplicarActionPerformed
+        herramientaDuplicar opDuplicar = new herramientaDuplicar(this);
+        opDuplicar.setVisible(true);
+    }//GEN-LAST:event_botonDuplicarActionPerformed
+
     
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -1831,6 +1847,7 @@ public class VentanaPrincipal extends JFrame {
     private javax.swing.JButton botonDirectoAbrir;
     private javax.swing.JButton botonDirectoGuardar;
     private javax.swing.JButton botonDirectoNuevo;
+    private javax.swing.JMenuItem botonDuplicar;
     private javax.swing.JCheckBox botonEditar;
     private javax.swing.JMenuItem botonEscalar;
     private javax.swing.JMenuItem botonFronteras;
@@ -1852,6 +1869,7 @@ public class VentanaPrincipal extends JFrame {
     private javax.swing.JToggleButton botonRojo;
     private javax.swing.JMenuItem botonRotar;
     private javax.swing.JCheckBox botonTransparencia;
+    private javax.swing.JMenuItem botonUmbralizacion;
     private javax.swing.JToggleButton botonVerde;
     private javax.swing.JToggleButton buttonArco;
     private javax.swing.JToggleButton buttonCubicCurve;
@@ -1870,7 +1888,6 @@ public class VentanaPrincipal extends JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
-    private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem7;
     private javax.swing.JPanel jPanel16;
     private javax.swing.JPanel jPanel3;

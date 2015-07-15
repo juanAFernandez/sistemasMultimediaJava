@@ -18,15 +18,15 @@ Esta figura se compone de segmentos de linea conexos entre puntos que se van tra
 
 Compuesta de dos puntos, posee dos puntos de control en los extremos de linea que permiten modificar su tamaño y posición. Esta figura puede moverse usando  cualquier otro punto que no sean puntos de control.
 
-![](AllOpenMOJ/OpenMOJ/src/Img/cuad.png)** Curva con un punto de control**
+![](AllOpenMOJ/OpenMOJ/src/Img/cuad.png)**Curva con un punto de control**
 
 Segmento de linea curvo con un punto de control. Modificables los extremos y el punto de control además puede moverse seleccionando la linea que forman los extremos (que no se muestran).
 
-![](AllOpenMOJ/OpenMOJ/src/Img/cubic.png)** Curva con dos puntos de control**
+![](AllOpenMOJ/OpenMOJ/src/Img/cubic.png)**Curva con dos puntos de control**
 
 Igual que la anterior pero con dos puntos de control.
 
-![](AllOpenMOJ/OpenMOJ/src/Img/polyline.png)** Polilinea**
+![](AllOpenMOJ/OpenMOJ/src/Img/polyline.png)**Polilinea**
 
 Se compone de lineas entre puntos que se van añadiendo al hacer click en el lienzo formando una figura general. Cada uno de los puntos es un punto de control que puede modificarse en modo edición y seleccionando cualquier parte de la figura puede moverse.
 
@@ -38,12 +38,12 @@ Figura que posee dos puntos de control en los extremos de su diagonal principal 
 
 Igual que el rectángulo pero con los bordes redondeados.
 
-![](AllOpenMOJ/OpenMOJ/src/Img/arc.png)**  Arco**
+![](AllOpenMOJ/OpenMOJ/src/Img/arc.png)**Arco**
 
 Sección del perímetro de un círculo posee tres puntos de control con los que la figura puede moverse y además cambiar los ángulos, principio y fin, que definen el arco, así como su tamaño, definido por el radio.
 
 
-![](AllOpenMOJ/OpenMOJ/src/Img/Texto.gif)** Texto**
+![](AllOpenMOJ/OpenMOJ/src/Img/Texto.gif)**Texto**
 
 Herramienta de creación de texto simple. Carga las fuentes del sistema y permite modificar el color, subrayar, tachar, hacer negrita y cursiva. La edición puede hacerse después de su escritura haciendo doble click sobre el texto para que la herramienta se vuelva a abrir.
 
