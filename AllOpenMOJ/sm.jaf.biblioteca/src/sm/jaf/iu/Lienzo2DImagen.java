@@ -57,11 +57,13 @@ public class Lienzo2DImagen extends Lienzo2D {
         //Ajustamos el tamaño del lienzo al tamaño de la imagen que abrimos.
         if(img!=null){
             setPreferredSize(new Dimension(img.getWidth(), img.getHeight()));
+            //Ajustamos el tamaño del cliping al tamño de la imagen:
+            altoLienzo=img.getHeight();
+            anchoLienzo=img.getWidth();
         }
             
     }
-    
-    
+
     public BufferedImage getImage(boolean drawVector){
         if(drawVector){
             return getImage();
@@ -70,10 +72,14 @@ public class Lienzo2DImagen extends Lienzo2D {
             return getImage();
     }
             
-    
+    /**
+     * Devuelve todo lo que haya en el lienzo grabado sobre una imagen.
+     * @return Imagen en formato BufferedImagen
+     */
     public BufferedImage getImage(){
         Imprimir("Llamando a getImage en Lienzo2DImagen");
        
+        //Si el vector de figuras no está vacío:
         if(!vShape.isEmpty()){
             return dibujarFiguras();
         }
@@ -81,57 +87,40 @@ public class Lienzo2DImagen extends Lienzo2D {
         return imagen;          
     }
     
-    public BufferedImage dibujarFiguras(){
-        //Intentando dibujar figuras en imagen
+    public BufferedImage dibujarFiguras(){                
         
-        
+        //Si no existe imagen previa (una foto, por ejemplo)
         if(imagen==null){
             Imprimir("Aun no hay una imgaen donde guardar!");
-            crearImagen();
+            imagen = imagen = new BufferedImage(anchoLienzo, altoLienzo, BufferedImage.TYPE_INT_RGB);
             
-            paint(imagen.createGraphics());  //1ª forma de dibujar las formas que no funcionaba
-            return imagen;// 1ª forma que no funcionaba
+            paint(imagen.createGraphics());
+            return imagen;
             
+        //Si existe imagen previa (una foto, por ejemplo)
         }else{
             Imprimir("La imagen ya tiene contenido");
         
-        
-        
-        //paint(imagen.createGraphics());     
-        
-        BufferedImage mImagen;
-        Dimension d = getSize();
-        int ancho = d.width, alto = d.height;
-        mImagen = new BufferedImage(ancho,alto, BufferedImage.TYPE_INT_RGB);
-        
-        //Tenemos que convertir esta imagen en blanca:
-        
+          
+            BufferedImage mImagen;
+            mImagen = new BufferedImage(anchoLienzo, altoLienzo, BufferedImage.TYPE_INT_RGB);
 
-        
-        Graphics2D gOculta = mImagen.createGraphics();
-        
-      //  gOculta.setPaint(Color.WHITE);
-      //  gOculta.drawRect(0, 0, alto, ancho);
-        
-        gOculta.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        gOculta.drawImage(imagen, 0, 20, this);
-        
-        if(!vShape.isEmpty())
-            for(Figura figura:vShape)
-                figura.dibujateEn(gOculta);
-        
-        return mImagen;
+            Graphics2D gOculta = mImagen.createGraphics();
+
+
+            gOculta.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            gOculta.drawImage(imagen, 0, 0, this);
+
+
+            if(!vShape.isEmpty())
+                for(Figura fig:vShape)
+                    fig.dibujateEn(gOculta);
+
+            return mImagen;
         }
-    
-      //  return imagen; 1ª forma que no funcionaba
+       
     }
-    
-    
-    public void crearImagen(){
-        Dimension d = getSize();
-        int ancho = d.width; int alto = d.height;
-        imagen = new BufferedImage(ancho, alto, BufferedImage.TYPE_INT_RGB);
-    }
+
     
     
     @Override
