@@ -24,13 +24,14 @@ import sm.image.BufferedImagePixelIterator;
  *
  * @author juan
  */
-public class UmbralizacionOp extends BufferedImageOpAdapter {
+public class EscalaGrisesOp extends BufferedImageOpAdapter {
 
     private int umbral;
     
-    public UmbralizacionOp(int umbral){
-        this.umbral=umbral;
+    public EscalaGrisesOp(){
+
     }
+
     
     /**
      * Función que realmente aplica el filtro:
@@ -70,13 +71,8 @@ public class UmbralizacionOp extends BufferedImageOpAdapter {
                 media=media/numBandas;
                                
                 
-                
-                
-                if(media>=umbral){                    
-                    for(int i=0; i<numBandas; i++) pixel.sample[i]=255; // 255 es BLANCO         
-                }else if (media<umbral){
-                    for(int i=0; i<numBandas; i++) pixel.sample[i]=0; // 0 es NEGRO
-                }
+                for(int i=0; i<numBandas; i++) pixel.sample[i]=media;
+
                 
                 //Guardamos el pixel modificado en la imagen destino
                 destRaster.setPixel(pixel.col, pixel.row, pixel.sample);

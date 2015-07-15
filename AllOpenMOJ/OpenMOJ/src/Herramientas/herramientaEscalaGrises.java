@@ -1,3 +1,17 @@
+/*
+        This program is free software: you can redistribute it and/or modify
+        it under the terms of the GNU General Public License as published by
+        the Free Software Foundation, either version 3 of the License, or
+        (at your option) any later version.
+        This program is distributed in the hope that it will be useful,
+        but WITHOUT ANY WARRANTY; without even the implied warranty of
+        MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+        GNU General Public License for more details.
+        You should have received a copy of the GNU General Public License
+        along with this program. If not, see <http://www.gnu.org/licenses/>.
+      
+        Copyright 2015 Juan A. Fernández Sánchez
+*/
 package Herramientas;
 
 import Programa.VentanaInterna;
@@ -5,34 +19,48 @@ import Programa.VentanaPrincipal;
 import static extras.Imprimir.Imprimir;
 import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
+import java.awt.image.ColorModel;
+import java.awt.image.ConvolveOp;
+import java.awt.image.Kernel;
+import java.awt.image.RescaleOp;
+import java.awt.image.WritableRaster;
 import javax.swing.JOptionPane;
-import sm.jaf.imagen.UmbralizacionOp;
-
+import sm.image.KernelProducer;
+import sm.jaf.imagen.EscalaGrisesOp;
 
 /**
  *
  * @author Juan A. Fernández Sánchez
  */
-public final class herramientaUmbralizacion extends javax.swing.JFrame {
+public final class herramientaEscalaGrises extends javax.swing.JFrame {
 
     
     private VentanaPrincipal padre;
     
     private VentanaInterna vis;
-        
-    private int umbral;
+
+    
     //Las dos imagenes que gestionamos. Una copia de la original y el resultado de las operaciones.
-    private BufferedImage imagenTemporalParaOperaciones;    
+    private BufferedImage imagenTemporalParaOperaciones;
+    private BufferedImage imgTMP;
+
+    
+    
+    
+    public BufferedImage deepCopy(BufferedImage bi) {
+        ColorModel cm = bi.getColorModel();
+        boolean isAlphaPremultiplied = cm.isAlphaPremultiplied();
+        WritableRaster raster = bi.copyData(null);
+        return new BufferedImage(cm, raster, isAlphaPremultiplied, null);
+    }
      
-      
-    /**
+    /**sl
      * Constructor    
      * @param padre //Le pasamos el propio padre que lo crea para acceder forma fácil a métodos de este.     
      */
-    public herramientaUmbralizacion(VentanaPrincipal padre) {
+    public herramientaEscalaGrises(VentanaPrincipal padre) {
         initComponents();
-                          
-    
+     
         
         //Creamos la referencia al padre
         this.padre=padre;
@@ -42,29 +70,25 @@ public final class herramientaUmbralizacion extends javax.swing.JFrame {
         //Sacamos la imagen del lienzo
         sacarImagen();
         
-        umbral=128;
-        
-        
-        aplicar();
-        
-        
+
         this.addWindowListener(new java.awt.event.WindowAdapter() {
     @Override
     public void windowClosing(java.awt.event.WindowEvent windowEvent) {
-        System.out.println("Cerrando putita ventana");
+        System.out.println("Cerrando  ventana");
         recuperarImagen();
     }
 });
         
     }
 
-   
+
     
     /**
      * Con esta función reseteamos la herramienta y dejamos la imagen como estaba al principio.
      */
     private void resetHerramienta(){
-                
+        
+
         Imprimir("Reseteando imagen");
         //Enviamos la copia de la imagen que teníamos guadada deshaciendo cualquier operación anterior.
         vis.getLienzo().setImage(imagenTemporalParaOperaciones);
@@ -85,37 +109,27 @@ public final class herramientaUmbralizacion extends javax.swing.JFrame {
         if(vis!=null){
          //Cargamos en nuestras variables privada la imagen que ese lienzo tiene.
             this.imagenTemporalParaOperaciones=vis.getLienzo().getImage();
+            
+            imgTMP=this.deepCopy(imagenTemporalParaOperaciones);
+            //this.imgTMP=vis.getLienzo().getImage();
 
         }else{
             //Mostramos el mensaje de error
             JOptionPane.showMessageDialog(this, "Debes seleccionar una imagen antes de usar esta herramienta.", "Error", JOptionPane.WARNING_MESSAGE);
             padre.ventanaHerramientaBrilloContraste.setVisible(false);
             padre.ventanaHerramientaBrilloContraste=null;
-            //En otro caso no se puede trabajar y es necesario avisar de que es necesario tener una ventan seleccionada.
+//En otro caso no se puede trabajar y es necesario avisar de que es necesario tener una ventan seleccionada.
         }
     }
     
     private void aplicar(){
-         
-        try{ 
-                         
-            
-                UmbralizacionOp umbralOp = new UmbralizacionOp(umbral);
-                
-                Imprimir("Intentando aplicar umbralización");
 
-                vis.getLienzo().setImage(umbralOp.filter(imagenTemporalParaOperaciones, null));
-                vis.repaint();
-            
-                        
-
-
-            
-         }catch (Exception e){
-            System.out.println("Error: "+e);
-            JOptionPane.showMessageDialog(this,e, "Error", JOptionPane.WARNING_MESSAGE);
+        EscalaGrisesOp escalaGrisesOp = new EscalaGrisesOp();
+        
+        if(vis!=null){
+            vis.getLienzo().setImage(escalaGrisesOp.filter(imagenTemporalParaOperaciones, null));
+            vis.repaint();
         }
-
     }
     
     /**
@@ -137,12 +151,9 @@ public final class herramientaUmbralizacion extends javax.swing.JFrame {
         resetButton = new javax.swing.JButton();
         saveButton = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
+        botonAplicar2 = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
-        sliderUmbral = new javax.swing.JSlider();
         jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
-        textoUmbral = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
 
         javax.swing.GroupLayout jLayeredPane1Layout = new javax.swing.GroupLayout(jLayeredPane1);
         jLayeredPane1.setLayout(jLayeredPane1Layout);
@@ -162,9 +173,9 @@ public final class herramientaUmbralizacion extends javax.swing.JFrame {
 
         jLabel1.setFont(new java.awt.Font("Sawasdee", 1, 18)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(51, 51, 51));
-        jLabel1.setText("Umbralización");
+        jLabel1.setText("Escala Grises");
 
-        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/umbralizacion.png"))); // NOI18N
+        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/grayScale.png"))); // NOI18N
 
         exitButton.setBackground(new java.awt.Color(255, 135, 135));
         exitButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/cancel.png"))); // NOI18N
@@ -202,7 +213,7 @@ public final class herramientaUmbralizacion extends javax.swing.JFrame {
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 265, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 231, Short.MAX_VALUE)
                 .addComponent(exitButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(resetButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -224,70 +235,44 @@ public final class herramientaUmbralizacion extends javax.swing.JFrame {
 
         getContentPane().add(panelNorte, java.awt.BorderLayout.PAGE_START);
 
-        jLabel2.setFont(new java.awt.Font("Sawasdee", 1, 14)); // NOI18N
-        jLabel2.setText("Umbral:");
-
-        sliderUmbral.setMaximum(255);
-        sliderUmbral.setValue(128);
-        sliderUmbral.addChangeListener(new javax.swing.event.ChangeListener() {
-            public void stateChanged(javax.swing.event.ChangeEvent evt) {
-                sliderUmbralStateChanged(evt);
+        botonAplicar2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/grayScale.png"))); // NOI18N
+        botonAplicar2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonAplicar2ActionPerformed(evt);
             }
         });
 
-        jLabel4.setFont(new java.awt.Font("Sawasdee", 1, 14)); // NOI18N
-        jLabel4.setText("0");
+        jLabel2.setFont(new java.awt.Font("Sawasdee", 1, 14)); // NOI18N
+        jLabel2.setText("Aplicar:");
 
-        jLabel5.setFont(new java.awt.Font("Sawasdee", 1, 14)); // NOI18N
-        jLabel5.setText("255");
-
-        textoUmbral.setFont(new java.awt.Font("Sawasdee", 1, 24)); // NOI18N
-        textoUmbral.setText("128");
-
-        jLabel6.setFont(new java.awt.Font("Sawasdee", 1, 14)); // NOI18N
-        jLabel6.setText("Todo pixel cuya media (de los tres canales rgb) supere el ubral será llevado BLANCO");
+        jLabel4.setFont(new java.awt.Font("DejaVu Sans", 2, 12)); // NOI18N
+        jLabel4.setText("Aun no se han implementado todas las características de esta herramienta.");
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGap(36, 36, 36)
-                        .addComponent(jLabel2)
-                        .addGap(46, 46, 46)
-                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(sliderUmbral, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(27, 27, 27)
-                        .addComponent(textoUmbral, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGap(14, 14, 14)
-                        .addComponent(jLabel6)))
+                .addGap(196, 196, 196)
+                .addComponent(jLabel2)
+                .addGap(18, 18, 18)
+                .addComponent(botonAplicar2)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                .addContainerGap(30, Short.MAX_VALUE)
+                .addComponent(jLabel4)
+                .addGap(25, 25, 25))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel4Layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                .addContainerGap(30, Short.MAX_VALUE)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGap(13, 13, 13)
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel5)
-                            .addComponent(textoUmbral, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGap(34, 34, 34)
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(jLabel4)
-                                .addComponent(jLabel2))
-                            .addComponent(sliderUmbral, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel6)
-                .addContainerGap(14, Short.MAX_VALUE))
+                    .addComponent(botonAplicar2, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING))
+                .addGap(18, 18, 18)
+                .addComponent(jLabel4)
+                .addContainerGap())
         );
 
         getContentPane().add(jPanel4, java.awt.BorderLayout.LINE_START);
@@ -299,9 +284,20 @@ public final class herramientaUmbralizacion extends javax.swing.JFrame {
      * Función que recupera la imagen original y también el estado  de los botones
      */
     public void recuperarImagen(){
-                                                      
+            
+                                    
             vis.getLienzo().setImage(this.imagenTemporalParaOperaciones);
-            vis.getLienzo().repaint();                     
+            vis.getLienzo().repaint();
+            
+            //Volvemos a realizar la copia para que no guarde los cambios anteriores.
+            imgTMP=this.deepCopy(imagenTemporalParaOperaciones);
+            /*
+            Recordamos que en java no se puede realizar la copia por valor con = si no se 
+            trata de tipos primitivos.
+            */
+            
+            
+            
     }
     
     private void resetButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_resetButtonActionPerformed
@@ -319,11 +315,9 @@ public final class herramientaUmbralizacion extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_saveButtonActionPerformed
 
-    private void sliderUmbralStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_sliderUmbralStateChanged
-        umbral=(int)sliderUmbral.getValue();
-        textoUmbral.setText(Integer.toString(umbral));
+    private void botonAplicar2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonAplicar2ActionPerformed
         aplicar();
-    }//GEN-LAST:event_sliderUmbralStateChanged
+    }//GEN-LAST:event_botonAplicar2ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -342,76 +336,8 @@ public final class herramientaUmbralizacion extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(herramientaUmbralizacion.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(herramientaEscalaGrises.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-        //</editor-fold>
-        /*
-        /* Create and display the form
-        java.awt.EventQueue.invokeLater(new Runnable() {
-        public void run() {
-        new herramientaEmborronamiento(VentanaPrincipal padre).setVisible(true);
-        }
-        });*/
-        
-        //</editor-fold>
-
-        /*
-        /* Create and display the form 
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new herramientaEmborronamiento(VentanaPrincipal padre).setVisible(true);
-            }
-        //</editor-fold>
-        /*
-        /* Create and display the form
-        java.awt.EventQueue.invokeLater(new Runnable() {
-        public void run() {
-        new herramientaEmborronamiento(VentanaPrincipal padre).setVisible(true);
-        }
-        });*/
-        
-        //</editor-fold>
-
-        /*
-        /* Create and display the form 
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new herramientaEmborronamiento(VentanaPrincipal padre).setVisible(true);
-            }
-        //</editor-fold>
-        /*
-        /* Create and display the form
-        java.awt.EventQueue.invokeLater(new Runnable() {
-        public void run() {
-        new herramientaEmborronamiento(VentanaPrincipal padre).setVisible(true);
-        }
-        });*/
-        
-        //</editor-fold>
-
-        /*
-        /* Create and display the form 
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new herramientaEmborronamiento(VentanaPrincipal padre).setVisible(true);
-            }
-        //</editor-fold>
-        /*
-        /* Create and display the form
-        java.awt.EventQueue.invokeLater(new Runnable() {
-        public void run() {
-        new herramientaEmborronamiento(VentanaPrincipal padre).setVisible(true);
-        }
-        });*/
-        
-        //</editor-fold>
-
-        /*
-        /* Create and display the form 
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new herramientaEmborronamiento(VentanaPrincipal padre).setVisible(true);
-            }
         //</editor-fold>
         /*
         /* Create and display the form
@@ -484,6 +410,9 @@ public final class herramientaUmbralizacion extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton botonAplicar;
+    private javax.swing.JButton botonAplicar1;
+    private javax.swing.JButton botonAplicar2;
     private javax.swing.JButton exitButton;
     private javax.swing.ButtonGroup grupoBotonesMatriz;
     private javax.swing.ButtonGroup grupoBotonesTipo;
@@ -491,14 +420,10 @@ public final class herramientaUmbralizacion extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
     private javax.swing.JLayeredPane jLayeredPane1;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel panelNorte;
     private javax.swing.JButton resetButton;
     private javax.swing.JButton saveButton;
-    private javax.swing.JSlider sliderUmbral;
-    private javax.swing.JLabel textoUmbral;
     // End of variables declaration//GEN-END:variables
 }

@@ -4,6 +4,7 @@ import Herramientas.herramientaBrilloContraste;
 import Herramientas.herramientaDuplicar;
 import Herramientas.herramientaEmborronamiento;
 import Herramientas.herramientaEnfoque;
+import Herramientas.herramientaEscalaGrises;
 import Herramientas.herramientaEscalar;
 import Herramientas.herramientaFronteras;
 import Herramientas.herramientaNegativo;
@@ -366,6 +367,7 @@ public class VentanaPrincipal extends JFrame {
         botonMenuherramientaEnfoque = new javax.swing.JMenuItem();
         botonEscalar = new javax.swing.JMenuItem();
         botonUmbralizacion = new javax.swing.JMenuItem();
+        botonEscalaGrises = new javax.swing.JMenuItem();
         botonDuplicar = new javax.swing.JMenuItem();
         botonOperacionBinarias = new javax.swing.JMenuItem();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -993,6 +995,15 @@ public class VentanaPrincipal extends JFrame {
             }
         });
         menuHerramientas.add(botonUmbralizacion);
+
+        botonEscalaGrises.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/grayScale.png"))); // NOI18N
+        botonEscalaGrises.setText("Escala Grises");
+        botonEscalaGrises.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonEscalaGrisesActionPerformed(evt);
+            }
+        });
+        menuHerramientas.add(botonEscalaGrises);
 
         botonDuplicar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/duplicate.png"))); // NOI18N
         botonDuplicar.setText("Duplicar");
@@ -1826,6 +1837,11 @@ public class VentanaPrincipal extends JFrame {
         opDuplicar.setVisible(true);
     }//GEN-LAST:event_botonDuplicarActionPerformed
 
+    private void botonEscalaGrisesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonEscalaGrisesActionPerformed
+        herramientaEscalaGrises herramientaGrises = new herramientaEscalaGrises(this);
+        herramientaGrises.setVisible(true);
+    }//GEN-LAST:event_botonEscalaGrisesActionPerformed
+
     
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -1849,6 +1865,7 @@ public class VentanaPrincipal extends JFrame {
     private javax.swing.JButton botonDirectoNuevo;
     private javax.swing.JMenuItem botonDuplicar;
     private javax.swing.JCheckBox botonEditar;
+    private javax.swing.JMenuItem botonEscalaGrises;
     private javax.swing.JMenuItem botonEscalar;
     private javax.swing.JMenuItem botonFronteras;
     private javax.swing.JMenuItem botonGrabarAudio;
