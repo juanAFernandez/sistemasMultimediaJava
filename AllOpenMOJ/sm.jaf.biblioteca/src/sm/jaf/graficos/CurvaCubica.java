@@ -25,33 +25,50 @@ import java.awt.geom.Line2D;
 /**
  * Segmento de linea con dos puntos de control para hacerlo curvo con mayor precisión que la QuadCurve 
  * con sólo un punto de control.
+ * Se basa en un objeto de tipo CubicCurve2D.
  * @author Juan A. Fernández Sánchez
  */
 public class CurvaCubica extends Figura {
      
-    
-    private Point2D puntoControlA = new Point2D.Double();  
+    /**
+     * Variables para el primer punto de control.
+     */
+    private Point2D puntoControlA;  
     private Ellipse2D elipsePuntoControlA;    
-    boolean seleccionadoPuntoControlA=false;
+    private boolean seleccionadoPuntoControlA;
     
-    private Point2D puntoControlB = new Point2D.Double();  
+    /**
+     * Variables para el segundo punto de control.
+     */
+    private Point2D puntoControlB;  
     private Ellipse2D elipsePuntoControlB;    
-    boolean seleccionadoPuntoControlB=false;
+    private boolean seleccionadoPuntoControlB;
     
-    private Point2D A = new Point2D.Double(); 
-    Ellipse2D elipsePuntoA;
-    boolean seleccionadoPuntoA=false;
+    /**
+     * Puntos que definen los extremos del segmento de linea.
+     */
+    private Point2D A; 
+    private Ellipse2D elipsePuntoA;
+    boolean seleccionadoPuntoA;    
+    private Point2D B;
+    private Ellipse2D elipsePuntoB;
+    boolean seleccionadoPuntoB;
     
-    private Point2D B = new Point2D.Double();
-    Ellipse2D elipsePuntoB;
-    boolean seleccionadoPuntoB=false;
+    /**
+     * Para el control de la edición de la figura.
+     */
+    private boolean modoEdicion;
     
-    boolean moviendo=false;
-    double distanciaX=0;
-    double distanciaY=0;
-
+    /**
+     * Para el control de movimiento de la figura.
+     */
+    private boolean moviendo;
     
-    private boolean modoEdicion=false;
+    /**
+     * Variables para el control del movimiento de la figura.
+     */
+    private double distanciaX;
+    private double distanciaY;
     
     
     /**
@@ -59,6 +76,22 @@ public class CurvaCubica extends Figura {
      */
     public CurvaCubica(){
         datosGeometricos=new CubicCurve2D.Double();
+        
+        distanciaX=0;
+        distanciaY=0;
+        modoEdicion=false;
+        moviendo=false;
+        
+        A = new Point2D.Double();
+        seleccionadoPuntoA=false;
+        puntoControlA = new Point2D.Double();
+        seleccionadoPuntoControlA=false;
+        
+        B = new Point2D.Double();
+        seleccionadoPuntoB=false;
+        puntoControlB = new Point2D.Double();
+        seleccionadoPuntoControlB=false;
+        
     }
     /**
      * Segundo constructor con parámetros. 
@@ -107,9 +140,11 @@ public class CurvaCubica extends Figura {
     }
     
     /**
-     * 
-     * @param puntoRef
-     * @param npc 
+     * Para calcular la diferencia entre los puntos de control.
+     * Si la figura se está moviendo se calcula la diferencia entre el punto de referencia y la nueva posición 
+     * para que el movimiento de todos los puntos se hagan de forma correcta.
+     * @param puntoRef El punto del plano donde se hace click para coger la figura.
+     * @param npc El punto donde la figura se deja tras hacer dragged o la selección de un punto de control.
      */
     public void cambiarPuntosControl(Point2D puntoRef, Point2D npc){
          if(moviendo){
@@ -166,8 +201,12 @@ public class CurvaCubica extends Figura {
          }
     }
     
-    
-          public void soltarRaton(Point2D ref, Point2D nuevo){
+     /**
+     * Realiza las modificaciones reales sobre todos los puntos que definen la figura.
+     * @param ref Referencia 
+     * @param nuevo Punto nuevo
+     */
+    public void soltarRaton(Point2D ref, Point2D nuevo){
             
             /**
              * Si la figura se está moviendo se realiza el cambio de su posición, en caso contrario se estará
@@ -212,11 +251,20 @@ public class CurvaCubica extends Figura {
 
         
     }
-        
+      
+    /**
+     * Cambia el modo de edición.
+     * @param modo True para activarlo y false para desactivalrlo.
+     */
     public void setModoEdicion(boolean modo){
         modoEdicion=modo;
     }
     
+    
+    /**
+     * Para que la figura se pinte (renderice) en el objeto Graphics2D.
+     * @param g2d Entorno donde renderizar la linea.
+     */
     @Override
     public void dibujateEn(Graphics2D g2d){
                        
@@ -332,41 +380,30 @@ public class CurvaCubica extends Figura {
                  return false;
                 }
              } 
-                
-
-
-
-
-
-
-        //Posiblemente falle como en el caso de la linea:
-        
-        
-        
-        /*
-        
-        if( ((QuadCurve2D)datosGeometricos).contains(punto) )
-            return true;
-        else
-            return false;
-        */
-                
-    }
-
-    @Override
-    public String toString() {
-        return "Curva Cubica";
-        
-    }
-
-    @Override
-    public void cambiarPosicion2(Point2D pos) {
-                     
-     //   double dx=pos.getX()-((QuadCurve2D)datosGeometricos).getX1();
-     //   double dy=pos.getY()-((QuadCurve2D)datosGeometricos).getY1();
-     //   Point2D newp2 = new Point2D.Double(((QuadCurve2D)datosGeometricos).getX2()+dx,((QuadCurve2D)datosGeometricos).getY2()+dy);        
-     //   this.cambiarPosicion(pos, newp2);
+     
     }
     
+    /**
+     * Para conocer información sobre el objeto.
+     * @return Información del objeto en un String.
+     */
+    @Override
+    public String toString() {
+        String mensaje="";
+    
+        mensaje+="Curva Cubica: \n";
+        mensaje+="\t Extremos: A("+A.getX()+","+A.getY()+")  B("+B.getX()+","+B.getY()+")\n";
+        mensaje+="\t Punto de control 1 ("+puntoControlA.getX()+","+puntoControlA.getY()+")\n";
+        mensaje+="\t PUnto de control 2 ("+puntoControlB.getX()+","+puntoControlB.getY()+")\n";                
+        
+        return mensaje;
+        
+    }
+
+    @Override
+    public void cambiarPosicion2(Point2D nuevaLocalizacion) {
+        throw new UnsupportedOperationException("NO SOPORTADA"); //To change body of generated methods, choose Tools | Templates.
+    }
+
     
 }

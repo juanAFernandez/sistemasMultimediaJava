@@ -14,7 +14,6 @@
 */
 package sm.jaf.iu;
 
-import com.sun.glass.events.MouseEvent;
 import static extras.Imprimir.Imprimir;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -25,40 +24,31 @@ import extras.Herramienta;
 import extras.herramientaTexto;
 import java.awt.Color;
 import java.awt.Cursor;
-import java.awt.Font;
 import java.awt.Image;
 import java.awt.RenderingHints;
 import java.awt.Shape;
-import java.awt.geom.Arc2D;
-import java.awt.geom.GeneralPath;
-import java.awt.geom.Path2D;
 import java.awt.geom.Rectangle2D;
-import java.awt.image.BufferedImage;
 import javax.swing.SwingUtilities;
-import sm.jaf.graficos.Arco;
-import sm.jaf.graficos.CurvaCuadratica;
-import sm.jaf.graficos.CurvaCubica;
-import sm.jaf.graficos.Elipse;
-import sm.jaf.graficos.Figura;
-import sm.jaf.graficos.Linea;
-import sm.jaf.graficos.ManoAlzada;
-import sm.jaf.graficos.Polilinea;
-import sm.jaf.graficos.Rectangulo;
-import sm.jaf.graficos.RectanguloRedondeado;
-import sm.jaf.graficos.Relleno;
-import sm.jaf.graficos.Texto;
-import sm.jaf.graficos.Trazo;
-
+//Añadimos toda la librería:
+import sm.jaf.graficos.*;
 
 
 /**
+ * Implementa el linezo sobre el que se realiza el dibujo de las figuras.
+ * Se trata de un panel de Java Swing que posee algunos vectores donde se almacenan todas las figuras y 
+ * textos que usuario introduzca. Posee los métodos necesarios para realizar el dibujado de los vectores.
+ * Además implementa toda la gestión de eventos del ratón que conforma la mayor parte de la interactividad 
+ * con el usuario.
  * 
  * @author Juan A. Fernández Sánchez
  */
 public class Lienzo2D extends javax.swing.JPanel {
 
+    Figura figura;
     
-    
+    /**
+     * Dimensiones del lienzo.
+     */
     int anchoLienzo;
     int altoLienzo;
     
@@ -88,14 +78,25 @@ public class Lienzo2D extends javax.swing.JPanel {
      */
     private Relleno rellenoPadre;
     
+    /**
+     * Variable de control para el proceso de creación del objeto polilinea.
+     */
     private boolean bloqueadaCreacionPolilinea=false;
     
     
-    //Vector de objetos de tipo Shape (Java2D) que es del que heredan todos los tipos que vamos a usar:
+    /**
+     * Vector de almacenamiento para los objetos de tipo de Figura.
+     */
     protected ArrayList <Figura> vShape = new ArrayList();
     
+    /**
+     * Vector de almacenamiento para los objetos de tipo texto.
+     */
     protected ArrayList <Texto> vTextos = new ArrayList();
     
+    /**
+     * Puntos de ratón recogidos en ciertos momentos de la interacción con el usuario.
+     */
     private Point pA, pB;
     
     private boolean rellenoBoolean, modoSeleccion, mejoraRenderizacion, transparencia;
@@ -109,10 +110,6 @@ public class Lienzo2D extends javax.swing.JPanel {
     Cursor cursorManoCerrada = toolkit.createCustomCursor(iconoManoCerrada , new Point(this.getX(),this.getY()), "");
     
     
-    
-    
-    
-    private BufferedImage img;
    
     /**
      * Objeto temporal para cuando se hace una selección de una figura.
@@ -122,12 +119,15 @@ public class Lienzo2D extends javax.swing.JPanel {
     //Idem que figuraMoviendo pero para texto.
     int textoMoviendo;
     
+    /**
+     * Variable para la selección de herramienta de dibujo.
+     */
     private Herramienta tipoHerramienta;
 
-    //Constructor de la clase Lienzo2D
+    
     
     /**
-     * Necesitamos una referncia directa al padre.
+     * Constructor.
      */
     public Lienzo2D() {
         initComponents();
@@ -139,6 +139,11 @@ public class Lienzo2D extends javax.swing.JPanel {
  
     }
    
+    /**
+     * Modifica el tamaño del linezo de dibujo.
+     * @param anchoL Nuevo valor para el ancho del lienzo.
+     * @param altoL Nuevo valor para el alto del lienzo.
+     */
     public void setDimensionesLienzo(int anchoL, int altoL){
         anchoLienzo=anchoL;
         altoLienzo=altoL;
@@ -148,103 +153,162 @@ public class Lienzo2D extends javax.swing.JPanel {
     
     // ## FUNCIONES PARA ESTABLECER PARAMETROS DESDE EL PADRE QUE SERÁN LOS DE USO EN LA CREACIÓN DE FIGURAS NUEVAS ##
     
+    /**
+     * Especifica si se trata de un lienzo usado en una ventana interna.
+     * @param opcion Siendo true dibuja aplica el cliping al dibujar las figura, siendo false como en las 
+     * previsualizaciones, no lo aplica.
+     */
     public void setCentral(boolean opcion){
         central=opcion;
     }
     
+    /**
+     * Para cambiar el trazo a aplicar sobre las nuevas figuras que se dibujen.
+     * @param nuevoTrazo Objeto de tipo trazo para aplicar a las figuras.
+     */
     public void setTrazo(Trazo nuevoTrazo){
+        //Se crea el nuevo objeto de tipo trazo.
         trazo = new Trazo();
+        //Para hacer una copia después, al no tratarse de un tipo primario no puede realizarse una copia directa.
         trazo.setCopiaTrazo(nuevoTrazo);
-                
-                
-        Imprimir("Cambiado tipo de trazo");
     }
+    /**
+     * Devuelve el tipo de trazo usado.
+     * @return Objeto de tipo Trazo 
+     */
     public Trazo getTrazo(){
         
         Imprimir("Devolviendo el trazo");
         return trazo;
     }
     
+    /**
+     * Establece un nuevo tipo de relleno usado en las figuras que lo acepten.
+     * @param nuevoRelleno Nuevo relleno a usar por las figuras.
+     */
     public void setRelleno(Relleno nuevoRelleno){
         Imprimir("Introduciendo relleno a Lienzo2D del padre");
         rellenoPadre = nuevoRelleno;
         
     }
+    /**
+     * Devuelve el tipo de relleno usado por las figuras.
+     * @return Objeto de tipo Relleno
+     * @see sm.jaf.graficos.Relleno.java
+     */
     public Relleno getRelleno(){
         return rellenoPadre;
     }
+    /**
+     * Para conocer si se está o no usando relleno en el dibujado de las figuras.
+     * @return True si se están rellenando las figuras y false si no es así.
+     */
     public boolean getRellenoBoolean(){
         return rellenoBoolean;
     }
     
-    //Get herramienta
-    public Herramienta getTipoHerramienta(){
-        
+    /**
+     * Devuelve el tipo de herramienta que se se está usano para dibujar.
+     * @return Objeto del tipo enumerado Herramienta.
+     * @see extras.Herramienta.java
+     */        
+    public Herramienta getTipoHerramienta(){        
         return tipoHerramienta;
     }    
-    //Set herramienta    
+    
+    /**
+     * Establece el tipo de herramienta a usar, el tipo de figura.
+     * @param herramienta Objeto de tipo Herramienta para elegir.
+     * @see extras.Herramienta.java
+     */
     public void setTipoHerramienta(Herramienta herramienta){
         Imprimir("recibido tipo de herramienta");
         this.tipoHerramienta=herramienta;
     }
     
-
-
-    
+    /**
+     * Especifica si las figuras que se añadan al linezo tendrán relleno.
+     * @param relleno True si tse quieren rellenas, false en otro caso.
+     */
     public void setRelleno(boolean relleno){
         this.rellenoBoolean=relleno;
         Imprimir("Cambiando relleno a "+relleno);
         this.repaint();
     }
     
+    /**
+     * Aplica la mejora de renderización para que el dibuja mejore haciendo más suave el dibujo.
+     * @param mejora True si se quiere suavizar el dibujo, false en otro caso.
+     */
     public void setMejoraRenderizacion(boolean mejora){
         this.mejoraRenderizacion=mejora;
         this.repaint();
     }
     
-    
-  /*
-    private Shape getShapeSeleccionada(Point2D p){
-        for(Figura s:vShape)
-            if(s.contains(p)) 
-                return s;
-        return null;
-    }
-    
-    */
-    
+    /**
+     * Devuelve la figura con índice pasado del vector que las almacena.
+     * @param pos Posición de la figura que queremos sacar del vector de figuras.
+     * @return La figura que indicamos con el índice.
+     */
     public Figura getFigura(int pos){
         return vShape.get(pos);
     }
+    
+    /**
+     * Elimina una figura del vector que las contiene.
+     * @param pos Posición de la figura que queremos eliminar.
+     */
     public void delFigura(int pos){
         vShape.remove(pos);
     }
+    
+    /**
+     * Devuelve el indice del texto que haya sido seleccionado con el ratón en caso de que alguno haya sido.
+     * @return Índice del vector de textos del texto seleccionado.
+     */
     public int getTextoSeleccionado(){//Sólo es esto lo que se hacía antes, 
         return textoMoviendo;
     }
+    
+    /**
+     * Devuelve el texto indicado por el índice.
+     * @param pos Posición del texto en el vector que requeremos recuperar.
+     * @return Objeto de tipo Texto.
+     * @see sm.jaf.graficos.Texto
+     */
     public Texto getText(int pos){
         return vTextos.get(pos);
     }
+    
+    /**
+     * Para cononcer si el vector de textos está vacío.
+     * @return True si está vacío, false en otro caso.
+     */
     public boolean isEmptyTextos(){
         return vTextos.isEmpty();
     }
     
+    /**
+     * Añade un texto al vector de textos del lienzo.
+     * @param nuevo Objeto de tipo Texto que se añadirá al vector del lienzo.
+     * @see sm.jaf.graficos.Texto
+     */
     public void setTexto(Texto nuevo){
         vTextos.add(nuevo);
         textoMoviendo=vTextos.indexOf(nuevo);
     }
     
+    /**
+     * Para aplicar el modo selección a las figuras y textos del vector.
+     * Si se activa se dibujan junto a la figura todos los puntos de control y se habilita el uso 
+     * y selección de los mismos.
+     * @param modo True si se quiere habilitar el modo edición, false en otro caso.
+     */
     public void setModoSeleccion(boolean modo){
         
-        //Cambiamos el modoSeleccion a true o false según lo que nos digan
+        //Cambiamos el modoSeleccion a true o false según el param.
         this.modoSeleccion=modo;
-        
-        
-        
-        System.out.println("Asignado modo seleccion: "+modoSeleccion);
-        //>>>>>
-        
-
+                
         /**
          * No afecta a todas las figuras igual.
          * Hasta ahora sólo teníamos figuras que su edición era moverlas por el plano, pero al incuir las curvas cuadraticas y cúbicas
@@ -254,10 +318,8 @@ public class Lienzo2D extends javax.swing.JPanel {
          */
         
         if(modo==true){
+            
             //Podemos decirle a todas las figuras del vector que se entra en modo editar para que dibujen sus puntos de control.        
-            //Para eso recorremos el vector:
-            //POR AHORA SOLO VAMOS A PROBAR CON LA CURVA
-            //Le decimos a las figuras de tipo Curva que se está en modo edición.
             for(Figura figura: vShape){
                 if(figura.getClass().getName().contains("Cuadratica"))
                     ((CurvaCuadratica)figura).setModoEdicion(true);
@@ -279,8 +341,10 @@ public class Lienzo2D extends javax.swing.JPanel {
 
             //Se repinta el vector para que se pinten los puntos de control que se han activado en las figuras de tipo Curva.
             this.repaint();
+            
         }else{
-            //Le decimos a todas las figuras que no:
+            
+            //Le decimos a todas las figuras que no queremos dibujar los puntos de control:
             for(Figura figura: vShape){
                 if(figura.getClass().getName().contains("Cuadratica"))
                     ((CurvaCuadratica)figura).setModoEdicion(false);
@@ -299,65 +363,39 @@ public class Lienzo2D extends javax.swing.JPanel {
                 if(figura.getClass().getName().contains("Polilinea"))
                     ((Polilinea)figura).setModoEdicion(false);
             }
-            
+            //Se repita el vector de figuras para que los puntos de control no aparezcan.
             this.repaint();
 
         }
         
     }
   
+    /**
+     * Habilita la transparencia entre todas las figuras de los vectores.
+     * @param transparencia True si queremos habilitarla y false en otro caso.
+     */
     public void setTransparencia(boolean transparencia){
         this.transparencia=transparencia;
         this.repaint();
     }
     
-    /*
-    public void setAtributos(Graphics2D g2d){
-        //Declaramos un objeto de tipo stroke para cambiar atributos del trazo
-        Stroke trazo;
-        //Lo creamos con e cosntructor que sólo acepta el parámetro de grosor de linea.
-        trazo = new BasicStroke(grosorLinea);
-        //Aplicamos el estilo creado al objeto Graphics2D
-        g2d.setStroke(trazo);      
-
-        g2d.setPaint(color);
-        
-        
-        if(mejoraRenderizacion){
-            //Renderización
-            RenderingHints render;
-            
-            render = new RenderingHints(RenderingHints.KEY_ANTIALIASING,
-            RenderingHints.VALUE_ANTIALIAS_ON);
-            
-
-            render.put(RenderingHints.KEY_COLOR_RENDERING,
-            RenderingHints.VALUE_COLOR_RENDER_QUALITY);
-            g2d.setRenderingHints(render);
-        }
-        
-        if(transparencia){
-            Composite comp;
-            comp = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f);
-            g2d.setComposite(comp);
-        }
-        
-        
-    }*/
-    
-    //Sobreescritura del método paint
+    /**
+     * Método más importante de la clase, es quien realiza realmente el pintado de todas las figuras
+     * sobre el objeto de tipo Graphics que le es pasado.
+     * @param g Entorno donde se realizará el dibujado de todas las figuras.
+     */
     @Override 
     public void paint(Graphics g){
         super.paint(g);
         Graphics2D g2d=(Graphics2D)g;
  
+        //Si la mejora de renderización está activa se aplican ciertos parámetros al entorno pasado antes de pintar cualquier cosa.
         if(mejoraRenderizacion){
             //Renderización
             RenderingHints render;
             
             render = new RenderingHints(RenderingHints.KEY_ANTIALIASING,
-            RenderingHints.VALUE_ANTIALIAS_ON);
-            
+            RenderingHints.VALUE_ANTIALIAS_ON);            
 
             render.put(RenderingHints.KEY_COLOR_RENDERING,
             RenderingHints.VALUE_COLOR_RENDER_QUALITY);
@@ -365,18 +403,15 @@ public class Lienzo2D extends javax.swing.JPanel {
         }
         
         
-        /*
-        Recorremos el vector y usamos el objeto Graphics2D creado para pintar cada uno de los objetos que contiene el vector
-        de figuras.
-        */
-        
-     //   Imprimir("Nombre del objeto"+this.getClass().);
-            //Habría que conseguir que esto sólo se hiciera para la sección central
-                //Pruebas de recorte:
+
+        /**
+         * No sólo hay lienzos donde dibujamos sino que también se usan para previsualizaciones.
+         * Si centrall==true se trata de un lienzo en una ventana interna y por tanto requiere cliping
+         * y dibujado de borde del mismo.
+         */
         if(central){
-                Shape clipArea = new Rectangle2D.Double(0,0,anchoLienzo,altoLienzo);                
-                g2d.setClip(clipArea);
-                //fin de prueba de recorte                                
+                                
+                //Creamos el borde la zona de cliping.
                 Figura clip = new Rectangulo();
                 clip.cambiarPosicion(new Point2D.Double(0, 0), new Point2D.Double(anchoLienzo-1,altoLienzo-1));
                 Trazo miTrazo = new Trazo();
@@ -387,22 +422,21 @@ public class Lienzo2D extends javax.swing.JPanel {
                // Shape clipArea2 = new Rectangle2D.Double(0,0,199,199);
                 //g2d.draw(clipArea2);
                 clip.dibujateEn(g2d);
+                
+                //Creamos una región de clip sobre la figura para que sólo se dibuje lo que hay dentro de ella.
+                Shape clipArea = new Rectangle2D.Double(0,0,anchoLienzo,altoLienzo);                
+                g2d.setClip(clipArea);
+                
         }
 
+            /*Recorremos el vector y usamos el objeto Graphics2D creado para pintar cada uno de los objetos que contiene el vector
+            de figuras.*/                
             Imprimir("Dibujando "+vShape.size()+"figuras en el plano");
-            //Si el vector de figuras no está vacío se recorre y se imprime.
+            //Si el vector de figuras no está vacío se recorre y se diguban todas las figuras que contenga.
             if(!vShape.isEmpty())
 
-                for(Figura figura:vShape){
-                    figura.dibujateEn(g2d);
-                    //Imprimir(figura.toString());
-                   /*
-                   //Imprimir(s.getClass().getName());
-                    if( (s.getClass().getName().contains("Rectangle") || s.getClass().getName().contains("Ellipse")) && relleno==true)
-                        g2d.fill(s);
-                    else
-                        g2d.draw(s);                                              
-                    */
+                for(Figura fig:vShape){
+                    fig.dibujateEn(g2d);
                 }
         
             //Después de recorrer el vector de figuras se recorre el vector de textos:
@@ -455,25 +489,42 @@ public class Lienzo2D extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
-   
+   /**
+    * Añade una figura al vector de estas del lienzo.
+    * @param figura Objeto de tipo Figura que se añadirá al vector.
+    * @see sm.jaf.graficos.Figura
+    */
     public void  addFigure(Figura figura){
         vShape.add(figura);
         this.repaint();
     }
     
+    /**
+     * Para sacar un objeto figura del vector de estas del lienzo si el punto pasado pertenece  ella.
+     * @param puntoClicado Punto a comprobar si pertenece a una figura para sacarla del vector.
+     * @return Objeto de tipo Figura del vector de estas.
+     * @see sm.jaf.graficos.Figura
+     */
     public Figura getFiguraSeleccionada(Point2D puntoClicado){
         
-        //Se recorre todas las figuras almacenadas en el vector a ver en cual coincide el punto. Cuando
-        //damos con ella la devolvemos
-        for(Figura figura: vShape)
-            if(figura.contiene(puntoClicado))
-                return figura;
+        //Se recorre todas las figuras almacenadas en el vector a ver en cual coincide el punto
+        for(Figura fig: vShape)
+            if(fig.contiene(puntoClicado))
+                //En el caso de dar con ella se devuelve
+                return fig;
         /* En el caso de que el niguna función devolviera true significaría que el punto no pertenece a ninguna y devolvemos null
         para indicarlo asi. */
         return null;
     }
     
-      public Texto getTextoSeleccionado(Point2D puntoClicado){
+    /**
+     * Para obtener el texto del vector de textos que contenca a punto pasado.
+     * En caso de que el punto pasado coincida con algún texto se devuelve.
+     * @param puntoClicado Punto a comprobar pertenencia con algún texto.
+     * @return Objeto Texto al que el punto pasado pertenece en el caso de que haya coincidencia, null en otro caso.
+     * @see sm.jaf.graficos.Texto
+     */
+    public Texto getTextoSeleccionado(Point2D puntoClicado){
         
         //Se recorre todas los textos almacenadas en el vector a ver en cual coincide el punto. Cuando
         //damos con ella la devolvemos
@@ -486,14 +537,37 @@ public class Lienzo2D extends javax.swing.JPanel {
     }
     
     /**
+     * Refresca la ultima figura seleccionada con los nuevos parámetros de dibujo, que 
+     * han podido cambiar.
+     */
+    public void aplicarUltimaFigura(){
+                                        
+          /*Cuando se llama a esta función desde ventana principal antes se ha llamado a alguna que cambia el trazo por defecto
+          por tanto se cambia el color de la ultima figura seleccionada.*/
+          if(figura!=null){
+            //Color
+            figura.getTrazo().setColor(this.trazo.getColor());
+            //Grosor
+            figura.getTrazo().setGrosor(this.trazo.getGrosor());
+            //Traoz
+            figura.setTrazo(this.trazo);
+            this.repaint();
+          }
+          
+      }
+      
+    /**
      * Gestion del evento presionar ratón.
+     * Es la función que se encarga de crear las figuras cuando se dibuja en el lienzo y de realizar los ajustes
+     * necesarios para que su modificación pueda realizarse. Además cuando se encuentra e modo edición permite ofrece
+     * una interfaz sencilla para conocer si una figura de las ya dibujadas ha sido seleccionada comparandola con un 
+     * punto pasado.
      * @param evt Evento en gestión.
      */
     private void formMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMousePressed
     
         
-        //Tendremos que identificar el botón izquierdo que será sólo con el que se podrá
-        //dibujar, con el derecho no se podrá hacer nada.
+        //Bloqueamos el uso de esta función sólo para cuando se hace click con el botón izquierdo.
         if(SwingUtilities.isLeftMouseButton(evt)){
         
         
@@ -505,13 +579,11 @@ public class Lienzo2D extends javax.swing.JPanel {
         if(modoSeleccion==true){
             
             //Con el punto obtenido buscamos en el vector de figuras amacenadas aquella que hayamos podido seleccionar.
-            Figura figura = getFiguraSeleccionada(pA);
+            figura = getFiguraSeleccionada(pA);
             
             Texto texto = getTextoSeleccionado(pA);
-            
-            
-                    //Si ha ocurrido una selección de una figura
-                  
+                        
+                    //Si ha ocurrido una selección de una figura                  
                     if(figura!=null){                
 
                         //Cambiamos el icono
@@ -524,9 +596,7 @@ public class Lienzo2D extends javax.swing.JPanel {
 
                     //Si no ha ocurrido una selección:
                     }else{
-
-                       // this.setCursor(cursorManoAbierta);
-                        
+                       
                         System.out.println("No se ha seleccionado ninguna figura.");
 
                         //Para controlar que no se ha seleccionado ninguna figura del vector se usa el valor de control -1
@@ -534,8 +604,7 @@ public class Lienzo2D extends javax.swing.JPanel {
 
                     }
                     
-                    //Si ha ocurrido una selección de un texto
-                  
+                    //Si ha ocurrido una selección de un texto                  
                     if(texto!=null){                
 
                          //Cambiamos el icono
@@ -566,9 +635,10 @@ public class Lienzo2D extends javax.swing.JPanel {
         }else{
                 // ### POLILINEA (aclaración) ###
                 /*Si pulsamos una vez y estamos trabajando con la figura polilinea se queda bloqueado el dibujo en
-                ella de forma que cualquier click que podamos hacer siguiente añade un punto a esta figura. 
-                En el caso de que no queramos seguir dibujando esta figura hacemos doble click y el cerrojo será 
-                abierto.
+                ella de forma que cualquier click que podamos hacer con posterioridad añade un punto a esta figura. 
+                En el caso de que no queramos seguir dibujando esta figura haremos doble click, el último
+                punto que añadamos cerrará la figura y el cerrojo será abierto, pudiendo volver a crear otro objeto de 
+                tipo polilinea.
                 */
             
                 //Objeto temporal al que aplicaremos características antes de introducirlo en el vector.
@@ -581,32 +651,24 @@ public class Lienzo2D extends javax.swing.JPanel {
                     
                     //Aplicamos el estilo de trazado.
                     figuraTemporal.setTrazo(trazo);
-
-
                     
                     ((ManoAlzada)figuraTemporal).addPunto(pA);
                     
                     vShape.add(figuraTemporal);
-                    
-                    
-                
+                                                        
                 }else
                 //Si ha sido seleccionada la herramienta LINEA del buttonGroup
                 if(this.tipoHerramienta==Herramienta.LINEA){
                     //Construimos la figura como una Linea
                     figuraTemporal = new Linea();
 
-                    //Aplicamos el color 
-               //     figuraTemporal.getTrazo().setColor(color);
-                    
-                    
-                    //PRUEBA EXPLOSIVA//
+
                     figuraTemporal.setTrazo(trazo);
 
                     vShape.add(figuraTemporal);
 
                 }else 
-                //Si ha sido seleccionada la herramienta LINEA del buttonGroup
+                //Si ha sido seleccionada la herramienta POLINEA del buttonGroup
                 if(this.tipoHerramienta==Herramienta.POLILINEA){                                        
                     
                     //Si no está bloqueada la creación de una polilinea
@@ -642,19 +704,13 @@ public class Lienzo2D extends javax.swing.JPanel {
                         this.repaint();
                     }
 
-                        
-                        
+                                                
                 }else 
                      //Si ha sido seleccionada la herramienta Curva Cuadratica del buttonGroup
                 if(this.tipoHerramienta==Herramienta.CURVA_CUADRATICA){
                     //Construimos la figura como una Linea
                     figuraTemporal = new CurvaCuadratica();
 
-                    //Aplicamos el color 
-               //     figuraTemporal.getTrazo().setColor(color);
-                    
-                    
-                    //PRUEBA EXPLOSIVA//
                     figuraTemporal.setTrazo(trazo);
 
                     vShape.add(figuraTemporal);
@@ -665,16 +721,12 @@ public class Lienzo2D extends javax.swing.JPanel {
                     //Construimos la figura como una Linea
                     figuraTemporal = new CurvaCubica();
 
-                    //Aplicamos el color 
-               //     figuraTemporal.getTrazo().setColor(color);
-                    
-                    
-                    //PRUEBA EXPLOSIVA//
                     figuraTemporal.setTrazo(trazo);
 
                     vShape.add(figuraTemporal);
 
                 }else 
+                //Si ha sido seleccionada la herramienta RECTÁNGULO del buttonGroup
                 if(this.tipoHerramienta==Herramienta.RECTANGULO){
                     //Construimos la figura como un rectángulo
                     figuraTemporal = new Rectangulo();
@@ -682,12 +734,8 @@ public class Lienzo2D extends javax.swing.JPanel {
                     //Aplicamos el estilo de trazado.
                     figuraTemporal.setTrazo(trazo);
                     
-
-
-
-                    //Si  ha espeficado quse quiere que la figu esté rellena
-                    if(rellenoBoolean){
-                                            
+                    //Si ha espeficado quse quiere que la figu esté rellena se aplica 
+                    if(rellenoBoolean){                                            
                         ((Rectangulo)figuraTemporal).setRelleno(rellenoPadre);
                         ((Rectangulo)figuraTemporal).setRelleno(true);
                     }
@@ -752,22 +800,20 @@ public class Lienzo2D extends javax.swing.JPanel {
                     //Aplicamos el estilo de trazado.
                     figuraTemporal.setTrazo(trazo);
 
-                    //Esta figura no tiene relleno porque no puede
-
+                    //Esta figura no tiene relleno porque no puede.
+                    
                     vShape.add(figuraTemporal);
 
                 } else
                     
                     if(this.tipoHerramienta==Herramienta.TEXTO){
-                    
-                  
-                    
+                                      
+                    //Se avisa al padre para que abra la herramienta de edición de texto.
                     herramientaTexto hT = new herramientaTexto(this, pA);
                     hT.setVisible(true);
-                    
-                    //Tengo que avisar al padre para que habra el menú de la herramienta
-                    
-                    //Sólo en este caso repintamos ya.
+                                                            
+                    /*Sólo en este caso repintamos ya, para que la edición del texto por la herramienta se
+                    vea mientras se realizan los cambios. */
                     this.repaint();
                 }
                 
@@ -777,38 +823,29 @@ public class Lienzo2D extends javax.swing.JPanel {
         }//Fin del bloque de ejecución sólo para el botón izquierdo del ratón.
     }//GEN-LAST:event_formMousePressed
 
+    
+    
+    /**
+     * Gestión del evento arrastrar ratón.
+     * @param evt Evento en gestión.
+     */
     private void formMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseDragged
          /*
         Para ver como quedaría la linea conforme vamos dibujando la repintamos mientras
         arrastramos el ratón para al final dibujarla del todo al levantar el click (released).
-        */
-       
-        
+        Como en fomrMousedPressed bloqueamos para el uso del botón izquierdo del ratón.
+        */        
          if(SwingUtilities.isLeftMouseButton(evt)){
-             
-             
+                          
          
         //Capturamos el segundo punto necesario para construir la linea:
         pB=evt.getPoint();
-        
-        //Sacamos el último objeto del array:
-        //Line2D temporal = (Line2D) vShape.remove(vShape.size()-1);        
-        
-        //Line2D tmp =(Line2D) vShape.get((vShape.size()-1));
-        
-        
-    //    Imprimir("Draggeando en modo seleccion: "+modoSeleccion + "con figura: "+figuraMoviendo);
-     //   Imprimir("Draggeando en modo seleccion: "+modoSeleccion + "con texto: "+textoMoviendo);
-        
         
         /**
          * Si el modo de selcción está activado se va a editar algo en alguna figura.
          */
          if(modoSeleccion==true){
-             
-             
-             
-            
+                                  
              //Si ha seleccionado alguna figura en el pressed tendremos alguna figura que mover
              if(figuraMoviendo!=-1){
 
@@ -900,8 +937,7 @@ public class Lienzo2D extends javax.swing.JPanel {
                          ((Elipse)vShape.get(figuraMoviendo)).cambiarPuntosControl(pA, pB);
                   
              } 
-             
-             
+                          
              //Si se ha seleccionado agún texto tendremos un texto que mover:
               if(textoMoviendo!=-1){
               Imprimir("Vamos a mover un texto");
@@ -909,7 +945,7 @@ public class Lienzo2D extends javax.swing.JPanel {
               }
          
          //Si NO SE ENCUENTRA EN MODO SELECCIÓN entonces se está creando una figura (modificando la ultima creada) añadiendole coordenadas nuevas,
-              //normalmente porque se está haciendo grande...
+        //normalmente porque se está haciendo grande...
          }else  if(!vShape.isEmpty()){ //Por si el vector está vacío.
        
         /* 
@@ -968,8 +1004,7 @@ public class Lienzo2D extends javax.swing.JPanel {
             Un método mucho más útil y simple que debería tener la clase sería aquel que permitiera especificar un nuevo
             rectángulo a partir de dos puntos (haciendo el los cálculos dentro para se pudiera hacer en cualquier dirección y 
             también debería tener un par de métodos set para los dos puntos que representan las esquinas del rectángulo.
-            */                      
-            //((Rectangle2D)vShape.get(vShape.size()-1)).setRect(pA.x, pA.y, ancho, alto);
+            */                                  
             
             //Esta función de Rectangle2D permite enviar solo dos puntos y conseguir que independientemente del lugar donde
             //se encuentren se dibuje un rectangulo entre ellos.
@@ -977,37 +1012,19 @@ public class Lienzo2D extends javax.swing.JPanel {
             
             
         }else if(this.tipoHerramienta==Herramienta.RECTANGULO){
-            /*
-            Para modificarlo tenemos que volver a especificar el primer punto y calcular el ancho y alto del rectángulo
-            ***Posible mejora de diseño***
-            Un método mucho más útil y simple que debería tener la clase sería aquel que permitiera especificar un nuevo
-            rectángulo a partir de dos puntos (haciendo el los cálculos dentro para se pudiera hacer en cualquier dirección y 
-            también debería tener un par de métodos set para los dos puntos que representan las esquinas del rectángulo.
-            */                      
-            //((Rectangle2D)vShape.get(vShape.size()-1)).setRect(pA.x, pA.y, ancho, alto);
             
             //Esta función de Rectangle2D permite enviar solo dos puntos y conseguir que independientemente del lugar donde
             //se encuentren se dibuje un rectangulo entre ellos.
-            ((Rectangulo)vShape.get(vShape.size()-1)).cambiarPosicion(pA, pB);
-            
-            
+            ((Rectangulo)vShape.get(vShape.size()-1)).cambiarPosicion(pA, pB);                        
         }        
         else if(this.tipoHerramienta==Herramienta.OVALO){
-            ((Elipse)vShape.get(vShape.size()-1)).cambiarPosicion(pA,pB);
-            //((Ellipse2D)vShape.get(vShape.size()-1)).setFrame(pA.x, pA.y, ancho, alto);
+            ((Elipse)vShape.get(vShape.size()-1)).cambiarPosicion(pA,pB);            
         }
         else if(this.tipoHerramienta==Herramienta.ARCO){
-            ((Arco)vShape.get(vShape.size()-1)).cambiarPosicion(pA,pB);
-            //((Ellipse2D)vShape.get(vShape.size()-1)).setFrame(pA.x, pA.y, ancho, alto);
+            ((Arco)vShape.get(vShape.size()-1)).cambiarPosicion(pA,pB);            
         } 
         
-         }
-        //Modificamos el objeto extraido seteandolo de nuevo con el punto A y el nuevo punto B a falta de un 
-        //método directo para hacer sólo esto con el punto que queramos.
-        //temporal.setLine(pA, pB);
-        
-        //Añadimos el nuevo objeto al array para que se vaya viendo la construcción del mismo mientras hacemos dragged.
-        //vShape.add(temporal);
+      }
                 
         //Como ya está en el vector llamamos a paint para que vuelva a pintar todos los objetos y este en el estado que está.
         this.repaint();  
@@ -1017,11 +1034,15 @@ public class Lienzo2D extends javax.swing.JPanel {
     /**
      * Implementa las acciones a realizar al hacer released (levantar click) del ratón.
      * Llama a soltar ratón en todas las figuras.
-     * @param evt 
+     * @param evt Evento en gestión.
      */
     private void formMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseReleased
 
-        
+        /**
+         * Sea cual sea la figura llamamos a soltarRaton para que realmente modifique la posición de los
+         * datos geométricos grabandolos en la nueva posición ofrecida por al ratón en el dragged donde se ha conseguido
+         * el punto pB.
+         */
         if(modoSeleccion==true && figuraMoviendo!=-1){        
             
                  if(vShape.get(figuraMoviendo).getClass().getName().contains("Polilinea"))
@@ -1056,30 +1077,32 @@ public class Lienzo2D extends javax.swing.JPanel {
                      if(vShape.get(figuraMoviendo)!=null)
                          ((Elipse)vShape.get(figuraMoviendo)).soltarRaton(pA,pB);
         }
-              
+        //Cuando se realice con todos se podrá realizar un bucle normal.      
         this.repaint();
     }//GEN-LAST:event_formMouseReleased
 
     
     /**
      * Programaicón del doble click de ratón.
-     * @param evt 
+     * @param evt Evento en gestión.
      */
     private void formMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseClicked
         
-        int numTexto;
-        Texto texto = new Texto();
+   
         
+        
+        Texto texto = new Texto();
+        //Detectamos contando el número de click que se trata de doble click.
         if (evt.getClickCount() == 2) {
             
             Imprimir("### Doble click ###");
             
             
             if(modoSeleccion){
-                //Detectamos el doble click del botón derecho del ratón
+                /*Si detectamos el doble click del botón derecho del ratón y está en modo edición lo que se quiere hacer
+                es eliminar una figura*/
                 if(SwingUtilities.isRightMouseButton(evt)){
-
-                    Imprimir("BOTÓN RIGHT");
+                    
                     //Sacamos si existe alguna figura donde hemos pulsado.
                     Figura figura=getFiguraSeleccionada(evt.getPoint());
                     //Eliminamos la figura del vector
@@ -1147,33 +1170,29 @@ public class Lienzo2D extends javax.swing.JPanel {
 
     /**
      * Implementacion del comportamiento del ratón al moverse por el lienzo.
-     * @param evt 
+     * Cambia el icono del mouse de los que se cargaron en el constructor si estándo en modo edición se entra dentro de una figura
+     * o se selecciona alguno de sus puntos de control.
+     * @param evt Evento en gestión.
      */
     private void formMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseMoved
         
         if(modoSeleccion){
            // Imprimir("Soy un ratón y me estoy moviendo por el plano");
             //Comprueba si en el punto el que estoy hay una figura
-            Figura figura = getFiguraSeleccionada(evt.getPoint());
+            Figura fig = getFiguraSeleccionada(evt.getPoint());
             Texto texto = this.getTextoSeleccionado(evt.getPoint());
-            
-            //this.getTextoSeleccionado(pA)
-            
+                                    
             //Si estoy encima de una figura cambio el icono
-            if(figura!=null || texto!=null)
+            if(fig!=null || texto!=null)
                 this.setCursor(cursorManoAbierta);
             //Si no estoy encima de una figura, dejo el cursor como estaba
             else
-                this.setCursor(Cursor.getDefaultCursor());
-            
-        }
-        
+                this.setCursor(Cursor.getDefaultCursor());            
+        }        
         
     }//GEN-LAST:event_formMouseMoved
 
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables
-
   
 }

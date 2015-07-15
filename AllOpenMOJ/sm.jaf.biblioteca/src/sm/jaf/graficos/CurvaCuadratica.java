@@ -29,29 +29,39 @@ import java.awt.geom.QuadCurve2D;
 public class CurvaCuadratica extends Figura {
      
     /**
-     * Único punto de control de la curva cuadrática.
+     * Variables para el primer punto de control.
      */
-    private Point2D puntoControl = new Point2D.Double();
-    
+    private Point2D puntoControl;    
     private Ellipse2D elipsePuntoControl;    
-    private boolean seleccionadoPuntoControl=false;
+    private boolean seleccionadoPuntoControl;
     
-    private Point2D A = new Point2D.Double(); 
-    //Variable para la reprensentación espacial del primer punto de la linea.    
+    
+    /**
+     * Puntos que definen los extremos del segmento de linea.
+     */
+    private Point2D A;     
     private Ellipse2D elipsePuntoA;
-    private boolean seleccionadoPuntoA=false;
-    
-    //Variable para la reprensentación espacial del segundo punto de la linea.
+    private boolean seleccionadoPuntoA;        
     
     private Ellipse2D elipsePuntoB;
-    private boolean seleccionadoPuntoB=false;       
-    private Point2D B = new Point2D.Double();
+    private boolean seleccionadoPuntoB;       
+    private Point2D B;
     
-    private boolean modoEdicion=false;
+    /**
+     * Para el control de la edición de la figura.
+     */
+    private boolean modoEdicion;
     
-    boolean moviendo=false;
-    double distanciaX=0;
-    double distanciaY=0;
+    /**
+     * Para el control de movimiento de la figura.
+     */
+    private boolean moviendo;
+    
+    /**
+     * Variables para el control del movimiento de la figura.
+     */
+    private double distanciaX;
+    private double distanciaY;
     
     
     
@@ -60,6 +70,17 @@ public class CurvaCuadratica extends Figura {
      */
     public CurvaCuadratica(){
         datosGeometricos=new QuadCurve2D.Double();
+        distanciaX=0;
+        distanciaY=0;
+        modoEdicion=false;
+        moviendo=false;
+        seleccionadoPuntoControl=false;
+        puntoControl = new Point2D.Double();
+        A = new Point2D.Double();
+        seleccionadoPuntoA=false;
+        B = new Point2D.Double();
+        seleccionadoPuntoB=false;
+        
     }
     /**
      * Segundo constructor con parámetros. 
@@ -82,6 +103,7 @@ public class CurvaCuadratica extends Figura {
      * justo en el centro del segemento para que después el usuario lo use.     
      * @param A Extremo A del segmento que definen los puntos.
      * @param B Extremo B del segmento que definen los puntos
+     * @return El punto de control construido en el centro de la linea.
      * @see <a href="https://es.wikipedia.org/wiki/Punto_medio">Calculo del punto medio</a>
      */        
     public Point2D puntoControlDefecto(Point2D A, Point2D B){
@@ -91,7 +113,13 @@ public class CurvaCuadratica extends Figura {
         return new Point2D.Double((A.getX()+B.getX())/2, (A.getY()+B.getY())/2);
     }
    
-   
+    /**
+     * Para calcular la diferencia entre los puntos de control.
+     * Si la figura se está moviendo se calcula la diferencia entre el punto de referencia y la nueva posición 
+     * para que el movimiento de todos los puntos se hagan de forma correcta.
+     * @param puntoRef El punto del plano donde se hace click para coger la figura.
+     * @param npc El punto donde la figura se deja tras hacer dragged o la selección de un punto de control.
+     */   
     public void cambiarPuntoControl(Point2D puntoRef, Point2D npc){
             
         if(moviendo){
@@ -263,8 +291,13 @@ public class CurvaCuadratica extends Figura {
              } 
 
     }
-
-        public void soltarRaton(Point2D ref, Point2D nuevo){
+    
+     /**
+     * Realiza las modificaciones reales sobre todos los puntos que definen la figura.
+     * @param ref Referencia 
+     * @param nuevo Punto nuevo
+     */
+    public void soltarRaton(Point2D ref, Point2D nuevo){
             
             /**
              * Si la figura se está moviendo se realiza el cambio de su posición, en caso contrario se estará
@@ -288,12 +321,18 @@ public class CurvaCuadratica extends Figura {
     }
     
     /**
-     * Devuelve información básica de la figura.
-     * @return Una cadena de texto con la información que se disponga.
+     * Para conocer información sobre el objeto.
+     * @return Información del objeto en un String.
      */
     @Override
     public String toString() {
-        return "CurvaCuadratica - ";
+        String mensaje="";
+    
+        mensaje+="Curva Cubica: \n";
+        mensaje+="\t Extremos: A("+A.getX()+","+A.getY()+")  B("+B.getX()+","+B.getY()+")\n";
+        mensaje+="\t Punto de control  ("+puntoControl.getX()+","+puntoControl.getY()+")\n";                     
+        
+        return mensaje;
         
     }
 

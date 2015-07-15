@@ -23,41 +23,62 @@ import java.awt.geom.Point2D;
 
 /**
  * Clase que implementa la figura LINEA.
- * Utiliza internamente un objeto de tipo Line2D de la Java2D para los datos geometricos.
+ * Utiliza internamente un objeto de tipo Line2D de la Java2D para los datos geometricos. En esta figura
+ * los propios puntos de control son los extremos de la linea.
  * @see <a href="http://docs.oracle.com/javase/7/docs/api/java/awt/geom/Line2D.html">Clase Line2D</a> 
  * @author Juan A. Fernández Sánchez
  */
 public class Linea extends Figura {
               
     
-    private Point2D puntoControlA;  
+    /**
+     * Puntos que definen los extremos del segmento de linea.
+     */
+    private Point2D A; 
+    private Point2D B;
+    
+    /**
+     * Variables para el control de primer punto de edicion, que es uno de los extremos de la linea.
+     */
     private Ellipse2D elipsePuntoControlA;    
-    boolean seleccionadoPuntoControlA;
+    private boolean seleccionadoPuntoControlA;
     
-    private Point2D puntoControlB;
+    /**
+     * Variables para el control de primer punto de edicion, que es otro de los extremos de la linea.
+     */
     private Ellipse2D elipsePuntoControlB;    
-    boolean seleccionadoPuntoControlB;
+    private boolean seleccionadoPuntoControlB;
     
+    /**
+     * Para el control de la edición de la figura.
+     */
     private boolean modoEdicion;
     
-    boolean moviendo=false;
+    /**
+     * Para el control de movimiento de la figura.
+     */
+    private boolean moviendo;
     
-    //Valores para controlar el movimiento de la figura.
-    double distanciaX=0;
-    double distanciaY=0;
+    /**
+     * Variables para el control del movimiento de la figura.
+     */
+    private double distanciaX;
+    private double distanciaY;
     
-      Point2D A = new Point2D.Double(); 
-      Point2D B = new Point2D.Double();
+    
     
     /**
      * Primer constructor sin parámetros.
      * Sólo inicializa los datos geométricos con una Line2D de la Java2D.
      */
     public Linea(){
+        A = new Point2D.Double();
+        B = new Point2D.Double();
         datosGeometricos=new Line2D.Double();
+        distanciaX=0;
+        distanciaY=0;
         modoEdicion=false;
-        puntoControlA = new Point2D.Double();
-        puntoControlB = new Point2D.Double();
+        moviendo=false;
         seleccionadoPuntoControlA=false;
         seleccionadoPuntoControlB=false;
     }
@@ -72,6 +93,14 @@ public class Linea extends Figura {
         datosGeometricos=new Line2D.Double(puntoA, puntoB);        
     }
     
+    
+    /**
+     * Para calcular la diferencia entre los puntos de control.
+     * Si la figura se está moviendo se calcula la diferencia entre el punto de referencia y la nueva posición 
+     * para que el movimiento de todos los puntos se hagan de forma correcta.
+     * @param puntoRef El punto del plano donde se hace click para coger la figura.
+     * @param npc El punto donde la figura se deja tras hacer dragged o la selección de un punto de control.
+     */
     public void cambiarPuntosControl(Point2D puntoRef, Point2D npc){
         
         
@@ -148,6 +177,12 @@ public class Linea extends Figura {
     public void setModoEdicion(boolean modo){
         modoEdicion=modo;
     }
+     
+    /**
+     * Realiza las modificaciones reales sobre todos los puntos que definen la figura.
+     * @param ref Referencia 
+     * @param nuevo Punto nuevo
+     */
     public void soltarRaton(Point2D ref, Point2D nuevo){
             Imprimir("Soltando el raton");
             
@@ -306,16 +341,6 @@ public class Linea extends Figura {
         
         //Se llama a "cambiarPosicion" que es quien cambia la posición de los dos puntos de la linea.
         this.cambiarPosicion(pos, newp2);
-    }
-    
-    
-    public void cambiarPosicion2(Point2D P, Point2D nP) {
-                     
-       //1º Calculamos las diferencias usando el punto de marcado P en el segmento origen.
-    //    double dXA=
-     //   double dXB
-       
-        
     }
     
 }

@@ -39,29 +39,28 @@ public class SobreMOJ extends javax.swing.JFrame {
     private void initComponents() {
 
         jTextField1 = new javax.swing.JTextField();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
-        jLabel7 = new javax.swing.JLabel();
+        labelTituloPrincipal = new javax.swing.JLabel();
+        labelGitHub = new javax.swing.JLabel();
+        labelIMGGitHub = new javax.swing.JLabel();
+        labelGranada = new javax.swing.JLabel();
+        labelIMGGPL3 = new javax.swing.JLabel();
 
         jTextField1.setText("jTextField1");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("About MOJ");
 
-        jLabel1.setFont(new java.awt.Font("Ubuntu", 1, 24)); // NOI18N
-        jLabel1.setText("Open MOJ (Multimedia Over Java)");
+        labelTituloPrincipal.setFont(new java.awt.Font("Ubuntu", 1, 24)); // NOI18N
+        labelTituloPrincipal.setText("Open MOJ (Multimedia Over Java)");
 
-        jLabel2.setText("Códio disponible en https://github.com/juanAFernandez/sistemasMultimediaJava");
+        labelGitHub.setText("Código disponible en https://github.com/juanAFernandez/sistemasMultimediaJava");
 
-        jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/github-icon.png"))); // NOI18N
+        labelIMGGitHub.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/github-icon.png"))); // NOI18N
 
-        jLabel5.setFont(new java.awt.Font("DejaVu Sans", 1, 12)); // NOI18N
-        jLabel5.setText("Granada @ 2015");
+        labelGranada.setFont(new java.awt.Font("DejaVu Sans", 1, 12)); // NOI18N
+        labelGranada.setText("Granada @ 2015");
 
-        jLabel7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/gplv3-logo-red.png"))); // NOI18N
+        labelIMGGPL3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/gplv3-logo-red.png"))); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -69,25 +68,20 @@ public class SobreMOJ extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(17, 17, 17)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel3)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 39, Short.MAX_VALUE)
-                        .addComponent(jLabel4)
-                        .addGap(21, 21, 21))))
+                .addComponent(labelTituloPrincipal)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 39, Short.MAX_VALUE)
+                .addComponent(labelIMGGitHub)
+                .addGap(21, 21, 21))
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(40, 40, 40)
-                        .addComponent(jLabel2))
+                        .addComponent(labelGitHub))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(149, 149, 149)
-                        .addComponent(jLabel7)
+                        .addComponent(labelIMGGPL3)
                         .addGap(81, 81, 81)
-                        .addComponent(jLabel5)))
+                        .addComponent(labelGranada)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -96,21 +90,19 @@ public class SobreMOJ extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(jLabel4))
+                        .addComponent(labelIMGGitHub))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(40, 40, 40)
-                        .addComponent(jLabel1)))
+                        .addComponent(labelTituloPrincipal)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 103, Short.MAX_VALUE)
-                .addComponent(jLabel2)
-                .addGap(5, 5, 5)
-                .addComponent(jLabel3)
-                .addGap(18, 18, 18)
+                .addComponent(labelGitHub)
+                .addGap(23, 23, 23)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel7)
+                        .addComponent(labelIMGGPL3)
                         .addGap(17, 17, 17))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jLabel5)
+                        .addComponent(labelGranada)
                         .addGap(30, 30, 30))))
         );
 
@@ -153,12 +145,11 @@ public class SobreMOJ extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel7;
     private javax.swing.JTextField jTextField1;
+    private javax.swing.JLabel labelGitHub;
+    private javax.swing.JLabel labelGranada;
+    private javax.swing.JLabel labelIMGGPL3;
+    private javax.swing.JLabel labelIMGGitHub;
+    private javax.swing.JLabel labelTituloPrincipal;
     // End of variables declaration//GEN-END:variables
 }

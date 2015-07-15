@@ -549,6 +549,7 @@ public final class herramientaTrazado extends javax.swing.JFrame {
         
         if(padre.getPanelEscritorio().getSelectedFrame()!=null){
             ((VentanaInterna)padre.getPanelEscritorio().getSelectedFrame()).getLienzo().setTrazo(trazo);
+            ((VentanaInterna)padre.getPanelEscritorio().getSelectedFrame()).getLienzo().aplicarUltimaFigura();
         }
                 
         //Cerramos la ventana

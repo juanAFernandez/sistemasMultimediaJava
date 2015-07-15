@@ -19,7 +19,6 @@ import java.awt.Graphics2D;
 import java.awt.geom.Arc2D;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
-import java.awt.geom.Rectangle2D;
 
 /**
  * Clase que implementa la figura ARCO.
@@ -29,28 +28,52 @@ import java.awt.geom.Rectangle2D;
 public class Arco extends Figura {
 
     
-    private Point2D puntoControlA = new Point2D.Double();  
+    /**
+     * Para la selección del modo edición.
+     */
+    private boolean modoEdicion;
+    
+    /**
+     * Variables del primer punto de control.
+     */
+    private Point2D puntoControlA;
     private Ellipse2D elipsePuntoControlA;    
-    boolean seleccionadoPuntoControlA=false;
+    boolean seleccionadoPuntoControlA;
     
-    private Point2D puntoControlB = new Point2D.Double();  
+    /**
+     * Variables para el segundo punto de control.
+     */
+    private Point2D puntoControlB;  
     private Ellipse2D elipsePuntoControlB;    
-    boolean seleccionadoPuntoControlB=false;
+    boolean seleccionadoPuntoControlB;
     
-    
-    private Point2D puntoControlC = new Point2D.Double();  
+    /**
+     * Variables para el tercer punto de control.
+     */
+    private Point2D puntoControlC;  
     private Ellipse2D elipsePuntoControlC;    
-    boolean seleccionadoPuntoControlC=false;
+    boolean seleccionadoPuntoControlC;
     
     
-    
+    /**
+     * Radio de la circunferencia donde se inscribe el arco.
+     */
     private double radio;
+    /**
+     * Ángulo que define el inicio del arco.
+     */
     private double gradosInicio;
+    /**
+     * Ángulo que define el fin del arco.
+     */
     private double gradosFin;
+    /**
+     * Punto que define el centro del circulo der arco.
+     */
     private Point2D centro;
     
     
-       private boolean modoEdicion=false;
+    
     
     
      /**
@@ -58,20 +81,30 @@ public class Arco extends Figura {
      * Sólo inicializa los datos geométricos con una Line2D de la Java2D.
      */
     public Arco(){
+        
         //Inicializamos los datos geométricos
         datosGeometricos=new Arc2D.Double(50, 50,
                          50,
                          50,
                          0, 360,
                          Arc2D.OPEN);
+        
+        //Las variables de las instancias:
+        puntoControlA = new Point2D.Double();       
+        seleccionadoPuntoControlA=false;    
+        puntoControlB = new Point2D.Double();        
+        seleccionadoPuntoControlB=false;        
+        puntoControlC = new Point2D.Double();        
+        seleccionadoPuntoControlC=false;
        
+        modoEdicion=false;
         
         
     }
     
     /**
-     * 
-     * @param npc  Nuevo punto de control
+     * Para cambiar cualquiera de los puntos de control de la figura.
+     * @param npc  Nuevo punto para cambiar por cualquier punto de control.
      */
     public void cambiarPuntosControl(Point2D npc){
         /**
@@ -165,12 +198,6 @@ public class Arco extends Figura {
                     grados[mod]=270+(90-grados[mod]);                    
                 }
 
-                
-                
-                
-                
-                
-                
             //6º Realizamos finalmente la modificación de la figura.
                      
                 ((Arc2D)datosGeometricos).setArcByCenter(centro.getX(), centro.getY(), radio, grados[0], grados[1]-grados[0], Arc2D.OPEN);
@@ -183,8 +210,8 @@ public class Arco extends Figura {
                 Imprimir("Grados inicio: "+grados[0]+" Grados fin: "+grados[1]);
         } 
         
-        if(cambiarTamaño){
-            
+        //SI lo que se está haciendo es cambar el tamaño de la figura
+        if(cambiarTamaño){            
             //Calculamos el nuevo radio con el centro y el punto que modificamos.
             double newRadio=Math.sqrt(   Math.pow(centro.getX()-npc.getX(),2)  +  Math.pow(centro.getY()-npc.getY(),2)    );
             this.radio=newRadio;
@@ -196,6 +223,11 @@ public class Arco extends Figura {
         
     }
     
+    /**
+     * Para dibujar la figura en un objeto Graphics2D.
+     * @param entorno Entorno donde dibujar la figura, objeto de tipo Graphics2D.
+     * @see <a href="http://docs.oracle.com/javase/7/docs/api/java/awt/Graphics2D.html">Clase Graphics2D</a>
+     */
     @Override
     public void dibujateEn(Graphics2D entorno) {
         
@@ -324,10 +356,15 @@ public class Arco extends Figura {
         ((Arc2D)datosGeometricos).setArcByCenter(centro.getX(), centro.getY(), radio, gradosInicio, gradosFin-gradosInicio, Arc2D.OPEN);
     }
 
+    /**
+     * Para conocer si un punto pasado pertenece a la figura, sea conteniendolo o perteneciendo a un punto de control.
+     * @param punto Punto con el que comparar las partes de las figuras.
+     * @return True si el punto coincide con la figura o con alguno de sus puntos de control.
+     */
     @Override
     public boolean contiene(Point2D punto) {
         
-        
+        //Inicializamos a false
         seleccionadoPuntoControlA=false;
         seleccionadoPuntoControlB=false;
         seleccionadoPuntoControlC=false;
@@ -365,9 +402,20 @@ public class Arco extends Figura {
          
     }
 
+    /**
+     * Ofrece informacion sobre los datos geometricos de la figura.
+     * @return Una cadena de texto con la informacion.
+     */
     @Override
     public String toString() {
-        return "arco";
+        String mensaje="";
+    
+        mensaje+="Arco: \n";
+        mensaje+="\t Centro: ("+centro.getX()+","+centro.getY()+") \n";
+        mensaje+="\t Radio: "+radio+"\n";
+        mensaje+="\t Grados Inicio: "+gradosInicio+" Grados Final: "+gradosFin+"\n";
+        
+        return mensaje;
     }
     
 }

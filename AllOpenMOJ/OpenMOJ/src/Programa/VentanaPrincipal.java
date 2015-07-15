@@ -9,40 +9,25 @@ import Herramientas.herramientaNegativo;
 import Herramientas.herramientaOpBinarias;
 import Herramientas.herramientaRelieve;
 import Herramientas.herramientaRotacion;
-import extras.herramientaTexto;
 import Herramientas.herramientaUmbralizacion;
 import accesorios.Ajustes;
 import accesorios.nuevoLienzo;
-import com.sun.glass.ui.Cursor;
 import static extras.Imprimir.Imprimir;
 import java.awt.Color;
 import java.awt.geom.Point2D;
 import java.io.File;
-import javax.swing.BorderFactory;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import extras.Herramienta;
 import java.awt.BasicStroke;
-import java.awt.GraphicsEnvironment;
-import java.awt.Stroke;
-import java.awt.geom.Line2D;
+import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.image.BufferedImage;
-import java.awt.image.ConvolveOp;
-import java.awt.image.Kernel;
-import java.awt.image.LookupOp;
-import java.awt.image.LookupTable;
-import java.awt.image.RescaleOp;
 import java.io.FileFilter;
 import java.io.IOException;
-import java.util.Locale;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.imageio.ImageIO;
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.JDesktopPane;
-import sm.image.KernelProducer;
-import sm.image.LookupTableProducer;
 import sm.jaf.graficos.Linea;
 import sm.jaf.graficos.Rectangulo;
 import sm.jaf.graficos.Relleno;
@@ -51,10 +36,7 @@ import sm.jaf.iu.Lienzo2D;
 
 public class VentanaPrincipal extends JFrame {
 
-    
-    private String []fuentesSistema;
-    
-    
+                    
     BufferedImage imagenTemporalParaOperaciones;
     
     private boolean guardar=false;
@@ -94,16 +76,23 @@ public class VentanaPrincipal extends JFrame {
 
     
     
-    
+    /**
+     * Constructor de la clase.
+     * Inicializa todas las variables y realiza todos los ajustes necesarios previos al funcionamiento 
+     * del programa.
+     */
     public VentanaPrincipal() {
         
+        //Iniciamos todos los componentes de la GUI.
         initComponents();
         
+        //Configuramos los mensajes flotantes de ayuda de la GUI.
         configuraMensajesInfo();
-
-        
+                        
+        //Establecemos el color de fondo del lienzo para los lienzos de nueva creación.
         colorLienzoDefecto = Color.WHITE;
         
+        //Por defecto el relleno de las figuras no está habilitado
         rellenoActivo=false;
         
         /** Ajuste del trazo por defecto. */
@@ -139,7 +128,7 @@ public class VentanaPrincipal extends JFrame {
             Color fondo;            
             fondo = new Color(214,217,223);
             this.miniLienzoRelleno.setBackground(fondo);
-           Point2D puntoA = new Point2D.Double(0,0);
+            Point2D puntoA = new Point2D.Double(0,0);
             Point2D puntoB = new Point2D.Double(0,0);
             
             Rectangulo rectangulo= new Rectangulo(puntoA, puntoB);
@@ -156,31 +145,11 @@ public class VentanaPrincipal extends JFrame {
         de VentanaInterna */        
         this.spinnerGrosor.setValue(1);
         
-        //Iniciamos el Lienzo con la herramienta punto seleccionada.
-//        this.lienzo1.setTipoHerramienta(Lienzo.tipoHerramienta.LINEA);
-        //Para que el botón de punto aparezca seleccionado.
-        //this.BotonLapiz.doClick();
-//        this.BotonLinea.doClick();
-        this.dialogoAbout.setSize(600, 200);
-        this.dialogoAbout.setLocationRelativeTo(null);
-        
-        //botonRojo.setSelected(true);
-        //botonRojo.setSelected(rootPaneCheckingEnabled);
-        
-        //botonRojo.doClick();
-        //botonRojo.setSelected(true);
-        
-        
-//        this.spinnerGrosor.setValue(1);
-//        this.lienzo1.setGrosorLinea(10);
-        
-        //this.BotonHerramientas.doClick();
-        //this.panelHerramientas.setVisible(false);
-        
-       
       
-        //Para que el JFrame se vea a pantalla completa:
-        //this.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        //Para que el JFrame (La ventana del programa) se vea a pantalla completa:
+            //this.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        
+        //Para que tenga un determPANELinado tamaño.
         this.setSize(500, 500);
         
       //  this.panelHerramientasInferior.setPreferredSize(new java.awt.Dimension(615, 140));
@@ -188,12 +157,15 @@ public class VentanaPrincipal extends JFrame {
         
         //this.panelEscritorio.setBackground(Color.red);
         
-       
+        this.panelEscritorio.setBackground(Color.BLUE);
+        
       
         
         
         
-        
+        /**
+         * Creación de lienzo inicial en una ventana interna del programa.
+         */
         
         //Abrimos una ventana al iniciar el programa:
         VentanaInterna ventanaInterna = new VentanaInterna(this);
@@ -208,18 +180,36 @@ public class VentanaPrincipal extends JFrame {
         
         
         
+        //1º Se crea una variable imagen:
+               BufferedImage img;
+            //2º Se incializa con una imagen del tamaño seleciconado por el usuario:
+               System.out.println("ancho"+300+"alto"+300);
+               img=new BufferedImage(300,300,BufferedImage.TYPE_INT_RGB);
+               
+            // 2.2 Abría que ajustar el color de la nueva imagen que se está creando rellenando la imagen que se crea.
+               Graphics objetoGrafico = img.getGraphics();
+               objetoGrafico.setColor(getColorLiezoDefecto());
+               objetoGrafico.fillRect(0,0, 300, 300);
+        
+        ventanaInterna.getLienzo().setImage(img);
+        
+        
         
         //Activamos la mejora de alisamiento de dibujo
         ventanaInterna.getLienzo().setMejoraRenderizacion(true);
-        this.panelEscritorio.add(ventanaInterna);
-        System.out.println("Creando ventana interna incial.");
+        //Añadimos la ventana a la variable escritorio.
+        this.panelEscritorio.add(ventanaInterna);        
+        //Hacemos visible la ventana interna dentro del escritorio.
         ventanaInterna.setVisible(true);
         
+        
+        
+        
+        
+        
+        
         this.botonAlisar.setSelected(true);
-        
-        
-        
-
+                        
         dimensionMatriz=0;
         
         
@@ -236,7 +226,7 @@ public class VentanaPrincipal extends JFrame {
      * Configura los mensajes de ayuda que se muestran al posar el ratón 
      * sobre un elemento unos segundos.
      */
-    public void configuraMensajesInfo(){
+    private void configuraMensajesInfo(){
         
         //Herramientas de dibujo:
             buttonLapiz.setToolTipText("Dibujo a mano alzada.");
@@ -280,18 +270,8 @@ public class VentanaPrincipal extends JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
         GrupoBotonesDibujo = new javax.swing.ButtonGroup();
         GrupoBotonesColores = new javax.swing.ButtonGroup();
-        popUpAjustes = new javax.swing.JPopupMenu();
-        jMenu5 = new javax.swing.JMenu();
-        jMenuItem3 = new javax.swing.JMenuItem();
-        jMenuItem4 = new javax.swing.JMenuItem();
-        dialogoAbout = new javax.swing.JDialog();
-        labelCC = new javax.swing.JLabel();
-        jPanel1 = new javax.swing.JPanel();
-        jLabel2 = new javax.swing.JLabel();
-        jSeparator2 = new javax.swing.JSeparator();
         PanelNorte = new javax.swing.JPanel();
         panelComplementario = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
@@ -339,7 +319,26 @@ public class VentanaPrincipal extends JFrame {
         nfoHerramienta = new javax.swing.JLabel();
         coordenadas = new javax.swing.JLabel();
         separadorBarraInfo = new javax.swing.JSeparator();
-        panelEscritorio = new javax.swing.JDesktopPane();
+        panelEscritorio = new javax.swing.JDesktopPane(){
+            private Image image;
+            {
+                try {
+                    image = ImageIO.read(getClass().getResource("/Img/background.jpg"));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            public void changeBackground(Image newImage){
+                image=newImage;
+            }
+
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                g.drawImage(image, 0, 0, getWidth(), getHeight(), this);
+            }
+        };
         jMenuBar1 = new javax.swing.JMenuBar();
         menuArchivo = new javax.swing.JMenu();
         botonNuevoMenuArchivo = new javax.swing.JMenuItem();
@@ -371,31 +370,6 @@ public class VentanaPrincipal extends JFrame {
         botonMenuAbout = new javax.swing.JMenu();
         botonAboutInfo = new javax.swing.JMenuItem();
         botonAjustes = new javax.swing.JMenuItem();
-
-        jLabel1.setText("jLabel1");
-
-        jMenu5.setText("jMenu5");
-
-        jMenuItem3.setText("jMenuItem3");
-        jMenu5.add(jMenuItem3);
-
-        jMenuItem4.setText("jMenuItem4");
-        jMenu5.add(jMenuItem4);
-
-        popUpAjustes.add(jMenu5);
-
-        dialogoAbout.setTitle("About OpenMOJ");
-
-        labelCC.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/cc.png"))); // NOI18N
-        dialogoAbout.getContentPane().add(labelCC, java.awt.BorderLayout.PAGE_END);
-
-        jPanel1.setLayout(new java.awt.BorderLayout());
-
-        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel2.setText("OpenMOJ");
-        jPanel1.add(jLabel2, java.awt.BorderLayout.CENTER);
-
-        dialogoAbout.getContentPane().add(jPanel1, java.awt.BorderLayout.PAGE_START);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Open MOJ (Media Over Java)");
@@ -440,6 +414,7 @@ public class VentanaPrincipal extends JFrame {
 
         GrupoBotonesDibujo.add(buttonLapiz);
         buttonLapiz.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/Lapiz.gif"))); // NOI18N
+        buttonLapiz.setSelected(true);
         buttonLapiz.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 buttonLapizActionPerformed(evt);
@@ -1427,6 +1402,9 @@ public class VentanaPrincipal extends JFrame {
         if(panelEscritorio.getSelectedFrame()!=null){
             ((VentanaInterna)panelEscritorio.getSelectedFrame()).getLienzo().getTrazo().setColor(Color.BLACK);
             miniLienzoMuestra.getFigura(0).getTrazo().setColor(Color.BLACK);
+            
+            ((VentanaInterna)panelEscritorio.getSelectedFrame()).getLienzo().aplicarUltimaFigura();
+            
             //miniLienzoMuestra.setGrosor((int)spinnerGrosor.getValue());
              miniLienzoMuestra.repaint();
         }
@@ -1437,6 +1415,9 @@ public class VentanaPrincipal extends JFrame {
         if(panelEscritorio.getSelectedFrame()!=null){
         ((VentanaInterna)panelEscritorio.getSelectedFrame()).getLienzo().getTrazo().setColor(Color.GREEN);
             miniLienzoMuestra.getFigura(0).getTrazo().setColor(Color.GREEN);
+            
+            ((VentanaInterna)panelEscritorio.getSelectedFrame()).getLienzo().aplicarUltimaFigura();
+            
             //miniLienzoMuestra.setGrosor((int)spinnerGrosor.getValue());
              miniLienzoMuestra.repaint();
         }
@@ -1447,6 +1428,9 @@ public class VentanaPrincipal extends JFrame {
             ((VentanaInterna)panelEscritorio.getSelectedFrame()).getLienzo().getTrazo().setColor(Color.RED);
             
             miniLienzoMuestra.getFigura(0).getTrazo().setColor(Color.RED);
+            
+            ((VentanaInterna)panelEscritorio.getSelectedFrame()).getLienzo().aplicarUltimaFigura();
+            
             //miniLienzoMuestra.setGrosor((int)spinnerGrosor.getValue());
              miniLienzoMuestra.repaint();
         }
@@ -1456,6 +1440,9 @@ public class VentanaPrincipal extends JFrame {
         if(panelEscritorio.getSelectedFrame()!=null){
             ((VentanaInterna)panelEscritorio.getSelectedFrame()).getLienzo().getTrazo().setColor(Color.WHITE);
             miniLienzoMuestra.getFigura(0).getTrazo().setColor(Color.WHITE);
+            
+            ((VentanaInterna)panelEscritorio.getSelectedFrame()).getLienzo().aplicarUltimaFigura();
+            
             //miniLienzoMuestra.setGrosor((int)spinnerGrosor.getValue());
              miniLienzoMuestra.repaint();
         }
@@ -1465,6 +1452,9 @@ public class VentanaPrincipal extends JFrame {
         if(panelEscritorio.getSelectedFrame()!=null){
             ((VentanaInterna)panelEscritorio.getSelectedFrame()).getLienzo().getTrazo().setColor(Color.BLUE);
             miniLienzoMuestra.getFigura(0).getTrazo().setColor(Color.BLUE);
+            
+            ((VentanaInterna)panelEscritorio.getSelectedFrame()).getLienzo().aplicarUltimaFigura();
+            
             //miniLienzoMuestra.setGrosor((int)spinnerGrosor.getValue());
              miniLienzoMuestra.repaint();
         }
@@ -1474,6 +1464,9 @@ public class VentanaPrincipal extends JFrame {
         if(panelEscritorio.getSelectedFrame()!=null){
         ((VentanaInterna)panelEscritorio.getSelectedFrame()).getLienzo().getTrazo().setColor(Color.YELLOW);
         miniLienzoMuestra.getFigura(0).getTrazo().setColor(Color.YELLOW);
+        
+        ((VentanaInterna)panelEscritorio.getSelectedFrame()).getLienzo().aplicarUltimaFigura();
+        
             //miniLienzoMuestra.setGrosor((int)spinnerGrosor.getValue());
              miniLienzoMuestra.repaint();
         }
@@ -1568,9 +1561,13 @@ public class VentanaPrincipal extends JFrame {
         }if(panelEscritorio.getSelectedFrame()!=null){
             ((VentanaInterna)panelEscritorio.getSelectedFrame()).getLienzo().getTrazo().setGrosor((int)spinnerGrosor.getValue());
              miniLienzoMuestra.getFigura(0).getTrazo().setGrosor((int)spinnerGrosor.getValue());
-            //miniLienzoMuestra.setGrosor((int)spinnerGrosor.getValue());
+            //miniLienzoMuestra.setGrosor((int)spinnerGrosor.getValconsue());
              miniLienzoMuestra.repaint();
         }
+        
+        if(panelEscritorio.getSelectedFrame()!=null)
+            ((VentanaInterna)panelEscritorio.getSelectedFrame()).getLienzo().aplicarUltimaFigura();
+        
     }//GEN-LAST:event_spinnerGrosorStateChanged
 
     private void buttonEditarTrazoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonEditarTrazoActionPerformed
@@ -1870,18 +1867,11 @@ public class VentanaPrincipal extends JFrame {
     private javax.swing.JToggleButton buttonRoundRectangulo;
     private javax.swing.JToggleButton buttonTexto;
     private javax.swing.JLabel coordenadas;
-    private javax.swing.JDialog dialogoAbout;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JMenu jMenu5;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
-    private javax.swing.JMenuItem jMenuItem3;
-    private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JMenuItem jMenuItem7;
-    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel16;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
@@ -1890,11 +1880,9 @@ public class VentanaPrincipal extends JFrame {
     private javax.swing.JPanel jPanel8;
     private javax.swing.JPanel jPanelInfo;
     private javax.swing.JPopupMenu.Separator jSeparator1;
-    private javax.swing.JSeparator jSeparator2;
     private javax.swing.JSeparator jSeparator3;
     private javax.swing.JSeparator jSeparator4;
     private javax.swing.JSeparator jSeparator5;
-    private javax.swing.JLabel labelCC;
     private javax.swing.JMenu menuArchivo;
     private javax.swing.JMenu menuEdicion;
     private javax.swing.JMenu menuHerramientas;
@@ -1904,7 +1892,6 @@ public class VentanaPrincipal extends JFrame {
     private javax.swing.JPanel panelComplementario;
     private javax.swing.JDesktopPane panelEscritorio;
     private javax.swing.JPanel panelTrazoColoresHerramientas;
-    private javax.swing.JPopupMenu popUpAjustes;
     private javax.swing.JSeparator separadorBarraInfo;
     private javax.swing.JSpinner spinnerGrosor;
     // End of variables declaration//GEN-END:variables
