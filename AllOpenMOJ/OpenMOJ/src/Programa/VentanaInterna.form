@@ -33,6 +33,7 @@
       <SubComponents>
         <Container class="sm.jaf.iu.Lienzo2DImagen" name="miLienzo2D">
           <Events>
+            <EventHandler event="mouseReleased" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="miLienzo2DMouseReleased"/>
             <EventHandler event="mouseMoved" listener="java.awt.event.MouseMotionListener" parameters="java.awt.event.MouseEvent" handler="miLienzo2DMouseMoved"/>
           </Events>
 

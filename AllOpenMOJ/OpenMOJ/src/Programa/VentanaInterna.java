@@ -1,44 +1,55 @@
 /*
- *d To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+        This program is free software: you can redistribute it and/or modify
+        it under the terms of the GNU General Public License as published by
+        the Free Software Foundation, either version 3 of the License, or
+        (at your option) any later version.
+        This program is distributed in the hope that it will be useful,
+        but WITHOUT ANY WARRANTY; without even the implied warranty of
+        MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+        GNU General Public License for more details.
+        You should have received a copy of the GNU General Public License
+        along with this program. If not, see <http://www.gnu.org/licenses/>.
+      
+        Copyright 2015 Juan A. Fernández Sánchez
+*/
 package Programa;
 
-import com.sun.glass.ui.Cursor;
 import static extras.Imprimir.Imprimir;
-import extras.Herramienta;
-import java.awt.event.ComponentEvent;
-import java.awt.event.MouseEvent;
-import javax.swing.JFrame;
-import javax.swing.SwingUtilities;
-import sm.jaf.graficos.Relleno;
+import java.awt.geom.Point2D;
+import sm.image.Histogram;
+import sm.jaf.graficos.Linea;
 import sm.jaf.iu.Lienzo2DImagen;
 
 /**
- *
- * @author juan
+ * Elemento ventana uilizado dentro de escritorio.
+ * Hereda de JInternalFrame, contiene los métodos básicos de control del linezo. 
+ * @author Juan A. Fernández Sánchez
+ * @see <a href="http://docs.oracle.com/javase/7/docs/api/javax/swing/JInternalFrame.html"> Clase JInternalFrame </a>
  */
 public class VentanaInterna extends javax.swing.JInternalFrame {
 
-       //Variable de clase para contar el número de instancias que se tienen:
+       /**Variable de clase para contar el número de instancias que se han creado durante la ejecución del programa.
+        */
        static int contadorVentanas = 0;
-       
+       /**
+        * Referencia al padre para el paso de mensajes.
+        */
        private VentanaPrincipal parent;
-       
-    //   private String nombreVentana;
+           
     
     /**
-     * Creates new form VI
+     * Constructor de ventana interna.
+     * @param v Objeto de tipo VentanaPrincipal que será el padre para tener una referencia a el.
      */
     public VentanaInterna(VentanaPrincipal v) {        
+        //Le pasamos el nombre al constructor del padre.
         super("Sin título " + (++contadorVentanas),true,true,true,true);
-        this.parent=v;
-      //  nombreVentana="Sin título "+contadorVentanas;
+        //Cargamos la referencia al padre.
+        this.parent=v;      
         initComponents();      
-        //Solo las ventanas internas tendrán habilitada la zona de cliping para que de la sensación de estar
-        //dibujando en un lienzo fintio. Para eso le decimos que este es el centra y con una variable booelana
-        //al redibujar se mostrará la zona de cliping.
+        /*Solo las ventanas internas tendrán habilitada la zona de cliping para que de la sensación de estar
+        dibujando en un lienzo fintio. Para eso le decimos que este es el centra y con una variable booelana
+        al redibujar se mostrará la zona de cliping.*/
         this.miLienzo2D.setCentral(true);
         
                  
@@ -46,17 +57,26 @@ public class VentanaInterna extends javax.swing.JInternalFrame {
     }
     
    
-    /*
+    /**
     Método que devuelve el objeto miLienzo2D desde donde es llamado para poder trabar con el y poder usar directamente
     sus métodos.
+     * @return El linezo que tiene dentro Ventana Interna.
+     * @see sm.jaf.iu.Lienzo2DImagen
     */
     public Lienzo2DImagen getLienzo(){        
         return this.miLienzo2D;
     }
-    public String getNombreVentana(){
-        //return nombreVentana;
+    /**
+     * Devuelve el nombre de la ventana.
+     * @return Cadena de texto con el nombre de la ventana.
+     */
+    public String getNombreVentana(){    
         return this.getTitle();
     }
+    /**
+     * Para cambiar el nombre de la ventana.
+     * @param nuevoNombre Nuevo nombre para la ventana.
+     */
     public void setNombreVentana(String nuevoNombre){
         this.setTitle(nuevoNombre);
     }
@@ -91,6 +111,11 @@ public class VentanaInterna extends javax.swing.JInternalFrame {
             }
         });
 
+        miLienzo2D.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                miLienzo2DMouseReleased(evt);
+            }
+        });
         miLienzo2D.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
             public void mouseMoved(java.awt.event.MouseEvent evt) {
                 miLienzo2DMouseMoved(evt);
@@ -117,8 +142,8 @@ public class VentanaInterna extends javax.swing.JInternalFrame {
 
    
     /**
-     * Programaicón de las tareas a realizar al pulsar sobre una ventana interna.
-     * @param evt 
+     * Programaicón de las tareas a realizar al activar una ventana interna.
+     * @param evt Evento en gestión.
      */
     private void formInternalFrameActivated(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameActivated
         
@@ -145,14 +170,65 @@ public class VentanaInterna extends javax.swing.JInternalFrame {
         }
         
         
-        //Cuatro variables booleanas checkbox
+        //Activamos el histograma si el padre quiere:
+        if(parent.getVerHistograma()){
+            construyeHistrograma();
+        }
+        
+        
         
         
     }//GEN-LAST:event_formInternalFrameActivated
 
+    /**
+     * Construye el histograma a partir de la imagen obtenida desde el lienzo.
+     */
+    public void construyeHistrograma(){
+                    
+            Histogram histo = new Histogram(getLienzo().getImage());
+            
+            
+            
+            Imprimir("Construyendo histograma:");
+            Imprimir(" Nº de bandas: "+histo.getNumBands());
+            Imprimir(" Nº de bins: "+histo.getNumBins());
+            
+            
+            
+            Imprimir(histo.getValue(0,   0));
+            Imprimir(histo.getValue(255, 0));
+            
+            double valor;
+ 
+            parent.getLinezoHistograma().delAllFiguras();
+            int x=1;
+            for(int i=0; i<256; i++){
+                //Obtenemos el valor medio de las tres bandas.
+                valor=(histo.getValue(i, 0)+histo.getValue(i,1)+histo.getValue(i,2))/3;
+                //Pintamos una linea que lo represente.
+                parent.getLinezoHistograma().addFigure(new Linea(new Point2D.Double(x,0), 
+                                                                new Point2D.Double(x, valor)
+                                                                )
+                                                      );
+                x+=1;
+            }
+                        
+            parent.getLinezoHistograma().repaint();
+    }
+
+    /**
+     * Al mover el ratón por la ventana interna.
+     * @param evt Evento en gestión.
+     */
     private void miLienzo2DMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_miLienzo2DMouseMoved
        parent.setCoordenadas(evt.getPoint());
     }//GEN-LAST:event_miLienzo2DMouseMoved
+
+    //Cuando se suelta un botón del ratón se construye el histograma si el parde lo permite.
+    private void miLienzo2DMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_miLienzo2DMouseReleased
+        //Construimos el histograma cuando soltamos el ratón.
+        construyeHistrograma();
+    }//GEN-LAST:event_miLienzo2DMouseReleased
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private sm.jaf.iu.Lienzo2DImagen miLienzo2D;

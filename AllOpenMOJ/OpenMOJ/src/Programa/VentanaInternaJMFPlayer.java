@@ -5,6 +5,7 @@
  */
 package Programa;
 
+import static extras.Imprimir.Imprimir;
 import java.awt.Component;
 import java.io.File;
 import javax.media.Manager;
@@ -18,7 +19,11 @@ import static sun.audio.AudioPlayer.player;
  */
 public class VentanaInternaJMFPlayer extends javax.swing.JInternalFrame {
 
-    
+    /**
+     * Objeto reproductor.
+     * @see <a href="http://docs.oracle.com/javame/config/cdc/opt-pkgs/api/jsr927/javax/media/Player.html">Class Player</a>
+     * 
+     */
     private Player player = null;
     
     
@@ -28,17 +33,29 @@ public class VentanaInternaJMFPlayer extends javax.swing.JInternalFrame {
      * Creates new form VentanaInternaJMFPlayer
      */       
     private VentanaInternaJMFPlayer(File f) {
+        
+        Imprimir("Abriendo VentanaInternaJMFPlayer");
+        
         initComponents();
         String sfichero = "file:" + f.getAbsolutePath();
+        
+        Imprimir("Try open: "+sfichero);
+        //Le ponemos a la ventana el nombre del fichero
+        this.setTitle(f.getName());
+        
         System.out.println(sfichero);
         MediaLocator ml = new MediaLocator(sfichero);
         try {
+            //Creamos el reproductor
             player = Manager.createRealizedPlayer(ml);
             Component vc = player.getVisualComponent();
             if(vc!=null)add(vc, java.awt.BorderLayout.CENTER);
             Component cpc = player.getControlPanelComponent();
             if(cpc!=null)add(cpc, java.awt.BorderLayout.SOUTH);
             this.pack();
+            
+            player.start();
+            
         }catch(Exception e) {
             System.err.println("VentanaInternaJMFPlayer: "+e);
             player = null;
@@ -56,14 +73,25 @@ public class VentanaInternaJMFPlayer extends javax.swing.JInternalFrame {
                 return null;
         }
         public void play() {
+                Imprimir("PRESS BUTTON PLAY");
             if (player != null) {
                 try {
+                    Imprimir("Try playing");
                     player.start();
                 } catch (Exception e) {
                     System.err.println("VentanaInternaJMFPlayer: "+e);
                 }
             }
+            Imprimir("PLAYER==NULL");
         }
+        
+        public void close(){
+         try{
+            if(player!=null) player.close();
+        } catch(Exception e) {
+            System.err.println("VentanaInternaJMFPlayer: " + e);
+        }
+    }
 
 
     /**

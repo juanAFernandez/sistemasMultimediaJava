@@ -35,6 +35,7 @@ import sm.jaf.graficos.Rectangulo;
 import sm.jaf.graficos.Relleno;
 import sm.jaf.graficos.Trazo;
 import sm.jaf.iu.Lienzo2D;
+import sm.jaf.iu.Lienzo2DImagen;
 
 public class VentanaPrincipal extends JFrame {
 
@@ -45,6 +46,8 @@ public class VentanaPrincipal extends JFrame {
     private int dimensionMatriz;
     
     public boolean rellenoActivo;
+    
+    private boolean verHistograma=true;
     
     private herramientaEnfoque ventanaHerramientaEnfoque;
     private herramientaRelieve ventanaHerramientaRelieve;
@@ -224,6 +227,13 @@ public class VentanaPrincipal extends JFrame {
     }
     
     
+    public boolean getVerHistograma(){
+        return verHistograma;
+    }
+    public Lienzo2DImagen getLinezoHistograma(){
+        return lienzoHistograma;
+    }
+    
     /**
      * Configura los mensajes de ayuda que se muestran al posar el ratón 
      * sobre un elemento unos segundos.
@@ -316,6 +326,9 @@ public class VentanaPrincipal extends JFrame {
         botonAmarillo = new javax.swing.JToggleButton();
         botonVerde = new javax.swing.JToggleButton();
         jSeparator3 = new javax.swing.JSeparator();
+        panelHistograma = new javax.swing.JPanel();
+        labelHistograma = new javax.swing.JLabel();
+        lienzoHistograma = new sm.jaf.iu.Lienzo2DImagen();
         PanelSur = new javax.swing.JPanel();
         jPanelInfo = new javax.swing.JPanel();
         nfoHerramienta = new javax.swing.JLabel();
@@ -710,6 +723,45 @@ public class VentanaPrincipal extends JFrame {
             .addComponent(jSeparator3)
         );
 
+        labelHistograma.setText("Histograma");
+
+        lienzoHistograma.setMaximumSize(new java.awt.Dimension(500, 500));
+
+        javax.swing.GroupLayout lienzoHistogramaLayout = new javax.swing.GroupLayout(lienzoHistograma);
+        lienzoHistograma.setLayout(lienzoHistogramaLayout);
+        lienzoHistogramaLayout.setHorizontalGroup(
+            lienzoHistogramaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        lienzoHistogramaLayout.setVerticalGroup(
+            lienzoHistogramaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 100, Short.MAX_VALUE)
+        );
+
+        javax.swing.GroupLayout panelHistogramaLayout = new javax.swing.GroupLayout(panelHistograma);
+        panelHistograma.setLayout(panelHistogramaLayout);
+        panelHistogramaLayout.setHorizontalGroup(
+            panelHistogramaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelHistogramaLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(panelHistogramaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelHistogramaLayout.createSequentialGroup()
+                        .addGap(6, 6, 6)
+                        .addComponent(lienzoHistograma, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(panelHistogramaLayout.createSequentialGroup()
+                        .addComponent(labelHistograma)
+                        .addGap(0, 127, Short.MAX_VALUE)))
+                .addContainerGap())
+        );
+        panelHistogramaLayout.setVerticalGroup(
+            panelHistogramaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelHistogramaLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(labelHistograma)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(lienzoHistograma, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+
         javax.swing.GroupLayout jPanel16Layout = new javax.swing.GroupLayout(jPanel16);
         jPanel16.setLayout(jPanel16Layout);
         jPanel16Layout.setHorizontalGroup(
@@ -732,10 +784,15 @@ public class VentanaPrincipal extends JFrame {
                     .addComponent(botonEditar)
                     .addComponent(botonTransparencia)
                     .addComponent(botonAlisar))
-                .addContainerGap(190, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(panelHistograma, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel16Layout.setVerticalGroup(
             jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel16Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
             .addGroup(jPanel16Layout.createSequentialGroup()
                 .addGap(9, 9, 9)
                 .addGroup(jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -752,10 +809,7 @@ public class VentanaPrincipal extends JFrame {
                             .addComponent(botonRelleno))
                         .addComponent(miniLienzoRelleno, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(0, 0, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel16Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+            .addComponent(panelHistograma, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         panelTrazoColoresHerramientas.add(jPanel16, java.awt.BorderLayout.CENTER);
@@ -786,11 +840,11 @@ public class VentanaPrincipal extends JFrame {
         panelEscritorio.setLayout(panelEscritorioLayout);
         panelEscritorioLayout.setHorizontalGroup(
             panelEscritorioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 869, Short.MAX_VALUE)
+            .addGap(0, 902, Short.MAX_VALUE)
         );
         panelEscritorioLayout.setVerticalGroup(
             panelEscritorioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 332, Short.MAX_VALUE)
+            .addGap(0, 315, Short.MAX_VALUE)
         );
 
         getContentPane().add(panelEscritorio, java.awt.BorderLayout.CENTER);
@@ -830,7 +884,7 @@ public class VentanaPrincipal extends JFrame {
 
         botonAbrirAudio.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_A, java.awt.event.InputEvent.ALT_MASK | java.awt.event.InputEvent.CTRL_MASK));
         botonAbrirAudio.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/openAudio24x24.png"))); // NOI18N
-        botonAbrirAudio.setText("AbrirAudio");
+        botonAbrirAudio.setText("Abrir Audio/Video");
         botonAbrirAudio.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 botonAbrirAudioActionPerformed(evt);
@@ -1077,6 +1131,11 @@ public class VentanaPrincipal extends JFrame {
     }
     
  
+    public void setHistograma(BufferedImage imagenHistograma){
+        lienzoHistograma.setImage(imagenHistograma);
+        lienzoHistograma.repaint();
+    }
+    
     
     public void saluda(){
         Imprimir("hola desde ventana principal");
@@ -1624,7 +1683,16 @@ public class VentanaPrincipal extends JFrame {
     }//GEN-LAST:event_jMenuItem7ActionPerformed
 
     private void botonHistogramaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonHistogramaActionPerformed
-         JOptionPane.showMessageDialog(this, "Esta funcionalidad aún no se ha implementado.","Oups!", JOptionPane.INFORMATION_MESSAGE);
+        //Si el botón queda seleccionado.
+        if(botonHistograma.isSelected()){
+            panelHistograma.setVisible(true);
+            verHistograma=true;
+            JOptionPane.showMessageDialog(this, "El histograma puede ralentizar el programa.","Cuidado", JOptionPane.INFORMATION_MESSAGE);
+        }            
+        if(!botonHistograma.isSelected()){
+            panelHistograma.setVisible(false);
+            verHistograma=false;
+        }        
     }//GEN-LAST:event_botonHistogramaActionPerformed
 
     private void botonBarraEstadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonBarraEstadoActionPerformed
@@ -1917,6 +1985,8 @@ public class VentanaPrincipal extends JFrame {
     private javax.swing.JSeparator jSeparator3;
     private javax.swing.JSeparator jSeparator4;
     private javax.swing.JSeparator jSeparator5;
+    private javax.swing.JLabel labelHistograma;
+    private sm.jaf.iu.Lienzo2DImagen lienzoHistograma;
     private javax.swing.JMenu menuArchivo;
     private javax.swing.JMenu menuEdicion;
     private javax.swing.JMenu menuHerramientas;
@@ -1925,6 +1995,7 @@ public class VentanaPrincipal extends JFrame {
     private javax.swing.JLabel nfoHerramienta;
     private javax.swing.JPanel panelComplementario;
     private javax.swing.JDesktopPane panelEscritorio;
+    private javax.swing.JPanel panelHistograma;
     private javax.swing.JPanel panelTrazoColoresHerramientas;
     private javax.swing.JSeparator separadorBarraInfo;
     private javax.swing.JSpinner spinnerGrosor;

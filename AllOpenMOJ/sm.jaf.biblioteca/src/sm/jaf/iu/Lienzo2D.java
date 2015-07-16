@@ -261,6 +261,12 @@ public class Lienzo2D extends javax.swing.JPanel {
     public void delFigura(int pos){
         vShape.remove(pos);
     }
+    /**
+     * ELimina todas las figuras del vector.
+     */
+    public void delAllFiguras(){
+        vShape.clear();
+    }
     
     /**
      * Devuelve el indice del texto que haya sido seleccionado con el ratón en caso de que alguno haya sido.
