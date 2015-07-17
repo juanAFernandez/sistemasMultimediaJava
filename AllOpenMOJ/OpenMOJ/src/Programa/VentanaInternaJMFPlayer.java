@@ -8,9 +8,12 @@ package Programa;
 import static extras.Imprimir.Imprimir;
 import java.awt.Component;
 import java.io.File;
+import javax.media.Format;
 import javax.media.Manager;
 import javax.media.MediaLocator;
 import javax.media.Player;
+import javax.media.PlugInManager;
+import javax.media.format.AudioFormat;
 import static sun.audio.AudioPlayer.player;
 
 /**
@@ -34,6 +37,20 @@ public class VentanaInternaJMFPlayer extends javax.swing.JInternalFrame {
      */       
     private VentanaInternaJMFPlayer(File f) {
         
+        
+        
+        Format input1 = new AudioFormat(AudioFormat.MPEGLAYER3);
+		Format input2 = new AudioFormat(AudioFormat.MPEG);
+		Format output = new AudioFormat(AudioFormat.LINEAR);
+		PlugInManager.addPlugIn(
+			"com.sun.media.codec.audio.mp3.JavaDecoder",
+			new Format[]{input1, input2},
+			new Format[]{output},
+			PlugInManager.CODEC
+		);
+        
+        
+        
         Imprimir("Abriendo VentanaInternaJMFPlayer");
         
         initComponents();
@@ -46,6 +63,18 @@ public class VentanaInternaJMFPlayer extends javax.swing.JInternalFrame {
         System.out.println(sfichero);
         MediaLocator ml = new MediaLocator(sfichero);
         try {
+            
+   
+	Player player = Manager.createPlayer(ml);
+	player.start();
+		
+	
+		
+	
+            
+            
+            
+            /*
             //Creamos el reproductor
             player = Manager.createRealizedPlayer(ml);
             Component vc = player.getVisualComponent();
@@ -55,6 +84,8 @@ public class VentanaInternaJMFPlayer extends javax.swing.JInternalFrame {
             this.pack();
             
             player.start();
+            
+            */
             
         }catch(Exception e) {
             System.err.println("VentanaInternaJMFPlayer: "+e);

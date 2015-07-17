@@ -31,14 +31,21 @@ import sm.image.KernelProducer;
 import sm.image.LookupTableProducer;
 
 /**
- *
+ * Herramienta brillo y contraste.
+ * Herramienta que permite modificar el brillo y el contraste de una imagen.
  * @author Juan A. Fernández Sánchez
  */
 public final class herramientaBrilloContraste extends javax.swing.JFrame {
 
-    
+    /**
+     * Referencia al padre.
+     * Para poder enviarle mensajes.
+     */
     private VentanaPrincipal padre;
     
+    /**
+     * Ventana inter
+     */
     private VentanaInterna vis;
     
     private Kernel k;
@@ -63,15 +70,20 @@ public final class herramientaBrilloContraste extends javax.swing.JFrame {
     private int nVecesNormal, nVecesIluminacion, nVecesOscurecimiento;
     
     
-    
-    public BufferedImage deepCopy(BufferedImage bi) {
-        ColorModel cm = bi.getColorModel();
+    /**
+     * Para realizar copias de las imágenes a bajo nivel.
+     * AL no ser tipos primitivos no pueden realizarse copias con el operador =.
+     * @param original Imagen original a copiar.
+     * @return Una copia de la imagen BufferedImage pasada.
+     */
+    public BufferedImage deepCopy(BufferedImage original) {
+        ColorModel cm = original.getColorModel();
         boolean isAlphaPremultiplied = cm.isAlphaPremultiplied();
-        WritableRaster raster = bi.copyData(null);
+        WritableRaster raster = original.copyData(null);
         return new BufferedImage(cm, raster, isAlphaPremultiplied, null);
     }
      
-    /**sl
+    /**
      * Constructor    
      * @param padre //Le pasamos el propio padre que lo crea para acceder forma fácil a métodos de este.     
      */

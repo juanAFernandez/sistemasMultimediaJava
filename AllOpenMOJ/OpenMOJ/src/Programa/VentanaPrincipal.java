@@ -29,6 +29,8 @@ import java.awt.image.BufferedImage;
 import java.io.FileFilter;
 import java.io.IOException;
 import javax.imageio.ImageIO;
+import javax.media.*;
+import javax.media.format.AudioFormat;
 import javax.swing.JDesktopPane;
 import sm.jaf.graficos.Linea;
 import sm.jaf.graficos.Rectangulo;
@@ -36,6 +38,7 @@ import sm.jaf.graficos.Relleno;
 import sm.jaf.graficos.Trazo;
 import sm.jaf.iu.Lienzo2D;
 import sm.jaf.iu.Lienzo2DImagen;
+import sm.sound.SMSoundPlayer;
 
 public class VentanaPrincipal extends JFrame {
 
@@ -47,7 +50,7 @@ public class VentanaPrincipal extends JFrame {
     
     public boolean rellenoActivo;
     
-    private boolean verHistograma=true;
+    private boolean verHistograma=false;
     
     private herramientaEnfoque ventanaHerramientaEnfoque;
     private herramientaRelieve ventanaHerramientaRelieve;
@@ -63,8 +66,7 @@ public class VentanaPrincipal extends JFrame {
     
     private VentanaInternaAudioReproductor ventanaInternaAudioReproductor;
     private VentanaInternaAudioGrabador ventanaInternaAudioGrabador;
-    
-    private VentanaInternaJMFPlayer ventanaInternaJMFPlayer;
+        
     private VentanaInternaCamara ventanaInternaCamara;
     
     private nuevoLienzo ventanaNuevoLienzo;
@@ -90,6 +92,10 @@ public class VentanaPrincipal extends JFrame {
         
         //Iniciamos todos los componentes de la GUI.
         initComponents();
+        
+        //Por defecto hacemos invisible el histograma
+        panelHistograma.setVisible(false);
+        verHistograma=false;
         
         //Configuramos los mensajes flotantes de ayuda de la GUI.
         configuraMensajesInfo();
@@ -1410,9 +1416,47 @@ public class VentanaPrincipal extends JFrame {
             try{
                  File f = dlg.getSelectedFile();
                 Imprimir("Abriendo "+f.getPath());
-                System.out.println(this.ventanaInternaJMFPlayer = VentanaInternaJMFPlayer.getInstance(f));
-                this.panelEscritorio.add(ventanaInternaJMFPlayer);
-                this.ventanaInternaJMFPlayer.setVisible(true);
+                
+                
+                
+	
+		Format input1 = new AudioFormat(AudioFormat.MPEGLAYER3);
+		Format input2 = new AudioFormat(AudioFormat.MPEG);
+		Format output = new AudioFormat(AudioFormat.LINEAR);
+		PlugInManager.addPlugIn(
+			"com.sun.media.codec.audio.mp3.JavaDecoder",
+			new Format[]{input1, input2},
+			new Format[]{output},
+			PlugInManager.CODEC
+		);
+		try{
+			Player player = Manager.createPlayer(new MediaLocator(f.toURI().toURL()));
+                        player.realize();
+                        player.getGainControl().setLevel(1);
+			player.start();
+                        
+		}
+		catch(Exception ex){
+			ex.printStackTrace();
+		}
+	
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                /*
+                VentanaInternaJMFPlayer ventanaInternaJMFPlayer = VentanaInternaJMFPlayer.getInstance(f);                 
+                panelEscritorio.add(ventanaInternaJMFPlayer);
+                ventanaInternaJMFPlayer.setVisible(true);
+                */
+                
             }catch(Exception ex){              
                 System.err.println("Error al leer fichero: "+ex);
             }

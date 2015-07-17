@@ -1,10 +1,10 @@
 ##Código fuente del programa
 
-
-###Librerías:
-
+Aquí se encuentra tódo el código fuente del programa, en formato de proyecto NetBeans para poder abrirlo con este.
 
 ###Documentación:
+
+[Disponible en  **dist/javadoc**.](AllOpenMOJ/OpenMOJ/dist/javadoc/Programa/package-summary.html)
 
 ###Iconos
 
