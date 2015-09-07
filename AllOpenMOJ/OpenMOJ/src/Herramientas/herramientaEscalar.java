@@ -3,7 +3,6 @@ package Herramientas;
 import Programa.VentanaInterna;
 import Programa.VentanaPrincipal;
 import static extras.Imprimir.Imprimir;
-import java.awt.Point;
 import java.awt.event.WindowEvent;
 import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
@@ -14,7 +13,10 @@ import javax.swing.JOptionPane;
 
 
 /**
- *
+ * Herramienta para la modificación del tamaño de imágenes.
+ * Realiza la modificación del tamaño de una imagen haciendo uso de las operaciones afines de las que
+ * dispone JAVA, AffineTransform, de una forma muy simple.
+ * @see <a href="http://docs.oracle.com/javase/7/docs/api/java/awt/geom/AffineTransform.html">Doc de AffineTransform</a> 
  * @author Juan A. Fernández Sánchez
  */
 public final class herramientaEscalar extends javax.swing.JFrame {

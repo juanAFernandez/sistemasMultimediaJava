@@ -5,18 +5,18 @@ import Programa.VentanaPrincipal;
 import static extras.Imprimir.Imprimir;
 import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
-import java.awt.image.ByteLookupTable;
-import java.awt.image.ColorModel;
 import java.awt.image.ConvolveOp;
 import java.awt.image.Kernel;
-import java.awt.image.LookupOp;
-import java.awt.image.WritableRaster;
 import javax.swing.JOptionPane;
 import sm.image.KernelProducer;
 
 
 /**
- *
+ * Herramienta de enfoque forzado de imágenes.
+ * Realiza el enforque forzado de iḿagenes a través de una operación con ConvolveOp y un kernel
+ * producido por KernelProducer, en concreto: TYPE_ENFOQUE_3x3
+ * @see <a href="http://docs.oracle.com/javase/7/docs/api/java/awt/image/ConvolveOp.html">Doc de ConvolveOp</a> 
+ * @see <a href="http://docs.oracle.com/javase/7/docs/api/java/awt/image/Kernel.html">Doc de Kernel</a>  
  * @author Juan A. Fernández Sánchez
  */
 public final class herramientaEnfoque extends javax.swing.JFrame {

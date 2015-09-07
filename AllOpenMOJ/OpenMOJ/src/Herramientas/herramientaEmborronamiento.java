@@ -8,16 +8,17 @@ import java.awt.image.BufferedImage;
 import java.awt.image.ColorModel;
 import java.awt.image.ConvolveOp;
 import java.awt.image.Kernel;
-import java.awt.image.LookupOp;
-import java.awt.image.LookupTable;
-import java.awt.image.RescaleOp;
 import java.awt.image.WritableRaster;
 import javax.swing.JOptionPane;
-import sm.image.KernelProducer;
-import sm.image.LookupTableProducer;
 
 /**
- *
+ * Herramienta de emborronamiento con varios filtros.
+ * Permite aplicar un emborronamiento de tipo Medio, Binomial o Gaussiano con distinto tipos de máscara,
+ * 3x3, 5x5, 7x7 o 9x9. Para esto hace uso de operaciones de convolución usando objetos de tipo ConvolveOp y
+ * Kernel.
+ * @see <a href="http://docs.oracle.com/javase/7/docs/api/java/awt/image/ConvolveOp.html">Doc de ConvolveOp</a> 
+ * @see <a href="http://docs.oracle.com/javase/7/docs/api/java/awt/image/Kernel.html">Doc de Kernel</a> 
+ * @see <a href="http://www.informit.com/articles/article.aspx?p=1013851&seqNum=5">Ejemplo de Uso</a>
  * @author Juan A. Fernández Sánchez
  */
 public final class herramientaEmborronamiento extends javax.swing.JFrame {

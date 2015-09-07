@@ -23,7 +23,12 @@ import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
 /**
- *
+ * Clase que implementa la figura trazo a MANO ALZADA.
+ * Se trata de una figura que no traía la librería de Graphics2D y que define una figura que está compuesta
+ * por la unión mediante segementos de linea de uan serie de puntos que el usuario va introduciendo en un vector
+ * cuando arrastra el mouse por el lienzo teniendo presionado el botón izquierdo.
+ * Aunque no está en su versión final pues el resultado podría quedar mejor ya que cuando el usuario se mueve
+ * por el lienzo con mucha velocidad el resultado no es del todo bueno, está bien para una primera aproximación.
  * @author Juan A. Fernández Sánchez
  */
 public class ManoAlzada extends Figura{
@@ -33,10 +38,6 @@ public class ManoAlzada extends Figura{
      * Esta figura la componen una serie de puntos que el usuario va introduciendo cuando mueve el ratón.
      */
     ArrayList<puntoManoAlzada> listaPuntos;
-    
-    boolean moviendo=false;
-    double distanciaX=0;
-    double distanciaY=0;
     
     
     public ManoAlzada(){
@@ -111,10 +112,7 @@ public class ManoAlzada extends Figura{
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    @Override
-    public void cambiarPosicion2(Point2D nuevaLocalizacion) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+ 
  
     public void cambiarPuntosControl(Point2D puntoRef, Point2D npc){
 

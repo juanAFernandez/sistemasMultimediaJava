@@ -10,7 +10,9 @@ import sm.jaf.imagen.UmbralizacionOp;
 
 
 /**
- *
+ * Herramienta que permite umbralizar una imagen a partir de un valor entre 0 y 255.
+ * Dado un valor muestrea toda la imagen y convierte aquellos valores que superen dicho umbral
+ * a blanco. Hace uso de la operación UmbralizacionOp de la librería sm.jaf.biblioteca
  * @author Juan A. Fernández Sánchez
  */
 public final class herramientaUmbralizacion extends javax.swing.JFrame {

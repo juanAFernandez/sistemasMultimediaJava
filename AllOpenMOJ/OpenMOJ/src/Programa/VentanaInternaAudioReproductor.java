@@ -10,14 +10,16 @@ import sm.sound.SMClipPlayer;
 import sm.sound.SMPlayer;
 
 /**
- *
- * @author juan
+ * Herramienta e interfaz gráfica de un sencillo reproductor de dos botones.
+ * Al igual que con el grabador implementa una sencilla forma de reproducir audio
+ * en formato wav y au, con la implementación de MP3 si finalizar.
+ * @author Juan A. Fernández Sánchez
  */
-public class VentanaInternaAudioReproductor extends javax.swing.JFrame {
+public class VentanaInternaAudioReproductor extends javax.swing.JInternalFrame {
 
     SMPlayer player;       
     
-    
+     
     
     
     
@@ -27,9 +29,21 @@ public class VentanaInternaAudioReproductor extends javax.swing.JFrame {
      */
     public VentanaInternaAudioReproductor(File f) {
         initComponents();
+        setClosable(true);
+        setMaximizable(true);
+        setResizable(true);
+    
         player = new SMClipPlayer(f);
     }
 
+     public static VentanaInternaAudioReproductor getInstance(File f){
+        VentanaInternaAudioReproductor v = new VentanaInternaAudioReproductor(f);
+        if(v.player!=null) 
+            return v;
+        else 
+            return null;
+    }
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -40,39 +54,39 @@ public class VentanaInternaAudioReproductor extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
+        buttonPlay = new javax.swing.JButton();
+        buttonStop = new javax.swing.JButton();
 
         getContentPane().setLayout(new javax.swing.BoxLayout(getContentPane(), javax.swing.BoxLayout.LINE_AXIS));
 
-        jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/PlayPressed_48x48.png"))); // NOI18N
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        buttonPlay.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/PlayPressed_48x48.png"))); // NOI18N
+        buttonPlay.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                buttonPlayActionPerformed(evt);
             }
         });
-        getContentPane().add(jButton3);
+        getContentPane().add(buttonPlay);
 
-        jButton4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/StopDisabled_48x48.png"))); // NOI18N
-        jButton4.addActionListener(new java.awt.event.ActionListener() {
+        buttonStop.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/StopDisabled_48x48.png"))); // NOI18N
+        buttonStop.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton4ActionPerformed(evt);
+                buttonStopActionPerformed(evt);
             }
         });
-        getContentPane().add(jButton4);
+        getContentPane().add(buttonStop);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+    private void buttonStopActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonStopActionPerformed
         if(player!=null)
             player.stop();
-    }//GEN-LAST:event_jButton4ActionPerformed
+    }//GEN-LAST:event_buttonStopActionPerformed
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+    private void buttonPlayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonPlayActionPerformed
         if(player!=null)
             player.play();      
-    }//GEN-LAST:event_jButton3ActionPerformed
+    }//GEN-LAST:event_buttonPlayActionPerformed
 
     /**
      * @param args the command line arguments
@@ -106,7 +120,7 @@ public class VentanaInternaAudioReproductor extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
+    private javax.swing.JButton buttonPlay;
+    private javax.swing.JButton buttonStop;
     // End of variables declaration//GEN-END:variables
 }

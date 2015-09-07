@@ -20,16 +20,17 @@ import static extras.Imprimir.Imprimir;
 import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 import java.awt.image.ColorModel;
-import java.awt.image.ConvolveOp;
-import java.awt.image.Kernel;
-import java.awt.image.RescaleOp;
 import java.awt.image.WritableRaster;
 import javax.swing.JOptionPane;
-import sm.image.KernelProducer;
 import sm.jaf.imagen.EscalaGrisesOp;
 
 /**
- *
+ * Herramienta de paso de color a escala de grises.
+ * Convierte cualquier imagen de color a su equivalente en escala de grises haciendo uso de la libería
+ * sm.jaf.imagen y de la operación EscalaGrisesOp.java que recorre todos los píxeles de la imagen 
+ * y hace una media de sus tres componentes de color para, nomralizando, objetener el nivel de grises.
+ * Ver más información en documentación de sm.jaf.biblioteca, en concreto el paquete sm.jaf.imagen.
+
  * @author Juan A. Fernández Sánchez
  */
 public final class herramientaEscalaGrises extends javax.swing.JFrame {
@@ -72,12 +73,12 @@ public final class herramientaEscalaGrises extends javax.swing.JFrame {
         
 
         this.addWindowListener(new java.awt.event.WindowAdapter() {
-    @Override
-    public void windowClosing(java.awt.event.WindowEvent windowEvent) {
-        System.out.println("Cerrando  ventana");
-        recuperarImagen();
-    }
-});
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+                System.out.println("Cerrando  ventana");
+                recuperarImagen();
+            }
+        });
         
     }
 
@@ -122,11 +123,16 @@ public final class herramientaEscalaGrises extends javax.swing.JFrame {
         }
     }
     
+    /**
+     * Función que aplica realmente el filtro haciendo uso del la clase operación
+     * escalaGrisesOp que es quien define relamente el filtro.
+     */
     private void aplicar(){
 
         EscalaGrisesOp escalaGrisesOp = new EscalaGrisesOp();
         
         if(vis!=null){
+            //Se hace uso de la clase definida en la biblioteca sm.jaf.imagen
             vis.getLienzo().setImage(escalaGrisesOp.filter(imagenTemporalParaOperaciones, null));
             vis.repaint();
         }

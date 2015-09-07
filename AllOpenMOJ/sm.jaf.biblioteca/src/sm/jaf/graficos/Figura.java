@@ -14,13 +14,12 @@
 */
 package sm.jaf.graficos;
 
-import static extras.Imprimir.Imprimir;
 import java.awt.Graphics2D;
 import java.awt.Shape;
 import java.awt.geom.Point2D;
 
 /**
- * Abstracción del objeto Figura que tiene las características que comparten todos los tipos de objetos que heredan de ella.
+ * Clase principal, Abstracción del objeto Figura que tiene las características que comparten todos los tipos de objetos que heredan de ella.
  * 
  * Haciendo la clase abstract forzamos a que sus herederas implementen cierto metodo de forma que despues podamos aplicar polimorfismo
  * mandando el mismo mensaje a objetos de distinto tipo pero herederos todos para que reaccionen de forma distinta, como en el caso de dibujar.
@@ -44,6 +43,27 @@ public abstract class Figura {
      * Contiene todos los datos relativos a como se dibuja, desde color, grosor hasta continuidad y estilos de terminación.
      */
     protected Trazo trazo;
+    
+    /**
+     * Para el control de la edición de la figura.
+     */
+    protected boolean modoEdicion;
+    
+    /**
+     * Para el control de movimiento de la figura.
+     */
+    protected boolean moviendo;
+    
+    /**
+     * Variable necesaria para el posicionamiento de la figura respectro al plano X y para operaciones con el.
+     */
+    protected double distanciaX=0;
+    /**
+     * Variable necesaria para el posicionamiento de la figura respectro al plano Y y para operaciones con el.
+     */    
+    protected double distanciaY=0;
+    
+   
     
      /**
       * Constructor sin parámetros.
@@ -93,11 +113,7 @@ public abstract class Figura {
      */
     public abstract void cambiarPosicion(Point2D nuevoPuntoA, Point2D nuevoPuntoB);
     
-    /**
-     * Segunda implementación de cambiarPosicion para cuando sólo es un punto.
-     * @param nuevaLocalizacion 
-     */
-    public abstract void cambiarPosicion2(Point2D nuevaLocalizacion);
+   
   
     /**
      * Para conocer si un punto pasado pertenece o no a la figura.

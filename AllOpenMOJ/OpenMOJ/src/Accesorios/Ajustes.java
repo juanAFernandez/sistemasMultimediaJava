@@ -14,14 +14,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package accesorios;
+package Accesorios;
 
 import Programa.VentanaPrincipal;
 import java.awt.Color;
 import javax.swing.JColorChooser;
 
 /**
- *
+ * Herramienta que ofrece una interfaz con los ajustes generales de programa, o una
+ * base para estos, actualmente no termianda de implementar.
  * @author Juan A. Fernández Sánchez
  */
 public class Ajustes extends javax.swing.JFrame {

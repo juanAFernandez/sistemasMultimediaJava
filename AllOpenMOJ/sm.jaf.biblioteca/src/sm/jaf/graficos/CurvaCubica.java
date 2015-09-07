@@ -23,9 +23,11 @@ import java.awt.geom.CubicCurve2D;
 import java.awt.geom.Line2D;
 
 /**
- * Segmento de linea con dos puntos de control para hacerlo curvo con mayor precisión que la QuadCurve 
- * con sólo un punto de control.
- * Se basa en un objeto de tipo CubicCurve2D.
+ * Clase que implementa la figura CURVA CUBICA.
+ * Se basa en un objeto de tipo CubicCurve2D y es igual que la curva cuadratica pero con dos puntos de control
+ * con lo que cambia un poco su implementacion por la gestion de estos, pero en sintesis se trata del mismo
+ * tipo de figura.
+ * @see <a href="https://docs.oracle.com/javase/8/docs/api/java/awt/geom/CubicCurve2D.html">Clase CubicCurve2D</a>
  * @author Juan A. Fernández Sánchez
  */
 public class CurvaCubica extends Figura {
@@ -53,22 +55,7 @@ public class CurvaCubica extends Figura {
     private Point2D B;
     private Ellipse2D elipsePuntoB;
     boolean seleccionadoPuntoB;
-    
-    /**
-     * Para el control de la edición de la figura.
-     */
-    private boolean modoEdicion;
-    
-    /**
-     * Para el control de movimiento de la figura.
-     */
-    private boolean moviendo;
-    
-    /**
-     * Variables para el control del movimiento de la figura.
-     */
-    private double distanciaX;
-    private double distanciaY;
+
     
     
     /**
@@ -398,11 +385,6 @@ public class CurvaCubica extends Figura {
         
         return mensaje;
         
-    }
-
-    @Override
-    public void cambiarPosicion2(Point2D nuevaLocalizacion) {
-        throw new UnsupportedOperationException("NO SOPORTADA"); //To change body of generated methods, choose Tools | Templates.
     }
 
     

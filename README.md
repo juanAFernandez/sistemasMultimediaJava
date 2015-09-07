@@ -113,8 +113,12 @@ Ejemplos de uso:
 ![](AllOpenMOJ/Img/c.png)
 
 
-##Licencia
+##Licencia y publicación
 
 **Programa bajo licencia [GPLv3](http://www.gnu.org/licenses/gpl-3.0.en.html).**
 
 **Se agradece toda colaboración y contribución.**
+
+
+######Publicado en GitHub (+doc en linea):
+https://github.com/juanAFernandez/sistemasMultimediaJava

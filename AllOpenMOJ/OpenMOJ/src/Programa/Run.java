@@ -1,15 +1,28 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Copyright (C) 2015 Juan A. Fernández Sánchez
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package Programa;
 
 /**
- *
- * @author juan
+ * Clase que arranca el programa.
+ * Su única función es separar la ejecuión del programa, construir el main que permite esto
+ * y aislar la clase VentanaPrincipal que es la que carga realmente la GUI del programa.
+ * @author Juan A. Fernández Sánchez
  */
-public class P10 {
+public class Run {
     
     
     public static void main(String args[]) {

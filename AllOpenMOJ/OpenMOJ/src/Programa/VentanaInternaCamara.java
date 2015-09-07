@@ -1,28 +1,39 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Copyright (C) 2015 Juan A. Fernández Sánchez
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package Programa;
 
 import java.awt.Component;
-import java.io.IOException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.media.CannotRealizeException;
 import javax.media.CaptureDeviceInfo;
 import javax.media.CaptureDeviceManager;
+import javax.media.Format;
 import javax.media.Manager;
 import javax.media.MediaLocator;
-import javax.media.NoPlayerException;
 import javax.media.Player;
 import javax.media.format.YUVFormat;
 import javax.swing.JOptionPane;
 
+
+
 /**
- *
- * @author juan
+ * Clase que construye el visualizador de la camara web del equipo.
+ * @author Juan A. Fernández Sánchez
  */
 public class VentanaInternaCamara extends javax.swing.JInternalFrame {
 
@@ -39,45 +50,75 @@ public class VentanaInternaCamara extends javax.swing.JInternalFrame {
         initComponents();
         
         
-            //Objeto de tipo información de dispositivo:
-    CaptureDeviceInfo deviceInfo;
-    
-    //Creamos una lista de dispositivos que el equipo tiene:
-    List<CaptureDeviceInfo> deviceList;
-        deviceList = CaptureDeviceManager.getDeviceList(new YUVFormat());
-        if(deviceList.isEmpty()){
-            System.out.println(deviceList.size());
-            JOptionPane.showMessageDialog(this, "No se ha encontrado ningún dispositivo de video.", "Error",
-    JOptionPane.WARNING_MESSAGE);
+        //Objeto de tipo información de dispositivo:
+        CaptureDeviceInfo deviceInfo;
+
+        //Creamos una lista de dispositivos
+        List<CaptureDeviceInfo> deviceList;
+       
+        //Rellenamos esa lista con getDeviceList
+        
+        /*
+        .getDeviceList(...)
+        Gets a list of CaptureDeviceInfo objects that correspond to devices that can capture data in the specified Format. 
+        If no Format is specified, this method returns a list of CaptureDeviceInfo objects for all of the available capture devices.
+        Returns:
+            A Vector that contains CaptureDeviceInfo objects for the devices that support the specified Format
+        
+        Es decir si sólo devuelve 1 con null, es que no está cogiendo la cámara del equipo.
+        */
+        
+        //deviceList = CaptureDeviceManager.getDeviceList(new YUVFormat());
+        deviceList = CaptureDeviceManager.getDeviceList(null);
+
+        //Imprimimos la lista de dispositivos por terminal.
+        System.out.println(deviceList.size() + " dispositivos cargados.");
+        
+        for (CaptureDeviceInfo deviceList1 : deviceList) {
+            System.out.println(deviceList1.getName());
         }
         
-        //Extraemos el primer elemento de la lista de dispositivos:
-        deviceInfo = deviceList.get(0);
-        MediaLocator ml= deviceInfo.getLocator();
-        try {
+            //Si no se hubiera cargado ningún dispositivo
+            if(deviceList.isEmpty()){                
+                //Mostramos un diáglo informándo de que no se ha encontrado ningún dispositivo de video.
+                JOptionPane.showMessageDialog(this, "No se ha encontrado ningún dispositivo de video.", "Error", JOptionPane.WARNING_MESSAGE);
+            }
+
+            //Extraemos la información del primer elemento de la lista.
+            deviceInfo = deviceList.get(0);
             
-            player = Manager.createRealizedPlayer(ml);
-            Component areaVisual = player.getVisualComponent();
-            if(areaVisual!=null)
-                this.add(areaVisual);
-            Component panelControl = player.getControlPanelComponent();
-            if(panelControl!=null)
-                this.add(panelControl);
-            player.start();
-                
+            //Creamos un localizador de medios para ese dispositivo hardaware para poder acceder a el.            
+            MediaLocator ml= deviceInfo.getLocator();
             
-            this.pack();
-                
-            
-            
-            
-        } catch (Exception ex){ 
-            Logger.getLogger(VentanaInternaCamara.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        
+            try {
+
+                player = Manager.createRealizedPlayer(ml);
+                Component areaVisual = player.getVisualComponent();
+                if(areaVisual!=null)
+                    this.add(areaVisual);
+                Component panelControl = player.getControlPanelComponent();
+                if(panelControl!=null)
+                    this.add(panelControl);
+                player.start();
+
+
+                this.pack();
+
+
+
+
+            } catch (Exception ex){ 
+                Logger.getLogger(VentanaInternaCamara.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+
         
     }
+    
+   /**
+    * Crea una instancia de VentanaIntercaCamara y la devuelve para ser usada desde otro lugar.
+    * @return Una instancia de VentanaInternaCamara
+    */
    public static VentanaInternaCamara getInstance(){
         VentanaInternaCamara vi = new VentanaInternaCamara();
         if(vi.player!=null)

@@ -27,6 +27,7 @@ import java.util.Map;
  * Como pasaba con el resto de figuras Java no ofrece una clase que englobe todos los aspectos de un 
  * texto como su fuente, su tamaño, color, etc. Por eso creamos una clase propia para poder trabajar
  * bien con textos.
+ * @see <a href="http://docs.oracle.com/javase/7/docs/api/java/awt/Graphics.html">Graphics</a>
  * @author Juan A. Fernández Sánchez
  */
 public class Texto {

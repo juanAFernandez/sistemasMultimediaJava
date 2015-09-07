@@ -14,10 +14,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package accesorios;
+package Accesorios;
 
 /**
- *
+ * Herramienta que ofrece el selector de color estandar de Java para
+ * varias utilidades.
  * @author Juan A. Fernández Sánchez
  */
 public class selectorColor extends javax.swing.JFrame {

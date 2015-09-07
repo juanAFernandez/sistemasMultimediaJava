@@ -11,7 +11,10 @@ import sm.jaf.imagen.SumaOp;
 
 
 /**
- *
+ * Herramienta que permite realizar operaciones binarias con dos imagenes, suma y resta.
+ * HAciendo uso de las operaciones SumaOp y RestaOp del paquete imagen de la librerí sm.jaf.biblioteca
+ * podemos sumar una imagen con otra o restarla seleccionándolas de cualesquiera dos ventanas del escritorio
+ * interno del programa.
  * @author Juan A. Fernández Sánchez
  */
 public final class herramientaOpBinarias extends javax.swing.JFrame {

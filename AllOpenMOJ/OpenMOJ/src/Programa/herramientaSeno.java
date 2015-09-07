@@ -20,8 +20,9 @@ import javax.swing.JOptionPane;
 import sm.image.KernelProducer;
 
 /**
- *
- * @author juan
+ * Herramienta de aplicación de tabla construida de seno, DEPRECIADA, OLD.
+ * Antigua implementación de función seno que aplicaba esta función sobre la imagen.
+ * @author Juan A. Fernández Sánchez
  */
 public class herramientaSeno extends javax.swing.JFrame {
 
@@ -73,7 +74,7 @@ public class herramientaSeno extends javax.swing.JFrame {
     }
     
     /**
-     * Creat la tabla LookupTable pra el procesamiento
+     * Creat la tabla LookupTable para el procesamiento
      * @param w
      * @return 
      */
@@ -110,9 +111,9 @@ public class herramientaSeno extends javax.swing.JFrame {
                         
             if(vis!=null){
                 
-                //Creamos la operación usando la tabla que nos devuelve nuestra operación propia seno
-                 LookupOp op = new LookupOp(seno(180.0/255.0),null);
-                
+                    //Creamos la operación usando la tabla que nos devuelve nuestra operación propia seno
+                     LookupOp op = new LookupOp(seno(90.0),null);
+
                     Imprimir("Intentando aplicar transformación");
 
                     vis.getLienzo().setImage(op.filter(imagenTemporalParaOperaciones, null));

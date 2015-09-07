@@ -6,23 +6,32 @@
 package Programa;
 
 import java.io.File;
+import java.net.URL;
+import javax.swing.ImageIcon;
 import sm.sound.SMRecorder;
 import sm.sound.SMSoundRecorder;
 
 /**
- *
- * @author juan
+ * Pequea GUI y herramienta incrustada para la grabación de audios.
+ * Permite grabar sonidos desde el micrófono del sistema y realiza cambios en los iconos en la puesta 
+ * en marcha y parada.
+ * @author Juan A. Fernández Sánchez
  */
 public class VentanaInternaAudioGrabador extends javax.swing.JFrame {
 
     SMRecorder recorder;
+    
+    File f;
+    
     /**
      * Creates new form VentanaInternaAudio
      * @param f
      */
     public VentanaInternaAudioGrabador(File f) {
         initComponents();
-        recorder = new SMSoundRecorder(f);
+        this.f=f;
+        this.setTitle("Grabando "+f.getName());
+        //recorder = new SMSoundRecorder(f);
     }
 
     /**
@@ -34,20 +43,20 @@ public class VentanaInternaAudioGrabador extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        buttonRec = new javax.swing.JButton();
+        buttonStop = new javax.swing.JButton();
 
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/RecordPressed_48x48.png"))); // NOI18N
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        buttonRec.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/RecordPressed_48x48.png"))); // NOI18N
+        buttonRec.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                buttonRecActionPerformed(evt);
             }
         });
 
-        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/StopDisabled_48x48.png"))); // NOI18N
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        buttonStop.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/StopDisabled_48x48.png"))); // NOI18N
+        buttonStop.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                buttonStopActionPerformed(evt);
             }
         });
 
@@ -57,29 +66,48 @@ public class VentanaInternaAudioGrabador extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jButton1)
+                .addComponent(buttonRec)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton2)
+                .addComponent(buttonStop)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jButton1)
-            .addComponent(jButton2)
+            .addComponent(buttonRec)
+            .addComponent(buttonStop)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void buttonRecActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonRecActionPerformed
+        
+        recorder = new SMSoundRecorder(f);
+        recorder.record();
+        
+        //Cambiamos el icono del botón de rec.
+        this.buttonRec.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/RecordDisabled_48x48.png")));
+        //Cambiamos el icono del botón de stop.
+        this.buttonStop.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/StopNormalRed_48x48.png")));
+        
+        
+        /*
         if(recorder!=null)
             recorder.record();
-    }//GEN-LAST:event_jButton1ActionPerformed
+        */
+    }//GEN-LAST:event_buttonRecActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        if(recorder!=null)
+    private void buttonStopActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonStopActionPerformed
+        //if(recorder!=null)
             recorder.stop();
-    }//GEN-LAST:event_jButton2ActionPerformed
+                        
+        //Cambiamos los iconos.
+            
+        //Cambiamos el icono del botón de rec.
+        this.buttonRec.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/RecordPressed_48x48.png")));
+        //Cambiamos el icono del botón de stop.
+        this.buttonStop.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/StopDisabled_48x48.png")));
+    }//GEN-LAST:event_buttonStopActionPerformed
 
     /**
      * @param args the command line arguments
@@ -115,7 +143,7 @@ public class VentanaInternaAudioGrabador extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
+    private javax.swing.JButton buttonRec;
+    private javax.swing.JButton buttonStop;
     // End of variables declaration//GEN-END:variables
 }

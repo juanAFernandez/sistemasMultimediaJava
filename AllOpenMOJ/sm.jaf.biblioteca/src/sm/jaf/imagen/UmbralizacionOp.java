@@ -21,8 +21,11 @@ import sm.image.BufferedImageOpAdapter;
 import sm.image.BufferedImagePixelIterator;
 
 /**
- *
- * @author juan
+ * Operación propia para el procesamiento de iḿagenes que permite la umbralización a partir de 
+ * un valor umbral.
+ * Dado un valor umbral ofrecido a través de un slider se modifica los píxeles y todos aquellos
+ * que superen dicho umbral son llevados a blanco.
+ * @author Juan A. Fernández Sánchez
  */
 public class UmbralizacionOp extends BufferedImageOpAdapter {
 

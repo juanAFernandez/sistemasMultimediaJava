@@ -1,7 +1,18 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Copyright (C) 2015 Juan A. Fernández Sánchez
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package Programa;
 
@@ -17,8 +28,8 @@ import javax.media.format.AudioFormat;
 import static sun.audio.AudioPlayer.player;
 
 /**
- *
- * @author juan
+ * Clase que construye una ventana de reproducción de video y audio.
+ * @author Juan A. Fernández Sánchez
  */
 public class VentanaInternaJMFPlayer extends javax.swing.JInternalFrame {
 
@@ -27,33 +38,24 @@ public class VentanaInternaJMFPlayer extends javax.swing.JInternalFrame {
      * @see <a href="http://docs.oracle.com/javame/config/cdc/opt-pkgs/api/jsr927/javax/media/Player.html">Class Player</a>
      * 
      */
-    private Player player = null;
-    
-    
-    
+    public Player player = null;
     
     /**
-     * Creates new form VentanaInternaJMFPlayer
+     * Constructor de VentanaInternaJMFPlayer
      */       
     private VentanaInternaJMFPlayer(File f) {
+
         
-        
-        
-        Format input1 = new AudioFormat(AudioFormat.MPEGLAYER3);
-		Format input2 = new AudioFormat(AudioFormat.MPEG);
-		Format output = new AudioFormat(AudioFormat.LINEAR);
-		PlugInManager.addPlugIn(
-			"com.sun.media.codec.audio.mp3.JavaDecoder",
-			new Format[]{input1, input2},
-			new Format[]{output},
-			PlugInManager.CODEC
-		);
-        
-        
+        initComponents();
         
         Imprimir("Abriendo VentanaInternaJMFPlayer");
         
-        initComponents();
+        
+        setClosable(true);
+        setMaximizable(true);
+        setResizable(true);
+        
+        //Extraemos la ruta del fichero
         String sfichero = "file:" + f.getAbsolutePath();
         
         Imprimir("Try open: "+sfichero);
@@ -61,62 +63,56 @@ public class VentanaInternaJMFPlayer extends javax.swing.JInternalFrame {
         this.setTitle(f.getName());
         
         System.out.println(sfichero);
-        MediaLocator ml = new MediaLocator(sfichero);
+        
         try {
             
-   
-	Player player = Manager.createPlayer(ml);
-	player.start();
-		
-	
-		
-	
-            
-            
-            
-            /*
-            //Creamos el reproductor
-            player = Manager.createRealizedPlayer(ml);
+            MediaLocator ml = new MediaLocator(sfichero);  
+            player = Manager.createRealizedPlayer(ml);	
             Component vc = player.getVisualComponent();
             if(vc!=null)add(vc, java.awt.BorderLayout.CENTER);
             Component cpc = player.getControlPanelComponent();
             if(cpc!=null)add(cpc, java.awt.BorderLayout.SOUTH);
             this.pack();
             
-            player.start();
-            
-            */
-            
+           
         }catch(Exception e) {
-            System.err.println("VentanaInternaJMFPlayer: "+e);
-            player = null;
+            System.err.println("VentanaInternaJMFPlayer: "+e);            
         }
-        this.resizable=true;
-        this.closable=true;
-        this.maximizable=true;
         
     }
-        public static VentanaInternaJMFPlayer getInstance(File f){
-            VentanaInternaJMFPlayer v = new VentanaInternaJMFPlayer(f);
-            if(v.player!=null) 
-                return v;
-            else 
-                return null;
-        }
-        public void play() {
-                Imprimir("PRESS BUTTON PLAY");
-            if (player != null) {
-                try {
-                    Imprimir("Try playing");
-                    player.start();
-                } catch (Exception e) {
-                    System.err.println("VentanaInternaJMFPlayer: "+e);
-                }
+    
+    /**
+     * Devuelve una instancia de la clase.
+     * @param f El nombre del fichero que queremos abrir.
+     * @return Un objeto de tipo VentanaInternaJMFPlayer inicializado
+     */
+    public static VentanaInternaJMFPlayer getInstance(File f){
+        VentanaInternaJMFPlayer v = new VentanaInternaJMFPlayer(f);
+        if(v.player!=null) 
+            return v;
+        else 
+            return null;
+    }
+    
+    /**
+     * Hace que la reproducción se inicie.
+     */
+    public void play() {
+            Imprimir("PRESS BUTTON PLAY");
+        if (player != null) {
+            try {
+                Imprimir("Try playing");
+                player.start();
+            } catch (Exception e) {
+                System.err.println("VentanaInternaJMFPlayer: "+e);
             }
-            Imprimir("PLAYER==NULL");
         }
-        
-        public void close(){
+        Imprimir("PLAYER==NULL");
+    }
+    /**
+     * Hace que la ventan de reproducción se cierre.
+     */
+    public void close(){
          try{
             if(player!=null) player.close();
         } catch(Exception e) {

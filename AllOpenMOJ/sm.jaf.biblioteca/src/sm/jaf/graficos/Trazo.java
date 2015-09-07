@@ -21,8 +21,10 @@ import java.awt.Stroke;
 
 
 /**
- * Clase que implementa el "trazo" para poder cambiar cosas particulares del stroke que le falta a la interfaz de esta clase de Java2D.
- * Para esto se hace uso de BasicStroke de Java2D.
+ * Clase que implementa el "trazo".
+ * Implementa el concepto de trazo ara poder cambiar cosas particulares del stroke que le falta a la interfaz de esta clase de Java2D.
+ * Para esto se hace uso de BasicStroke de Java2D y con esta herramienta se ajustan todos sus valores, de fomra sencilla,
+ * que el usuario mediante la herramienta gráfica puede modificar.
  * @see <a href="http://docs.oracle.com/javase/7/docs/api/java/awt/BasicStroke.html">BasicStroke</a>
  * @author Juan A. Fernández Sánchez
  */

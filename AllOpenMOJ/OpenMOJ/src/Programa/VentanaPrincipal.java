@@ -1,3 +1,20 @@
+/*
+ * Copyright (C) 2015 Juan A. Fernández Sánchez
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package Programa;
 
 import Herramientas.herramientaBrilloContraste;
@@ -7,13 +24,16 @@ import Herramientas.herramientaEnfoque;
 import Herramientas.herramientaEscalaGrises;
 import Herramientas.herramientaEscalar;
 import Herramientas.herramientaFronteras;
+import Herramientas.herramientaHistograma;
 import Herramientas.herramientaNegativo;
 import Herramientas.herramientaOpBinarias;
+import Herramientas.herramientaRGB;
 import Herramientas.herramientaRelieve;
 import Herramientas.herramientaRotacion;
+import Herramientas.herramientaSepia;
 import Herramientas.herramientaUmbralizacion;
-import accesorios.Ajustes;
-import accesorios.nuevoLienzo;
+import Accesorios.Ajustes;
+import Accesorios.nuevoLienzo;
 import static extras.Imprimir.Imprimir;
 import java.awt.Color;
 import java.awt.geom.Point2D;
@@ -27,11 +47,15 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.FileFilter;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.media.*;
 import javax.media.format.AudioFormat;
 import javax.swing.JDesktopPane;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import org.jfree.ui.ExtensionFileFilter;
 import sm.jaf.graficos.Linea;
 import sm.jaf.graficos.Rectangulo;
 import sm.jaf.graficos.Relleno;
@@ -40,6 +64,14 @@ import sm.jaf.iu.Lienzo2D;
 import sm.jaf.iu.Lienzo2DImagen;
 import sm.sound.SMSoundPlayer;
 
+
+
+/**
+ * Clase principal del programa OpenMOJ que carga toda la GUI del programa.
+ * Carga la interfaz gráfica del programa e implementa la mayoría de su interacción con el 
+ * usuario mediante la gestión de los eventos.
+ * @author Juan A. Fernández Sánchez
+ */
 public class VentanaPrincipal extends JFrame {
 
                     
@@ -67,7 +99,7 @@ public class VentanaPrincipal extends JFrame {
     private VentanaInternaAudioReproductor ventanaInternaAudioReproductor;
     private VentanaInternaAudioGrabador ventanaInternaAudioGrabador;
         
-    private VentanaInternaCamara ventanaInternaCamara;
+ 
     
     private nuevoLienzo ventanaNuevoLienzo;
     
@@ -375,7 +407,6 @@ public class VentanaPrincipal extends JFrame {
         menuEdicion = new javax.swing.JMenu();
         botonBarraEstado = new javax.swing.JCheckBoxMenuItem();
         botonHerramientasDibujo = new javax.swing.JCheckBoxMenuItem();
-        botonHistograma = new javax.swing.JCheckBoxMenuItem();
         menuHerramientas = new javax.swing.JMenu();
         botonMenuEdicionBrillo = new javax.swing.JMenuItem();
         botonNegativo = new javax.swing.JMenuItem();
@@ -389,7 +420,9 @@ public class VentanaPrincipal extends JFrame {
         botonEscalaGrises = new javax.swing.JMenuItem();
         botonDuplicar = new javax.swing.JMenuItem();
         botonOperacionBinarias = new javax.swing.JMenuItem();
-        jMenuItem1 = new javax.swing.JMenuItem();
+        botonRGB = new javax.swing.JMenuItem();
+        botonSepia = new javax.swing.JMenuItem();
+        botonHistograma = new javax.swing.JMenuItem();
         botonMenuAbout = new javax.swing.JMenu();
         botonAboutInfo = new javax.swing.JMenuItem();
         botonAjustes = new javax.swing.JMenuItem();
@@ -961,15 +994,6 @@ public class VentanaPrincipal extends JFrame {
         });
         menuEdicion.add(botonHerramientasDibujo);
 
-        botonHistograma.setSelected(true);
-        botonHistograma.setText("Histogramas");
-        botonHistograma.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                botonHistogramaActionPerformed(evt);
-            }
-        });
-        menuEdicion.add(botonHistograma);
-
         jMenuBar1.add(menuEdicion);
 
         menuHerramientas.setText("Herramientas");
@@ -1083,14 +1107,32 @@ public class VentanaPrincipal extends JFrame {
         });
         menuHerramientas.add(botonOperacionBinarias);
 
-        jMenuItem1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/seno.png"))); // NOI18N
-        jMenuItem1.setText("FuncionSeno");
-        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+        botonRGB.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/rgb.png"))); // NOI18N
+        botonRGB.setText("RGB");
+        botonRGB.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem1ActionPerformed(evt);
+                botonRGBActionPerformed(evt);
             }
         });
-        menuHerramientas.add(jMenuItem1);
+        menuHerramientas.add(botonRGB);
+
+        botonSepia.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/sepia.png"))); // NOI18N
+        botonSepia.setText("Sepia");
+        botonSepia.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonSepiaActionPerformed(evt);
+            }
+        });
+        menuHerramientas.add(botonSepia);
+
+        botonHistograma.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/histogram.png"))); // NOI18N
+        botonHistograma.setText("Histrograma");
+        botonHistograma.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonHistogramaActionPerformed(evt);
+            }
+        });
+        menuHerramientas.add(botonHistograma);
 
         jMenuBar1.add(menuHerramientas);
 
@@ -1390,10 +1432,10 @@ public class VentanaPrincipal extends JFrame {
         ventanaHerramientaNegativo.setVisible(true);
     }//GEN-LAST:event_botonNegativoActionPerformed
 
-    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
-        ventanaHerramientaSeno = new herramientaSeno(this);
-        ventanaHerramientaSeno.setVisible(true);
-    }//GEN-LAST:event_jMenuItem1ActionPerformed
+    private void botonRGBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonRGBActionPerformed
+        herramientaRGB hRGB = new herramientaRGB(this);
+        hRGB.setVisible(true);
+    }//GEN-LAST:event_botonRGBActionPerformed
 
     private void botonUmbralizacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonUmbralizacionActionPerformed
         ventanaHerramientaUmbral = new herramientaUmbralizacion(this);
@@ -1401,88 +1443,79 @@ public class VentanaPrincipal extends JFrame {
     }//GEN-LAST:event_botonUmbralizacionActionPerformed
 
     private void botonAbrirAudioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonAbrirAudioActionPerformed
-
+                
+        //Primero tiene que abrir un fichero, para ello:
         
-        
-        //Primero tiene que abrir un fichero          
-        //Creamos el explorador de ficheros
-        JFileChooser dlg = new JFileChooser();
-        //Personalizamos el nombre de la ventana
-        dlg.setDialogTitle("Abrir fichero de audio");
-        FileFilter filter;        
-        dlg.setFileFilter(null);          
-        int resp = dlg.showOpenDialog(this);
+        //1. Creamos el explorador de ficheros
+            JFileChooser dlg = new JFileChooser();
+            
+        //2. Personalizamos el nombre de la ventana
+            dlg.setDialogTitle("Abrir fichero multimedia");
+            
+        //3. Especificamos un filtro para sólo se puedan elegir ese tipo de ficheros si se selecciona    
+        dlg.addChoosableFileFilter(new FileNameExtensionFilter("wav, au, avi", "wav", "au", "avi"));        
+        dlg.setFileSelectionMode(JFileChooser.APPROVE_OPTION);
+            
+        //FileFilter filter;        
+        //dlg.setFileFilter(null);          
+            
+        //3. Extraemos la información del diágolo
+            int resp = dlg.showOpenDialog(this);
+            
+            
         if(resp==JFileChooser.APPROVE_OPTION){
             try{
-                 File f = dlg.getSelectedFile();
+                //Extraermos la ruta del fichero.
+                File f = dlg.getSelectedFile();
                 Imprimir("Abriendo "+f.getPath());
+                                     
                 
+                String[] trozos = f.getName().split("\\.");
                 
-                
-	
-		Format input1 = new AudioFormat(AudioFormat.MPEGLAYER3);
-		Format input2 = new AudioFormat(AudioFormat.MPEG);
-		Format output = new AudioFormat(AudioFormat.LINEAR);
-		PlugInManager.addPlugIn(
-			"com.sun.media.codec.audio.mp3.JavaDecoder",
-			new Format[]{input1, input2},
-			new Format[]{output},
-			PlugInManager.CODEC
-		);
-		try{
-			Player player = Manager.createPlayer(new MediaLocator(f.toURI().toURL()));
-                        player.realize();
-                        player.getGainControl().setLevel(1);
-			player.start();
+                switch (trozos[trozos.length-1]) {
+                    
+                    //Para abrir un fichero de tipo avi usamos VentanaInternaJMFPlayer
+                    case "avi":
+                        VentanaInternaJMFPlayer ventanaInternaJMFPlayer = VentanaInternaJMFPlayer.getInstance(f);
+                        panelEscritorio.add(ventanaInternaJMFPlayer);
+                        ventanaInternaJMFPlayer.setVisible(true);
+                        break;
+                      
+                    /**
+                     * No hay forma de hacer que mp3 se reproduzca, intentado de varias formas.
+                     */
+                    case "mp3" :
+                     
+                        break;
+                    
+                    case "au" :
+                       VentanaInternaAudioReproductor vir = VentanaInternaAudioReproductor.getInstance(f);
+                       panelEscritorio.add(vir);
+                       vir.setVisible(true);                       
+                       break;
                         
-		}
-		catch(Exception ex){
-			ex.printStackTrace();
-		}
-	
+                        
+                    //Cuando queramos reproducir WAV usamos VentanaInternaAudiREpr                   
+                    case "wav" :
+                       VentanaInternaAudioReproductor vir2 = VentanaInternaAudioReproductor.getInstance(f);
+                       panelEscritorio.add(vir2);
+                       vir2.setVisible(true);
+                       break;
+                        
+                    default:
+                        JOptionPane.showMessageDialog(this, "Formato de fichero desconocido. Sólo válidos .avi, .au y .mp3", "Error", JOptionPane.WARNING_MESSAGE);
+                        break;
+                }
                 
                 
                 
                 
-                
-                
-                
-                
-                
-                
-                
-                /*
-                VentanaInternaJMFPlayer ventanaInternaJMFPlayer = VentanaInternaJMFPlayer.getInstance(f);                 
-                panelEscritorio.add(ventanaInternaJMFPlayer);
-                ventanaInternaJMFPlayer.setVisible(true);
-                */
-                
+              
             }catch(Exception ex){              
                 System.err.println("Error al leer fichero: "+ex);
             }
         } 
-        
-        /*
-        //Primero tiene que abrir un fichero          
-        //Creamos el explorador de ficheros
-        JFileChooser dlg = new JFileChooser();
-        //Personalizamos el nombre de la ventana
-        dlg.setDialogTitle("Abrir fichero de audio");
-        FileFilter filter;        
-        dlg.setFileFilter(null);          
-        int resp = dlg.showOpenDialog(this);
-        if(resp==JFileChooser.APPROVE_OPTION){
-            try{
-                 File f = dlg.getSelectedFile();
-                Imprimir("Abriendo "+f.getPath());
-                ventanaInternaAudioReproductor = new VentanaInternaAudioReproductor(f);
-        ventanaInternaAudioReproductor.setVisible(true);
-            }catch(Exception ex){              
-                System.err.println("Error al leer fichero: "+ex);
-            }
-        }      
-        */
-        
+       
         
         
     }//GEN-LAST:event_botonAbrirAudioActionPerformed
@@ -1494,9 +1527,11 @@ public class VentanaPrincipal extends JFrame {
         int resp = dlg.showOpenDialog(this);
         if(resp==JFileChooser.APPROVE_OPTION){
             try{
-                 File f = dlg.getSelectedFile();
+                //Añadimos la extension al nombre del fichero
+                File f = new File(dlg.getSelectedFile()+".au");
+                
                 Imprimir("Abriendo "+f.getPath());
-                ventanaInternaAudioGrabador = new VentanaInternaAudioGrabador(f);
+                VentanaInternaAudioGrabador ventanaInternaAudioGrabador = new VentanaInternaAudioGrabador(f);
                 ventanaInternaAudioGrabador.setVisible(true);
 
             }catch(Exception ex){
@@ -1509,7 +1544,7 @@ public class VentanaPrincipal extends JFrame {
 
     private void botonAbrirWebCamActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonAbrirWebCamActionPerformed
                         
-        ventanaInternaCamara = VentanaInternaCamara.getInstance();
+        VentanaInternaCamara ventanaInternaCamara = VentanaInternaCamara.getInstance();
         this.panelEscritorio.add(ventanaInternaCamara);
         ventanaInternaCamara.setVisible(true);
         
@@ -1726,19 +1761,6 @@ public class VentanaPrincipal extends JFrame {
         JOptionPane.showMessageDialog(this, "Esta funcionalidad aún no se ha implementado.","Oups!", JOptionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_jMenuItem7ActionPerformed
 
-    private void botonHistogramaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonHistogramaActionPerformed
-        //Si el botón queda seleccionado.
-        if(botonHistograma.isSelected()){
-            panelHistograma.setVisible(true);
-            verHistograma=true;
-            JOptionPane.showMessageDialog(this, "El histograma puede ralentizar el programa.","Cuidado", JOptionPane.INFORMATION_MESSAGE);
-        }            
-        if(!botonHistograma.isSelected()){
-            panelHistograma.setVisible(false);
-            verHistograma=false;
-        }        
-    }//GEN-LAST:event_botonHistogramaActionPerformed
-
     private void botonBarraEstadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonBarraEstadoActionPerformed
         //Si el botón queda seleccionado.
         if(botonBarraEstado.isSelected())
@@ -1954,6 +1976,16 @@ public class VentanaPrincipal extends JFrame {
         herramientaGrises.setVisible(true);
     }//GEN-LAST:event_botonEscalaGrisesActionPerformed
 
+    private void botonHistogramaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonHistogramaActionPerformed
+        herramientaHistograma vi = new herramientaHistograma(this);
+        vi.setVisible(true);
+    }//GEN-LAST:event_botonHistogramaActionPerformed
+
+    private void botonSepiaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonSepiaActionPerformed
+        herramientaSepia sp = new herramientaSepia(this);
+        sp.setVisible(true);
+    }//GEN-LAST:event_botonSepiaActionPerformed
+
     
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -1983,7 +2015,7 @@ public class VentanaPrincipal extends JFrame {
     private javax.swing.JMenuItem botonGrabarAudio;
     private javax.swing.JMenuItem botonGuardarMenuArchivo;
     private javax.swing.JCheckBoxMenuItem botonHerramientasDibujo;
-    private javax.swing.JCheckBoxMenuItem botonHistograma;
+    private javax.swing.JMenuItem botonHistograma;
     private javax.swing.JMenu botonMenuAbout;
     private javax.swing.JMenuItem botonMenuEdicionBrillo;
     private javax.swing.JMenuItem botonMenuHerramientasEmborronar;
@@ -1993,10 +2025,12 @@ public class VentanaPrincipal extends JFrame {
     private javax.swing.JToggleButton botonNegro;
     private javax.swing.JMenuItem botonNuevoMenuArchivo;
     private javax.swing.JMenuItem botonOperacionBinarias;
+    private javax.swing.JMenuItem botonRGB;
     private javax.swing.JMenuItem botonRehacer;
     private javax.swing.JCheckBox botonRelleno;
     private javax.swing.JToggleButton botonRojo;
     private javax.swing.JMenuItem botonRotar;
+    private javax.swing.JMenuItem botonSepia;
     private javax.swing.JCheckBox botonTransparencia;
     private javax.swing.JMenuItem botonUmbralizacion;
     private javax.swing.JToggleButton botonVerde;
@@ -2016,7 +2050,6 @@ public class VentanaPrincipal extends JFrame {
     private javax.swing.JLabel coordenadas;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem7;
     private javax.swing.JPanel jPanel16;
     private javax.swing.JPanel jPanel3;

@@ -8,18 +8,15 @@ import java.awt.event.WindowEvent;
 import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
-import java.awt.image.ByteLookupTable;
-import java.awt.image.ColorModel;
 import java.awt.image.ConvolveOp;
 import java.awt.image.Kernel;
-import java.awt.image.LookupOp;
-import java.awt.image.WritableRaster;
 import javax.swing.JOptionPane;
-import sm.image.KernelProducer;
 
 
 /**
- *
+ * Herramienta que realiza el rotado de la imagen de cualquier ventana interna.
+ * Para ello hace uso de las transformaciones afines, al igual que se hacía en la herramienta para escalar.
+ * @see <a href="http://docs.oracle.com/javase/7/docs/api/java/awt/geom/AffineTransform.html">Doc de AffineTransform</a> 
  * @author Juan A. Fernández Sánchez
  */
 public final class herramientaRotacion extends javax.swing.JFrame {

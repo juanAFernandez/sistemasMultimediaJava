@@ -23,7 +23,13 @@ import java.awt.geom.Point2D;
 import java.awt.geom.QuadCurve2D;
 
 /**
- * Segmento de linea con un punto de control para hacerlo  curvo.
+ * Clase que implementa la figura CURVA CUADRATICA.
+ * Basándose en QuadCurve2D implementa la definición de la curva cuadrática que no es más que una linea con un punto de control con
+ * el que poder convertirla en curva.
+ * Esta figura dispone de tres puntos de control, dos para los exremos de la linea, su origen y su
+ * fin y otro para la propia curva, además de el general de cambio de posición.
+ * 
+ * @see <a href="https://docs.oracle.com/javase/8/docs/api/java/awt/geom/QuadCurve2D.html">Clase QuadCurve2D</a>
  * @author Juan A. Fernández Sánchez
  */
 public class CurvaCuadratica extends Figura {
@@ -46,25 +52,7 @@ public class CurvaCuadratica extends Figura {
     private Ellipse2D elipsePuntoB;
     private boolean seleccionadoPuntoB;       
     private Point2D B;
-    
-    /**
-     * Para el control de la edición de la figura.
-     */
-    private boolean modoEdicion;
-    
-    /**
-     * Para el control de movimiento de la figura.
-     */
-    private boolean moviendo;
-    
-    /**
-     * Variables para el control del movimiento de la figura.
-     */
-    private double distanciaX;
-    private double distanciaY;
-    
-    
-    
+
     /**
      * Primer constructor sin parámetros
      */
@@ -336,18 +324,6 @@ public class CurvaCuadratica extends Figura {
         
     }
 
-    /**
-     * Metodo alternativo para cambiar de posición.
-     * @param pos 
-     */
-    @Override
-    public void cambiarPosicion2(Point2D pos) {
-                     
-        double dx=pos.getX()-((QuadCurve2D)datosGeometricos).getX1();
-        double dy=pos.getY()-((QuadCurve2D)datosGeometricos).getY1();
-        Point2D newp2 = new Point2D.Double(((QuadCurve2D)datosGeometricos).getX2()+dx,((QuadCurve2D)datosGeometricos).getY2()+dy);        
-        this.cambiarPosicion(pos, newp2);
-    }
-    
+
     
 }

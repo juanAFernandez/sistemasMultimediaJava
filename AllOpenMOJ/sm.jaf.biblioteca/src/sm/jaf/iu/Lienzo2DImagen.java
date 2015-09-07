@@ -23,16 +23,12 @@ import java.awt.image.BufferedImage;
 import sm.jaf.graficos.Figura;
 
 /**
- *
- * @author juan
- * 
- * 
  * Lienzo2DImagen extiende de Lienzo2D porque debe tener todas las caracteríticas propias del Lienzo2D además de las 
- * que esta clase añada. Por eso una instancia de esta podrá hacer todo lo que hacía el padre, tendrá todos sus métodos 
+ * que esta clase añada. 
+ * Por eso una instancia de esta podrá hacer todo lo que hacía el padre, tendrá todos sus métodos 
  * y serán accesibles todas sus variables siempre a través de los métodos set/get. Así esta nueva imagen se centrará a todo lo relativo 
  * a la imagen.
- * 
- * 
+ * @author Juan A. Fernández Sánchez
  */
 public class Lienzo2DImagen extends Lienzo2D {
 

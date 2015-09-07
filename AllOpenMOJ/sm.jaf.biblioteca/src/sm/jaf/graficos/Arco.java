@@ -22,17 +22,16 @@ import java.awt.geom.Point2D;
 
 /**
  * Clase que implementa la figura ARCO.
+ * A partir de la implementación de Arc2D de Graphics2D se implementa esta figura que permite el dibujado
+ * de arcos como secciones de circunferencias perfectas con 4 puntos de control. El primero de ellos, centro
+ * o cualquier parte del area de la circunferencia permite moverla, el segundo centro del arco sirve
+ * para definir el radio de la circunferenica y los otros dos son los que definen el ángulo de inicio y fin
+ * del la sección de la circunferencia y también pueden ser editados por el usuario en modo edición.
  * @see <a href="https://docs.oracle.com/javase/8/docs/api/java/awt/geom/Arc2D.html">Clase Arc2D</a>
  * @author Juan A. Fernández Sánchez
  */
 public class Arco extends Figura {
 
-    
-    /**
-     * Para la selección del modo edición.
-     */
-    private boolean modoEdicion;
-    
     /**
      * Variables del primer punto de control.
      */
@@ -348,8 +347,7 @@ public class Arco extends Figura {
     /**
      * Para cambiar la posición completa de la figura a partir de un nuevo punto proporcionado.
      * @param nuevaLocalizacion 
-     */
-    @Override
+     */ 
     public void cambiarPosicion2(Point2D nuevaLocalizacion) {
         //((Arc2D)datosGeometricos).setFrame(nuevaLocalizacion.getX(), nuevaLocalizacion.getY(), datosGeometricos.getBounds2D().getWidth(), datosGeometricos.getBounds2D().getHeight());
         centro=nuevaLocalizacion;

@@ -49,22 +49,7 @@ public class Linea extends Figura {
     private Ellipse2D elipsePuntoControlB;    
     private boolean seleccionadoPuntoControlB;
     
-    /**
-     * Para el control de la edición de la figura.
-     */
-    private boolean modoEdicion;
-    
-    /**
-     * Para el control de movimiento de la figura.
-     */
-    private boolean moviendo;
-    
-    /**
-     * Variables para el control del movimiento de la figura.
-     */
-    private double distanciaX;
-    private double distanciaY;
-    
+
     
     
     /**
@@ -314,33 +299,5 @@ public class Linea extends Figura {
                       +"B("+((Line2D)datosGeometricos).getX2()+","+((Line2D)datosGeometricos).getY2()+")";        
     }
 
-    
-    /**
-     * Para cambiar la posición de la linea a través de un punto dado.
-     * Cuando movemos la linea sólo manejamos un punto que es donde la dejamos, la función que cambia la posición de una linea
-     * necesita dos puntos, los extremos de la linea. Para eso esta función hace los calculos necesarios para dado un punto
-     * en el espacio, mover toda la linea y obtener sus nuevos puntos que la definen (los extremos). Por eso es necesaria
-     * esta conversión siempre para mover una linea.
-     * @param pos Nuevo punto donde queremos colocar la linea.
-     */     
-    @Override
-    public void cambiarPosicion2(Point2D pos) {
-                    
-        Imprimir("Cambiando posicion plano");
-        
-        /*
-        Calculamos los puntos extremos que definen la linea que resultarían de moverla y dejarla en el punto 
-        que definimos con el ratón y que es el que se le pasa.
-        Esta forma tiene un fallo y es que siempre nos pondra el punto donde dejemos el ratón como un extremo de la linea
-        y aunque pinchemos en el centro de esta nos la moverá hacia uno de sus extremos. Esto se podría mejorar.
-        */
-        
-        double dx=pos.getX()-((Line2D)datosGeometricos).getX1();
-        double dy=pos.getY()-((Line2D)datosGeometricos).getY1();
-        Point2D newp2 = new Point2D.Double(((Line2D)datosGeometricos).getX2()+dx,((Line2D)datosGeometricos).getY2()+dy);
-        
-        //Se llama a "cambiarPosicion" que es quien cambia la posición de los dos puntos de la linea.
-        this.cambiarPosicion(pos, newp2);
-    }
     
 }

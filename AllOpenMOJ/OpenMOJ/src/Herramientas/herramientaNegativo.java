@@ -6,14 +6,17 @@ import static extras.Imprimir.Imprimir;
 import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 import java.awt.image.ByteLookupTable;
-import java.awt.image.ColorModel;
 import java.awt.image.LookupOp;
-import java.awt.image.WritableRaster;
 import javax.swing.JOptionPane;
 
 
 /**
- *
+ * Herramienta que convierte la imagen a su negativo.
+ * Para conseguirlo realiza una tabla de equivalencias donde cada valor queda convertido a su contrario, 
+ * 0->255, 255->0 para despues pasarsela a la imagen y que se aplique a todos sus pixeles y componentes.
+ * @see <a href="http://docs.oracle.com/javase/7/docs/api/java/awt/image/ByteLookupTable.html">Doc de ByteLookupTable</a> 
+ * @see <a href="http://docs.oracle.com/javase/7/docs/api/java/awt/image/LookupOp.html">Doc de LookupOp </a> 
+ * @see <a href="http://www.informit.com/articles/article.aspx?p=1013851&seqNum=6">Ejemplo de uso de LoolupOp</a>
  * @author Juan A. Fernández Sánchez
  */
 public final class herramientaNegativo extends javax.swing.JFrame {

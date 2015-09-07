@@ -26,7 +26,11 @@ import java.awt.geom.RoundRectangle2D;
 import sm.jaf.graficos.Relleno.Horientacion;
 
 /**
- * Clase 
+ * Clase que implementa la figura RECTANGULO REDONDEADO.
+ * Internamente usa un objeto de tipo RoundRectantle2D de Java2D abstrayendo su funcionamiento y especificando su
+ * comportamiento. Esta figura puede contener relleno y por eso tiene dos variables para controlarlo,la unica diferencia
+ * respecto al resctangulo normal es que esta tiene los bordes redondeados.
+ * @see <a href="https://docs.oracle.com/javase/8/docs/api/java/awt/geom/RoundRectangle2D.html">Clase RoundRectangle2D</a>
  * @author Juan A. Fernández Sánchez
  */
 public class RectanguloRedondeado extends Figura{
@@ -37,9 +41,6 @@ public class RectanguloRedondeado extends Figura{
     
     public Relleno miRelleno;
     
-    
-    private boolean modoEdicion;
-    
     private Point2D A;    
     private Ellipse2D elipsePuntoControlA;    
     boolean seleccionadoPuntoControlA;
@@ -47,10 +48,7 @@ public class RectanguloRedondeado extends Figura{
     private Point2D B;  
     private Ellipse2D elipsePuntoControlB;    
     boolean seleccionadoPuntoControlB;
-    
-    boolean moviendo=false;
-    double distanciaX=0;
-    double distanciaY=0;
+
     
      /**
      * Primer constructor sin parámetros
@@ -349,11 +347,6 @@ public class RectanguloRedondeado extends Figura{
         return "rectanguloRedondeado";
     }
 
-    @Override
-    public void cambiarPosicion2(Point2D pos) {
-                     
-        ((RoundRectangle2D)datosGeometricos).setFrame(pos.getX(), pos.getY(), datosGeometricos.getBounds2D().getWidth(), datosGeometricos.getBounds2D().getHeight());
 
-    }
     
 }

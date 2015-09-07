@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package accesorios;
+package Accesorios;
 
 import Programa.VentanaInterna;
 import Programa.VentanaPrincipal;
@@ -27,7 +27,9 @@ import java.awt.image.BufferedImage;
 import javax.swing.ImageIcon;
 
 /**
- *
+ * Herramienta de creación de nuevo lienzo ofrece la GUI para que el usuario
+ * pueda escoger el tamaño y orientación de su lienzo o bien escoja de una serie
+ * de plantillas predefinidas.
  * @author Juan Antonio Fernández Sánchez 
  */
 public class nuevoLienzo extends javax.swing.JFrame {
@@ -39,6 +41,9 @@ public class nuevoLienzo extends javax.swing.JFrame {
     private int anchoLienzo;
     private int altoLienzo;
     
+    /**
+     * Orientación del lienzo.
+     */
     private Orientacion orientacion;
  
     
@@ -328,6 +333,11 @@ public class nuevoLienzo extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_comboPlantillaActionPerformed
 
+    /**
+     * Programación del botón aceptar realiza todas las acciones que configuran el lienzo
+     * bajo los parámetros que el usuario ha introducido.
+     * @param evt Evento de control.
+     */
     private void botonAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonAceptarActionPerformed
        
         //Al pulsar sobre el boton aceptar.
@@ -475,9 +485,12 @@ public class nuevoLienzo extends javax.swing.JFrame {
     private javax.swing.JSpinner spinnerAncho;
     // End of variables declaration//GEN-END:variables
 
-private enum Orientacion{
-    VERTICAL,
-    HORIZONTAL
-}
+    /**
+     * Enumerado para el control de la horientación del lienzo.
+     */
+    private enum Orientacion{
+        VERTICAL,
+        HORIZONTAL
+    }
     
 }

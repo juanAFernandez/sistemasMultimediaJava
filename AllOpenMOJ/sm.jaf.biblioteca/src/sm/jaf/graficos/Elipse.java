@@ -25,7 +25,11 @@ import java.awt.geom.Point2D;
 import sm.jaf.graficos.Relleno.Horientacion;
 
 /**
- *
+ * Clase que implementa la figura Elipse.
+ * Basada en Ellipse2D, implementa la figura elipse, un circulo que no tiene por qué ser de radio constante,
+ * que usa un par de puntos de control para permitir al usuario modificar su tamaño.
+ * 
+ * @see <a href="@see <a href="https://docs.oracle.com/javase/8/docs/api/java/awt/geom/Ellipse2D.html">Clase Ellipse2D</a>">Clase Ellipse2D</a>
  * @author Juan A. Fernández Sánchez
  */
 public class Elipse extends Figura{
@@ -34,10 +38,7 @@ public class Elipse extends Figura{
     
     public Relleno miRelleno;
     
-    
-    
-    private boolean modoEdicion;
-                 //1º: Sacamos los extremos A y B del rectangulo
+
         
     private Point2D A;          
     private Ellipse2D elipsePuntoControlA;    
@@ -46,11 +47,7 @@ public class Elipse extends Figura{
     private Point2D B;    
     private Ellipse2D elipsePuntoControlB;    
     boolean seleccionadoPuntoControlB;
-    
-    boolean moviendo=false;
-    double distanciaX=0;
-    double distanciaY=0;
-    
+
     
     
     
@@ -281,11 +278,6 @@ public class Elipse extends Figura{
          ((Ellipse2D)datosGeometricos).setFrameFromDiagonal(nuevoPuntoA, nuevoPuntoB);
     }
 
-    @Override
-    public void cambiarPosicion2(Point2D pos) {
-       ((Ellipse2D)datosGeometricos).setFrame(pos.getX(), pos.getY(), datosGeometricos.getBounds2D().getWidth(), datosGeometricos.getBounds2D().getHeight());
-        
-    }
     /**
      * Cambia el modo de edición.
      * @param modo True para activarlo y false para desactivalrlo.

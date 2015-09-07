@@ -38,21 +38,7 @@ public class Polilinea extends Figura {
     private ArrayList<puntoPolilinea>puntos;
     private int puntoControlSeleccionado;
     
-    /**
-     * Para el control de la edición de la figura.
-     */
-    private boolean modoEdicion;
-    
-    /**
-     * Para el control de movimiento de la figura.
-     */
-    private boolean moviendo;
-    
-    /**
-     * Variables para el control del movimiento de la figura.
-     */
-    private double distanciaX;
-    private double distanciaY;
+
      
     public Polilinea(){
         super();
@@ -213,10 +199,6 @@ public class Polilinea extends Figura {
         throw new UnsupportedOperationException("NNO ES NECESARIA"); //To change body of generated methods, choose Tools | Templates.
     }
 
-    @Override
-    public void cambiarPosicion2(Point2D nuevaLocalizacion) {
-        throw new UnsupportedOperationException("NO ES NECESARIA."); //To change body of generated methods, choose Tools | Templates.
-    }
 
     /**
      * Nos dice si un punto pertenece a la Polilinea.

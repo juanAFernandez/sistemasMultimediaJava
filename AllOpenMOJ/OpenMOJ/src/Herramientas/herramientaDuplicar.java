@@ -1,28 +1,52 @@
+/*
+ * Copyright (C) 2015 Juan A. Fernández Sánchez
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package Herramientas;
 
 import Programa.VentanaInterna;
 import Programa.VentanaPrincipal;
-import static extras.Imprimir.Imprimir;
 import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 import javax.swing.JOptionPane;
-import sm.jaf.imagen.RestaOp;
-import sm.jaf.imagen.SumaOp;
 
 
 /**
- *
+ * Herramienta de copia de imágenes.
+ * Permite realizar duplicados de imágenes para cualquier función poserior. Estas copias son abiertas
+ * como nuevas ventanas dentro del escritorio principal, por lo que también se crean todas las variables
+ * necesarias al rspecto.
  * @author Juan A. Fernández Sánchez
  */
 public final class herramientaDuplicar extends javax.swing.JFrame {
 
-    
+    /**
+     * Referencia a la ventana principal del programa para poder acceder a sus elementos.
+     */
     private VentanaPrincipal padre;
     
+    /**
+     * Referencia a la ventana interna del escritorio de VentanaPrincipal donde se encuentra
+     * la imagen que con la que hay que trabajar.
+     */
     private VentanaInterna viA;
         
 
-    //Las dos imagenes que gestionamos. Una copia de la original y el resultado de las operaciones.
+    /**
+     * Objeto copia de la imagen que gestionamos.
+     */
     private BufferedImage imagenA;
      
       
@@ -37,33 +61,20 @@ public final class herramientaDuplicar extends javax.swing.JFrame {
         //Creamos la referencia al padre
         this.padre=padre;
         
-       titleImgA.setText("todavia nada");
+        titleImgA.setText("todavia nada");
              
        this.addWindowListener(new java.awt.event.WindowAdapter() {
     @Override
     public void windowClosing(java.awt.event.WindowEvent windowEvent) {
-        System.out.println("Cerrando ventana");
-        recuperarImagen();
+        System.out.println("Cerrando ventana");        
     }
 });
         
     }
 
-   
     
     /**
-     * Con esta función reseteamos la herramienta y dejamos la imagen como estaba al principio.
-     */
-    private void resetHerramienta(){
-                
-        Imprimir("Reseteando imagen");
-        //Enviamos la copia de la imagen que teníamos guadada deshaciendo cualquier operación anterior.
-     //   viA.getLienzo().setImage(imagenTemporalParaOperaciones);
-               
-    }
-    
-    /**
-     * Extrae una imagen desde el lienzo que se selecciona:
+     * Extrae una imagen desde el lienzo que se selecciona.
      */
     private void sacarImagenA(){
         viA= (VentanaInterna) padre.getPanelEscritorio().getSelectedFrame();
@@ -140,10 +151,10 @@ public final class herramientaDuplicar extends javax.swing.JFrame {
         grupoBotonesMatriz = new javax.swing.ButtonGroup();
         jLayeredPane1 = new javax.swing.JLayeredPane();
         panelNorte = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
+        textDuplicar = new javax.swing.JLabel();
+        iconoDuplicar = new javax.swing.JLabel();
         exitButton = new javax.swing.JButton();
-        jPanel4 = new javax.swing.JPanel();
+        panelIzquierdo = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         titleImgA = new javax.swing.JLabel();
@@ -169,11 +180,11 @@ public final class herramientaDuplicar extends javax.swing.JFrame {
 
         panelNorte.setBackground(new java.awt.Color(145, 145, 145));
 
-        jLabel1.setFont(new java.awt.Font("Sawasdee", 1, 18)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(51, 51, 51));
-        jLabel1.setText("Duplicar");
+        textDuplicar.setFont(new java.awt.Font("Sawasdee", 1, 18)); // NOI18N
+        textDuplicar.setForeground(new java.awt.Color(51, 51, 51));
+        textDuplicar.setText("Duplicar");
 
-        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/duplicate.png"))); // NOI18N
+        iconoDuplicar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/duplicate.png"))); // NOI18N
 
         exitButton.setBackground(new java.awt.Color(255, 135, 135));
         exitButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/cancel.png"))); // NOI18N
@@ -190,9 +201,9 @@ public final class herramientaDuplicar extends javax.swing.JFrame {
             panelNorteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelNorteLayout.createSequentialGroup()
                 .addGap(16, 16, 16)
-                .addComponent(jLabel3)
+                .addComponent(iconoDuplicar)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 298, Short.MAX_VALUE)
+                .addComponent(textDuplicar, javax.swing.GroupLayout.DEFAULT_SIZE, 298, Short.MAX_VALUE)
                 .addGap(110, 110, 110)
                 .addComponent(exitButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -202,8 +213,8 @@ public final class herramientaDuplicar extends javax.swing.JFrame {
             .addGroup(panelNorteLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(panelNorteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1)
-                    .addComponent(jLabel3)))
+                    .addComponent(textDuplicar)
+                    .addComponent(iconoDuplicar)))
             .addComponent(exitButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
@@ -225,43 +236,43 @@ public final class herramientaDuplicar extends javax.swing.JFrame {
             }
         });
 
-        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
-        jPanel4.setLayout(jPanel4Layout);
-        jPanel4Layout.setHorizontalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel4Layout.createSequentialGroup()
+        javax.swing.GroupLayout panelIzquierdoLayout = new javax.swing.GroupLayout(panelIzquierdo);
+        panelIzquierdo.setLayout(panelIzquierdoLayout);
+        panelIzquierdoLayout.setHorizontalGroup(
+            panelIzquierdoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelIzquierdoLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(panelIzquierdoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel7)
                     .addComponent(jLabel6))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelIzquierdoLayout.createSequentialGroup()
                 .addGap(0, 66, Short.MAX_VALUE)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel4Layout.createSequentialGroup()
+                .addGroup(panelIzquierdoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelIzquierdoLayout.createSequentialGroup()
                         .addComponent(jLabel4)
                         .addGap(66, 66, 66)
                         .addComponent(campoNombreImagen)
                         .addContainerGap())
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelIzquierdoLayout.createSequentialGroup()
                         .addComponent(jLabel2)
                         .addGap(61, 61, 61)
                         .addComponent(titleImgA)
                         .addGap(65, 65, 65))))
         );
-        jPanel4Layout.setVerticalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel4Layout.createSequentialGroup()
+        panelIzquierdoLayout.setVerticalGroup(
+            panelIzquierdoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelIzquierdoLayout.createSequentialGroup()
                 .addGap(8, 8, 8)
                 .addComponent(jLabel6)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel7)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(panelIzquierdoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(titleImgA))
                 .addGap(18, 18, 18)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(panelIzquierdoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
                     .addComponent(campoNombreImagen, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(19, Short.MAX_VALUE))
@@ -287,7 +298,7 @@ public final class herramientaDuplicar extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(panelNorte, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(panelIzquierdo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(capturaImagenA, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -298,7 +309,7 @@ public final class herramientaDuplicar extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addComponent(panelNorte, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(panelIzquierdo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(capturaImagenA)
@@ -310,14 +321,7 @@ public final class herramientaDuplicar extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    /**
-     * Función que recupera la imagen original y también el estado  de los botones
-     */
-    public void recuperarImagen(){
-                                                      
-     //       vis.getLienzo().setImage(this.imagenTemporalParaOperaciones);
-     //       vis.getLienzo().repaint();                     
-    }
+    
     
     private void exitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitButtonActionPerformed
         //Hace exactamente lo mismo que darle al boton cerrar de la esquina superior izquierda, es decir llamar a recuperarImagen.
@@ -909,15 +913,15 @@ public final class herramientaDuplicar extends javax.swing.JFrame {
     private javax.swing.JButton exitButton;
     private javax.swing.ButtonGroup grupoBotonesMatriz;
     private javax.swing.ButtonGroup grupoBotonesTipo;
-    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel iconoDuplicar;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLayeredPane jLayeredPane1;
-    private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel panelIzquierdo;
     private javax.swing.JPanel panelNorte;
+    private javax.swing.JLabel textDuplicar;
     private javax.swing.JLabel titleImgA;
     // End of variables declaration//GEN-END:variables
 

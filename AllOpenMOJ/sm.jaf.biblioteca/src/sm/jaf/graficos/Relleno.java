@@ -19,7 +19,10 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 
 /**
- *
+ * Clase que implementa el concepto de Relleno para las figuras cerradas.
+ * Define como se configura el relleno para que luego GradienPaint pueda construirlo según las especificaciones de este.
+ * Para ver como funciona ir a clases como rectangulo de esta misma librería donde se puede ver su uso.
+ * @see <a href="http://docs.oracle.com/javase/7/docs/api/java/awt/GradientPaint.html">Doc de GradientPaint</a>
  * @author Juan A. Fernández Sánchez
  */
 public class Relleno {

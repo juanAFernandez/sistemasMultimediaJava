@@ -21,23 +21,26 @@ import sm.image.BufferedImageOpAdapter;
 import sm.image.BufferedImagePixelIterator;
 
 /**
- *
- * @author juan
+ * Operación propia para el procesamiento de iḿagenes que convierte la imagen de color a escala de grises.
+ * Mediante la definición de una nueva operación mediante la implmentación de la interfaz
+ * BufferedImageOpAdapter implementamos la conversión a escala de grises de culquier imagen en la 
+ * funcion filter donde se recorre dicha imagen pixel a pixel analizando sus tres componentes de 
+ * color y calculando, normalizando, el valor medio y para luego grabarlo.
+ * @author Juan A. Fernández Sánchez
  */
 public class EscalaGrisesOp extends BufferedImageOpAdapter {
 
-    private int umbral;
-    
+        
     public EscalaGrisesOp(){
 
     }
 
     
     /**
-     * Función que realmente aplica el filtro:
-     * @param src
-     * @param dest
-     * @return 
+     * Función que realmente define y aplica el filtro:
+     * @param src Imgen de origen
+     * @param dest Imagen de destino
+     * @return Devuelve la imagen con el filtro aplicado.
      */
     @Override
     public BufferedImage filter(BufferedImage src, BufferedImage dest) {
@@ -46,14 +49,14 @@ public class EscalaGrisesOp extends BufferedImageOpAdapter {
         
         if(dest==null){
             Imprimir("Creando imagen destino por falta");
-            dest=createCompatibleDestImage(src,null);
-            
+            //creamos una imagen compatible.
+            dest=createCompatibleDestImage(src,null);            
         }
         
         WritableRaster srcRaster = src.getRaster();
         WritableRaster destRaster = dest.getRaster();
                                                
-        //Código de umbralización:
+        
         
             //Para recorrer la imagen vamos a usar un iterador pixel a pixel:
             int numPixel=0;
@@ -61,17 +64,23 @@ public class EscalaGrisesOp extends BufferedImageOpAdapter {
             int media=0;
             int numBandas;
             
+            //Iterador sobre la imagen pixel a pixel.
             for(BufferedImagePixelIterator it = new BufferedImagePixelIterator(src); it.hasNext();){
                 //Extraemos un pixel de la imagen original
                 pixel=it.next();
                                 
-                numBandas=pixel.numSamples;
-                for(int i=0; i<numBandas; i++)
-                    media+=pixel.sample[i];
-                media=media/numBandas;
+                //Extraemos el valor de sus tres componentes
+                int r = pixel.sample[0];
+                int g = pixel.sample[1];
+                int b = pixel.sample[2];
+
+                //Calculamos la media
+                int gris = (r + g + b) / 3;
                                
                 
-                for(int i=0; i<numBandas; i++) pixel.sample[i]=media;
+                pixel.sample[0]=gris;
+                pixel.sample[1]=gris;
+                pixel.sample[2]=gris;
 
                 
                 //Guardamos el pixel modificado en la imagen destino

@@ -34,21 +34,31 @@ import sm.jaf.graficos.Relleno.Horientacion;
  */
 public class Rectangulo extends Figura{
     
-    
-    private boolean modoEdicion;
-                 //1º: Sacamos los extremos A y B del rectangulo
-        
-    private Point2D A;          
-    private Ellipse2D elipsePuntoControlA;    
+    /**
+     * Punto que representa uno de los extremos del rectángulo.
+     */                             
+    private Point2D A;
+    /**
+     * Elipse que sirve para dibujar ese punto en modo edición.
+     */
+    private Ellipse2D elipsePuntoControlA;
+    /**
+     * Variable de control (seleccion) del punto de control A para el modo edición.
+     */
     boolean seleccionadoPuntoControlA;
-    
+    /**
+     * Punto que representa el otro extremo del rectángulo.
+     */
     private Point2D B;    
+    /**
+     * Ellipse para el dibujo del segundo punto de control.
+     */
     private Ellipse2D elipsePuntoControlB;    
+    /**
+     * Variable de control para el segundo punto, útil para el modo edición.
+     */
     boolean seleccionadoPuntoControlB;
-    
-    boolean moviendo=false;
-    double distanciaX=0;
-    double distanciaY=0;
+   
     
     
     /**
@@ -60,19 +70,7 @@ public class Rectangulo extends Figura{
      * En caso de que tenga relleno lo almacena aquí.
      */
     public Relleno miRelleno;
-       
-
-        
-
-        
-        //El A es muy facil de obtener:
-       // A.setLocation( ((Rectangle2D)datosGeometricos).getX(), ((Rectangle2D)datosGeometricos).getY() );        
-       // B.setLocation(((Rectangle2D)datosGeometricos).getMaxX(),((Rectangle2D)datosGeometricos).getMaxY());        
-       // Imprimir("Extremos del rectangulo: A("+A.getX()+","+A.getY()+")"+" B("+B.getX()+","+B.getY()+")");
-    
-        
-        
-        
+                 
      /**
      * Primer constructor sin parámetros.
      * Inicializa los datos geométricos con el tipo necesario pero sin información y especificando
@@ -89,6 +87,7 @@ public class Rectangulo extends Figura{
         A = new Point2D.Double(); 
         B = new Point2D.Double();
     }
+    
     /**
      * Segundo constructor con parámetros.
      * Este es uno de los casos donde mejoramos el diseño original. En la linea podíamos construir el objeto a partir de dos
@@ -126,15 +125,14 @@ public class Rectangulo extends Figura{
     public boolean getRelleno(){
         return relleno;
     }
+    
     /**
      * Para obtener el relleno que tiene la figura.
      * @return Objeto de tipo Relleno que la figura está usando en ese momento.
      */
     public Relleno getRellenoComplejo(){
         return miRelleno;
-    }
-    
-    //Métodos de implementación específica de la figura RECTANGULO
+    }        
     
     /**
      * Para cambiar la posición de un rectángulo.
@@ -294,9 +292,13 @@ public class Rectangulo extends Figura{
         
     }
      
-     public void cambiarPuntosControl(Point2D puntoRef, Point2D npc){
-         
-         
+    /**
+     * Función que realiza el cambio de los puntos de control usando la comparación de dos.
+     * @param puntoRef Punto de referencia
+     * @param npc Nuevo punto donde dejar la figura. 
+     */
+    public void cambiarPuntosControl(Point2D puntoRef, Point2D npc){
+                  
          if(moviendo){
               //EL nuevo punto puede realizar cuantro movimientos básicos respecto al anterior.
             
@@ -331,16 +333,20 @@ public class Rectangulo extends Figura{
                     ((Rectangle2D)datosGeometricos).setFrameFromDiagonal(A.getX(), A.getY(), B.getX(), B.getY());
                 }
          }
-     
-         
-     
+                  
      }
  
-       public void soltarRaton(Point2D ref, Point2D nuevo){
+    /**
+     * Método que finaliza el acto de mover, grabando las coordenadas finales en la figura.
+     * @param ref Punto de referencia para el cálculo del movimiento de todos los puntos clave de la figura.
+     * @param nuevo Punto final de referencia para el cálculo del movimiento de todos los puntos.
+     */
+    public void soltarRaton(Point2D ref, Point2D nuevo){
+        
             Imprimir("Soltando el raton");
             
-            if(moviendo){
-                
+            //Solo se aplica el movimiento si la variable de control lo indica.
+            if(moviendo){                
                 //Cambiamos los puntos: 
                 A.setLocation(A.getX()+distanciaX, A.getY()+distanciaY);
                 B.setLocation(B.getX()+distanciaX, B.getY()+distanciaY);
@@ -348,10 +354,8 @@ public class Rectangulo extends Figura{
                 //Modificamos la figura:
                  ((Rectangle2D)datosGeometricos).setFrameFromDiagonal(A, B);     
                 
-              //  elipsePuntoControlA = new Ellipse2D.Double(A.getX()-5, A.getY()-5, 10, 10);
-             //   elipsePuntoControlB = new Ellipse2D.Double(B.getX()-5, B.getY()-5, 10, 10);
-
             }
+            //Como se ha finalizado el movimiento se pone la variable moviendo a false.
             moviendo=false;
             
             //Después de soltar el ratón el moviviento de la figura ha cesado y se resetean los valores de las distancias:
@@ -397,8 +401,7 @@ public class Rectangulo extends Figura{
          }
       
     }
-    
-    
+        
     /**
      * Ofrece información del rectángulo.
      * @return Texto con información geométrica básica.
@@ -409,18 +412,7 @@ public class Rectangulo extends Figura{
                              "Alto "+((Rectangle2D)datosGeometricos).getHeight()+
                              "Ancho "+((Rectangle2D)datosGeometricos).getWidth();
     }
-
     
-    /**
-     * Para cambiar de posición un rectángulo a partir de un punto de referencia.
-     * Como pasaba con la linea al mover la figura con el ratón estamos dando un punto de referencia y es con el 
-     * con el que tenemos que mover todo el rectángulo.
-     * @param P Punto donde mover el rectángulo
-     */
-    @Override
-    public void cambiarPosicion2(Point2D P) {
-                     
-      
-    }    
+  
     
 }

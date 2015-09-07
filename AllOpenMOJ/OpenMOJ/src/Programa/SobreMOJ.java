@@ -17,13 +17,14 @@
 package Programa;
 
 /**
- *
+ * Pequeña ventana con información del programa y enlace al repositorio oficial.
+ * Construye una pequeña ventana con algunos labels e iconos con informacion de licencia.
  * @author Juan A. Fernández Sánchez
  */
 public class SobreMOJ extends javax.swing.JFrame {
 
     /**
-     * Creates new form SobreMOJ
+     * Constructor de  SobreMOJ
      */
     public SobreMOJ() {
         initComponents();
@@ -44,6 +45,7 @@ public class SobreMOJ extends javax.swing.JFrame {
         labelIMGGitHub = new javax.swing.JLabel();
         labelGranada = new javax.swing.JLabel();
         labelIMGGPL3 = new javax.swing.JLabel();
+        labelGitHub1 = new javax.swing.JLabel();
 
         jTextField1.setText("jTextField1");
 
@@ -62,6 +64,8 @@ public class SobreMOJ extends javax.swing.JFrame {
 
         labelIMGGPL3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/gplv3-logo-red.png"))); // NOI18N
 
+        labelGitHub1.setText("Programa de dibujo y retoque fotográfico / reproductor multimedia Open Source.");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -75,13 +79,15 @@ public class SobreMOJ extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(40, 40, 40)
-                        .addComponent(labelGitHub))
-                    .addGroup(layout.createSequentialGroup()
                         .addGap(149, 149, 149)
                         .addComponent(labelIMGGPL3)
                         .addGap(81, 81, 81)
-                        .addComponent(labelGranada)))
+                        .addComponent(labelGranada))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(40, 40, 40)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(labelGitHub1)
+                            .addComponent(labelGitHub))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -94,9 +100,11 @@ public class SobreMOJ extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(40, 40, 40)
                         .addComponent(labelTituloPrincipal)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 103, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(labelGitHub1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 17, Short.MAX_VALUE)
                 .addComponent(labelGitHub)
-                .addGap(23, 23, 23)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(labelIMGGPL3)
@@ -147,6 +155,7 @@ public class SobreMOJ extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField jTextField1;
     private javax.swing.JLabel labelGitHub;
+    private javax.swing.JLabel labelGitHub1;
     private javax.swing.JLabel labelGranada;
     private javax.swing.JLabel labelIMGGPL3;
     private javax.swing.JLabel labelIMGGitHub;
